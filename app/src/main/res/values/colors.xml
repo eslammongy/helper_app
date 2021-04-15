@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+
+    <color name="colorDark">#242526</color>
+    <color name="colorPrimaryDark">#18191a</color>
+    <color name="Gray">#CACACA</color>
+    <color name="ColorLightBlack">#181C23</color>
+    <color name="White">#FFFFFF</color>
+    <color name="Blue">#FF3700B3</color>
+
+    <color name="ColorDefaultNote">#555659</color>
+    <color name="ColorRedNote">#E91E63</color>
+    <color name="ColorPurpleNote">#FF6200EE</color>
+    <color name="ColorGreenNote">#4CAF50</color>
+    <color name="ColorOrangeNote">#FF5722</color>
+
+    <array name="demo_color">
+        <item>@color/ColorDefaultNote</item>
+        <item>@color/ColorRedNote</item>
+        <item>@color/ColorPurpleNote</item>
+        <item>@color/ColorGreenNote</item>
+        <item>@color/ColorOrangeNote</item>
+    </array>
+
+</resources>
