@@ -4,8 +4,8 @@
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
 
-    <color name="colorDark">#242526</color>
-    <color name="colorPrimaryDark">#18191a</color>
+    <color name="colorDark">#2B2B2B</color>
+    <color name="colorPrimaryDark">#1C1C1C</color>
     <color name="Gray">#CACACA</color>
     <color name="ColorLightBlack">#181C23</color>
     <color name="White">#FFFFFF</color>
@@ -16,6 +16,7 @@
     <color name="ColorPurpleNote">#FF6200EE</color>
     <color name="ColorGreenNote">#4CAF50</color>
     <color name="ColorOrangeNote">#FF5722</color>
+    <color name="ColorPinkNote">#E777EF</color>
 
     <array name="demo_color">
         <item>@color/ColorDefaultNote</item>

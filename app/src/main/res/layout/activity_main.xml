@@ -9,10 +9,11 @@
 
     <ImageView
         android:id="@+id/splashScreen_logo"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:contentDescription="@string/todo"
         android:src="@drawable/ic_app_logo"
+        android:layout_marginBottom="30dp"
         app:layout_constraintBottom_toTopOf="@id/guideline2"
         app:layout_constraintEnd_toEndOf="@id/guideline3"
         app:layout_constraintStart_toStartOf="@id/guideline3" />
@@ -32,7 +33,24 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/todo"
-            android:src="@drawable/ic_custom_circle_strock"
+            app:tint="@color/White"
+            android:src="@drawable/ic_iconfinder_task_done"
+            android:padding="10dp"
+            android:background="@drawable/ic_custom_circle_strok"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+             />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:contentDescription="@string/todo"
+            app:tint="@color/White"
+            android:padding="10dp"
+            android:src="@drawable/ic_iconfinder_check_list"
+            android:background="@drawable/ic_custom_circle_strok"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -42,7 +60,10 @@
             android:layout_height="40dp"
             android:layout_marginStart="10dp"
             android:contentDescription="@string/todo"
-            android:src="@drawable/ic_custom_circle_strock"
+            app:tint="@color/White"
+            android:padding="10dp"
+            android:src="@drawable/ic_iconfinder_contact_user"
+            android:background="@drawable/ic_custom_circle_strok"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -52,18 +73,10 @@
             android:layout_height="40dp"
             android:layout_marginStart="10dp"
             android:contentDescription="@string/todo"
-            android:src="@drawable/ic_custom_circle_strock"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="10dp"
-
-            android:contentDescription="@string/todo"
-            android:src="@drawable/ic_custom_circle_strock"
+            app:tint="@color/White"
+            android:padding="11dp"
+            android:src="@drawable/ic_iconfinder_snowflake"
+            android:background="@drawable/ic_custom_circle_strok"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -80,9 +93,11 @@
         android:gravity="center"
         android:text="@string/helper"
         android:textColor="@color/White"
-        android:textSize="50sp"
-        android:textStyle="bold"
+        android:textSize="40sp"
+        android:textStyle="normal"
+        android:fontFamily="@font/islandamina"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/splashLinear_layout" />
 
