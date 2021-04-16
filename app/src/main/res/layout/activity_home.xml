@@ -7,4 +7,106 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".HomeActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/custom_dark_shape"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@id/fragment_holder"
+        app:layout_constraintTop_toTopOf="@+id/guideline6"
+        tools:layout_editor_absoluteX="15dp">
+
+        <TextView
+            android:id="@+id/title_ActiveFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="center"
+            android:text="@string/task"
+            android:textColor="@color/White"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_AddNewElement"
+            app:layout_constraintStart_toEndOf="@+id/btn_Search"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageButton
+            android:id="@+id/btn_AddNewElement"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/custom_one_shape_button"
+            android:contentDescription="@string/todo"
+            android:padding="6dp"
+            android:onClick="openNewSelectedActivity"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_iconfinder_add"
+            android:tint="@color/White"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/title_ActiveFragment" />
+
+        <ImageButton
+            android:id="@+id/btn_Search"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/custom_one_shape_button"
+            android:contentDescription="@string/todo"
+            android:padding="6dp"
+            android:onClick="openSearchActivity"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_iconfinder_search"
+            android:tint="@color/White"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/title_ActiveFragment" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_holder"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+    </FrameLayout>
+
+    <com.etebarian.meowbottomnavigation.MeowBottomNavigation
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:mbn_backgroundBottomColor="@color/colorDark"
+        app:mbn_countBackgroundColor="#ff6f00"
+        app:mbn_countTextColor="#ffffff"
+        app:mbn_defaultIconColor="@android:color/darker_gray"
+        app:mbn_rippleColor="#2f424242"
+        app:mbn_selectedIconColor="@color/ColorOrangeNote"
+        app:mbn_shadowColor="#1f212121" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.01" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.92" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

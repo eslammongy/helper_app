@@ -24,6 +24,7 @@
         <item>@color/ColorPurpleNote</item>
         <item>@color/ColorGreenNote</item>
         <item>@color/ColorOrangeNote</item>
+        <item>@color/ColorPinkNote</item>
     </array>
 
 </resources>
