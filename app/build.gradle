@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     // hide keyboard && circle imageView
+    implementation 'com.thebluealliance:spectrum:0.7.1'
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.2.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'

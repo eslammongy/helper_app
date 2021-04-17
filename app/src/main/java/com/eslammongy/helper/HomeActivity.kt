@@ -85,7 +85,6 @@ class HomeActivity : AppCompatActivity() {
 
     fun openNewSelectedActivity(view: View) {
 
-        Toast.makeText(this , "Text Toast" , Toast.LENGTH_SHORT).show()
         when(titleFragment.text){
 
             "Task" -> {
@@ -102,10 +101,25 @@ class HomeActivity : AppCompatActivity() {
     }
     private fun openActivity(activity: Activity){
         val intent = Intent(this , activity::class.java)
+        intent.putExtra("SearchKey" , titleFragment.text.toString())
         startActivity(intent)
         finish()
     }
+
     fun openSearchActivity(view: View) {
+        when(titleFragment.text){
+
+            "Task" -> {
+                openActivity(SearchActivity())
+            }
+            "CheckList" -> {
+                openActivity(SearchActivity())
+            }
+            "Contact" -> {
+                openActivity(SearchActivity())
+            }
+
+        }
 
     }
 }

@@ -18,7 +18,7 @@
         android:padding="10dp"
         app:layout_constraintBottom_toTopOf="@id/fragment_holder"
         app:layout_constraintTop_toTopOf="@+id/guideline6"
-        tools:layout_editor_absoluteX="15dp">
+        >
 
         <TextView
             android:id="@+id/title_ActiveFragment"
@@ -106,7 +106,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.92" />
+        app:layout_constraintGuide_percent="0.93" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,4 +11,15 @@
     <string name="weather">Weather</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title">title</string>
+    <string name="description">description</string>
+    <string name="time">time</string>
+    <string name="date">date</string>
+    <string name="friend_name">friend name</string>
+    <string name="link">link</string>
+    <string name="top_name">top name</string>
+    <string name="enter_name">name</string>
+    <string name="enter_phone">phone</string>
+    <string name="address">address</string>
+    <string name="save">Save</string>
 </resources>
