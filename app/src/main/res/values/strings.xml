@@ -22,4 +22,23 @@
     <string name="enter_phone">phone</string>
     <string name="address">address</string>
     <string name="save">Save</string>
+    <string name="counter">counter</string>
+    <string name="add_item_to_list">add item to list</string>
+    <string name="mounofia">Mounofia</string>
+    <string name="last_update">last update</string>
+    <string name="cloudy">cloudy</string>
+    <string name="_29_c">29 °C</string>
+    <string name="min_26_c">Min 26 ºC</string>
+    <string name="exit">Exit</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="delete_text">Are You Sure You Want To Delete This Task OR Undo Deleted It ..</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="wind">Wind</string>
+    <string name="pressure">Pressure</string>
+    <string name="_06_40_am">06:40 AM</string>
+    <string name="humidity">Humidity</string>
+    <string name="androdocs">AndroDocs</string>
+    <string name="created_by">Created By</string>
+    <string name="email">email</string>
 </resources>

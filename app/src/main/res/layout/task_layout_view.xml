@@ -65,7 +65,7 @@
         app:layout_constraintEnd_toStartOf="@+id/circularCardView"
         app:layout_constraintTop_toTopOf="@+id/circularCardView" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.google.android.material.chip.Chip
         android:id="@+id/task_LayoutTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,6 +76,7 @@
         android:text="@string/title"
         android:textColor="@color/white"
         android:textSize="20sp"
+        app:chipBackgroundColor="@color/ColorRedNote"
         app:layout_constraintStart_toEndOf="@+id/task_LayoutImage"
         app:layout_constraintTop_toTopOf="@+id/task_LayoutImage" />
 

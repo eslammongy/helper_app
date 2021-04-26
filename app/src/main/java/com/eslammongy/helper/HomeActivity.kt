@@ -2,6 +2,7 @@ package com.eslammongy.helper
 
 import android.app.Activity
 import android.content.Intent
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -27,6 +28,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var bottomNavigationBar:MeowBottomNavigation
     private lateinit var btnOpenNewActivity:ImageButton
     private lateinit var titleFragment:TextView
+    private var selectedFragment:Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -38,7 +40,9 @@ class HomeActivity : AppCompatActivity() {
         bottomNavigationBar.add(MeowBottomNavigation.Model(ID_CHECKLIST , R.drawable.ic_iconfinder_check_list))
         bottomNavigationBar.add(MeowBottomNavigation.Model(ID_CONTACT , R.drawable.ic_iconfinder_contact_user))
         bottomNavigationBar.add(MeowBottomNavigation.Model(ID_WEATHER , R.drawable.ic_iconfinder_snowflake))
-        bottomNavigationBar.show(ID_TASKS , true)
+
+        selectFragmentWhenBack()
+       // bottomNavigationBar.show(ID_TASKS , true)
 
         bottomNavigationBar.setOnShowListener {
 
@@ -48,23 +52,25 @@ class HomeActivity : AppCompatActivity() {
                     val taskFragment = TaskFragment()
                     replaceFragment(taskFragment)
                     titleFragment.text = getString(R.string.task)
+                    hideSearchAddIcon()
                 }
                 ID_CHECKLIST -> {
                     val checkListFragment = CheckListFragment()
                     replaceFragment(checkListFragment)
                     titleFragment.text = getString(R.string.check_list)
-
+                    hideSearchAddIcon()
                 }
                 ID_CONTACT -> {
                     val contactFragment = ContactFragment()
                     replaceFragment(contactFragment)
                     titleFragment.text = getString(R.string.contact)
-
+                    hideSearchAddIcon()
                 }
                 ID_WEATHER -> {
                     val weatherFragment = WeatherFragment()
                     replaceFragment(weatherFragment)
                     titleFragment.text = getString(R.string.weather)
+                    hideSearchAddIcon()
 
                 }
                 else ->{
@@ -99,11 +105,45 @@ class HomeActivity : AppCompatActivity() {
 
         }
     }
+
+    private fun hideSearchAddIcon(){
+
+        val addButton = findViewById<ImageButton>(R.id.btn_AddNewElement)
+        val searchButton = findViewById<ImageButton>(R.id.btn_Search)
+        val title = titleFragment.text.toString()
+        if (title == "Weather"){
+
+            addButton.visibility = View.GONE
+            searchButton.visibility = View.GONE
+        }else{
+            addButton.visibility = View.VISIBLE
+            searchButton.visibility = View.VISIBLE
+
+        }
+    }
     private fun openActivity(activity: Activity){
         val intent = Intent(this , activity::class.java)
         intent.putExtra("SearchKey" , titleFragment.text.toString())
         startActivity(intent)
         finish()
+    }
+
+    private fun selectFragmentWhenBack(){
+
+        selectedFragment = intent.getIntExtra("ArrowKey" , 0)
+
+        when(selectedFragment){
+
+            ID_CHECKLIST ->{
+                bottomNavigationBar.show(ID_CHECKLIST , true)
+            }
+            ID_CONTACT ->{
+                bottomNavigationBar.show(ID_CONTACT , true)
+            }
+            else ->{
+                bottomNavigationBar.show(ID_TASKS , true)
+            }
+        }
     }
 
     fun openSearchActivity(view: View) {

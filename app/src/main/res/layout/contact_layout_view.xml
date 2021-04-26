@@ -21,7 +21,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.google.android.material.chip.Chip
             android:id="@+id/contact_LayoutName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,6 +31,7 @@
             android:text="@string/top_name"
             android:textColor="@color/white"
             android:textSize="18sp"
+            app:chipBackgroundColor="@color/ColorPurpleNote"
             android:layout_marginStart="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,6 +43,7 @@
             android:layout_height="30dp"
             android:layout_marginEnd="10dp"
             app:cardCornerRadius="50dp"
+            app:cardBackgroundColor="@color/ColorPurpleNote"
             app:layout_constraintTop_toTopOf="@id/contact_LayoutImage"
             app:layout_constraintEnd_toEndOf="parent" />
 
