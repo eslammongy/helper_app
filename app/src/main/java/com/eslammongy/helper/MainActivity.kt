@@ -1,5 +1,6 @@
 package com.eslammongy.helper
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,14 +15,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Handler().postDelayed(
-                {
+        val isFirstRun = getSharedPreferences("SharedPreference" , Context.MODE_PRIVATE)
+            .getBoolean("isFirstRun" , true)
 
-                val intent = Intent(this , OnboardingActivity::class.java)
+        if (isFirstRun){
+            Handler().postDelayed(
+                {
+                    val intent = Intent(this , OnboardingActivity::class.java)
+                    intent.putExtra("ToastMessage" , 101)
                     startActivity(intent)
                     finish()
 
                 }, splashTimeOut)
+        }else{
+            Handler().postDelayed(
+                {
+                    val intent = Intent(this , HomeActivity::class.java)
+                    intent.putExtra("ToastMessage" , 101)
+                    startActivity(intent)
+                    finish()
+
+                }, splashTimeOut)
+        }
+
+        getSharedPreferences("SharedPreference" , Context.MODE_PRIVATE).edit()
+            .putBoolean("isFirstRun" , false).apply()
+
 
     }
 }

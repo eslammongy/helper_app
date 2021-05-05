@@ -11,12 +11,12 @@
     <color name="White">#FFFFFF</color>
     <color name="Blue">#FF3700B3</color>
 
-    <color name="ColorDefaultNote">#555659</color>
-    <color name="ColorRedNote">#E91E63</color>
-    <color name="ColorPurpleNote">#FF6200EE</color>
+    <color name="ColorDefaultNote">#515151</color>
+    <color name="ColorRedNote">#DD2C00</color>
+    <color name="ColorPurpleNote">#9C27B0</color>
     <color name="ColorGreenNote">#4CAF50</color>
     <color name="ColorOrangeNote">#FF5722</color>
-    <color name="ColorPinkNote">#E777EF</color>
+    <color name="ColorPinkNote">#FFBB86FC</color>
 
     <array name="demo_color">
         <item>@color/ColorDefaultNote</item>

@@ -6,26 +6,27 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import com.eslammongy.helper.databinding.ActivitySearchBinding
 
 class SearchActivity : AppCompatActivity() {
-    lateinit var testSearchKey:TextView
 
+    private lateinit var binding:ActivitySearchBinding
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_search)
 
-        testSearchKey = findViewById(R.id.testSearchKey)
         when(intent.getStringExtra("SearchKey")){
 
             "Task" ->{
-                testSearchKey.text = "Search In Task DateBase"
+                binding.testSearchKey.text = "Search In Task DateBase"
             }
             "CheckList" ->{
-                testSearchKey.text = "Search In CheckList DateBase"
+                binding.testSearchKey.text = "Search In CheckList DateBase"
             }
             "Contact" ->{
-                testSearchKey.text = "Search In Contact DateBase"
+                binding.testSearchKey.text = "Search In Contact DateBase"
             }
         }
     }

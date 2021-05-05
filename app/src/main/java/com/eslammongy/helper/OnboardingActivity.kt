@@ -13,18 +13,20 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.IntentCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.eslammongy.helper.databinding.ActivityHomeBinding
+import com.eslammongy.helper.databinding.ActivityOnboardingBinding
 import com.eslammongy.helper.onboardingSetup.OnboardingItem
 import com.eslammongy.helper.onboardingSetup.OnboardingItemAdapter
 
 class OnboardingActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityOnboardingBinding
     private lateinit var onboardingItemsAdapter: OnboardingItemAdapter
-    private lateinit var pointContainer: LinearLayout
-    private lateinit var onboardingViewPager:ViewPager2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_onboarding)
+        binding = ActivityOnboardingBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setOnboardingItemsAdapter()
         setPointContainer()
@@ -42,10 +44,9 @@ class OnboardingActivity : AppCompatActivity() {
                         "when you encounter a small task that takes less than 5 minutes to complete.")
         ))
 
-        onboardingViewPager = findViewById<ViewPager2>(R.id.onBoardingViewPager2)
-        onboardingViewPager.adapter = onboardingItemsAdapter
+        binding.onBoardingViewPager2.adapter = onboardingItemsAdapter
 
-        onboardingViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.onBoardingViewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -53,14 +54,14 @@ class OnboardingActivity : AppCompatActivity() {
             }
         })
 
-        (onboardingViewPager.getChildAt(0) as RecyclerView).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        ( binding.onBoardingViewPager2.getChildAt(0) as RecyclerView).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
     }
 
     fun swipeToHome(view:View){
 
-        if (onboardingViewPager.currentItem +1 < onboardingItemsAdapter.itemCount){
-            onboardingViewPager.currentItem += 1
+        if ( binding.onBoardingViewPager2.currentItem +1 < onboardingItemsAdapter.itemCount){
+            binding.onBoardingViewPager2.currentItem += 1
 
         }else{
 
@@ -72,7 +73,6 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun setPointContainer() {
 
-        pointContainer = findViewById(R.id.pointLinearLayout)
         val points = arrayOfNulls<ImageView>(onboardingItemsAdapter.itemCount)
         val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
         layoutParams.setMargins(10, 0, 10, 0)
@@ -82,18 +82,18 @@ class OnboardingActivity : AppCompatActivity() {
             points[i]?.let {
                 it.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.point_inactive_background))
                 it.layoutParams = layoutParams
-                pointContainer.addView(it)
+                binding.pointLinearLayout.addView(it)
             }
         }
     }
 
     private fun setCurrentPint(position:Int){
 
-        val childCount = pointContainer.childCount
+        val childCount = binding.pointLinearLayout.childCount
 
         for (i in 0 until childCount){
 
-            val imageView = pointContainer.getChildAt(i) as ImageView
+            val imageView = binding.pointLinearLayout.getChildAt(i) as ImageView
             if (i == position){
                 imageView.setImageDrawable(ContextCompat.getDrawable(applicationContext , R.drawable.point_active_background))
             }else{
@@ -102,4 +102,6 @@ class OnboardingActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }

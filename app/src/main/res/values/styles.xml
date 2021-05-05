@@ -4,7 +4,21 @@
     <style name="RoundedSquare">
         <item name="cornerSize">10%</item>
     </style>
-    <style name="Circular">
-        <item name="cornerSize">50%</item>
+
+    <style name="DialogAnimation.Window" parent="@android:style/Animation.Activity">
+    <item name="android:windowEnterAnimation">@anim/starting_animation</item>
+    <item name="android:windowExitAnimation">@anim/ending_animation</item>
     </style>
+
+    <style name="theme_timePicker" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:textColor">@color/White</item>
+        <item name="colorControlActivated">@color/purple_200</item>
+        <item name="colorAccent">@color/purple_500</item>
+        <item name="android:textColorPrimary">@color/purple_200</item>
+        <item name="android:textColorSecondary">@color/White</item>
+        <item name="android:colorPrimary">@color/White</item>
+
+<!--        <item name="android:background">@color/colorDark</item>-->
+    </style>
+
 </resources>

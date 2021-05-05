@@ -2,19 +2,20 @@ package com.eslammongy.helper
 
 import android.app.Activity
 import android.content.Intent
-import android.media.Image
+import android.graphics.Color
+import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.eslammongy.helper.databinding.ActivityHomeBinding
 import com.eslammongy.helper.fragment.CheckListFragment
 import com.eslammongy.helper.fragment.ContactFragment
 import com.eslammongy.helper.fragment.TaskFragment
 import com.eslammongy.helper.fragment.WeatherFragment
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
+import java.util.*
 
 class HomeActivity : AppCompatActivity() {
 
@@ -25,51 +26,49 @@ class HomeActivity : AppCompatActivity() {
         const val ID_CONTACT = 3
         const val ID_WEATHER = 4
     }
-    private lateinit var bottomNavigationBar:MeowBottomNavigation
-    private lateinit var btnOpenNewActivity:ImageButton
-    private lateinit var titleFragment:TextView
+
+    private lateinit var binding:ActivityHomeBinding
     private var selectedFragment:Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        bottomNavigationBar = findViewById(R.id.bottomNavigation)
-        btnOpenNewActivity = findViewById(R.id.btn_AddNewElement)
-        titleFragment = findViewById(R.id.title_ActiveFragment)
-        bottomNavigationBar.add(MeowBottomNavigation.Model(ID_TASKS, R.drawable.ic_iconfinder_calendar))
-        bottomNavigationBar.add(MeowBottomNavigation.Model(ID_CHECKLIST , R.drawable.ic_iconfinder_check_list))
-        bottomNavigationBar.add(MeowBottomNavigation.Model(ID_CONTACT , R.drawable.ic_iconfinder_contact_user))
-        bottomNavigationBar.add(MeowBottomNavigation.Model(ID_WEATHER , R.drawable.ic_iconfinder_snowflake))
+        getGreetingMessage();
+        binding.bottomNavigation.add(MeowBottomNavigation.Model(ID_TASKS, R.drawable.ic_iconfinder_calendar))
+        binding.bottomNavigation.add(MeowBottomNavigation.Model(ID_CHECKLIST , R.drawable.ic_iconfinder_check_list))
+        binding.bottomNavigation.add(MeowBottomNavigation.Model(ID_CONTACT , R.drawable.ic_iconfinder_contact_user))
+        binding.bottomNavigation.add(MeowBottomNavigation.Model(ID_WEATHER , R.drawable.ic_iconfinder_snowflake))
 
         selectFragmentWhenBack()
        // bottomNavigationBar.show(ID_TASKS , true)
 
-        bottomNavigationBar.setOnShowListener {
+        binding.bottomNavigation.setOnShowListener {
 
             when(it.id){
 
                 ID_TASKS ->{
                     val taskFragment = TaskFragment()
                     replaceFragment(taskFragment)
-                    titleFragment.text = getString(R.string.task)
+                    binding.titleActiveFragment.text = getString(R.string.task)
                     hideSearchAddIcon()
                 }
                 ID_CHECKLIST -> {
                     val checkListFragment = CheckListFragment()
                     replaceFragment(checkListFragment)
-                    titleFragment.text = getString(R.string.check_list)
+                    binding.titleActiveFragment.text = getString(R.string.check_list)
                     hideSearchAddIcon()
                 }
                 ID_CONTACT -> {
                     val contactFragment = ContactFragment()
                     replaceFragment(contactFragment)
-                    titleFragment.text = getString(R.string.contact)
+                    binding.titleActiveFragment.text = getString(R.string.contact)
                     hideSearchAddIcon()
                 }
                 ID_WEATHER -> {
                     val weatherFragment = WeatherFragment()
                     replaceFragment(weatherFragment)
-                    titleFragment.text = getString(R.string.weather)
+                    binding.titleActiveFragment.text = getString(R.string.weather)
                     hideSearchAddIcon()
 
                 }
@@ -91,7 +90,7 @@ class HomeActivity : AppCompatActivity() {
 
     fun openNewSelectedActivity(view: View) {
 
-        when(titleFragment.text){
+        when(binding.titleActiveFragment.text){
 
             "Task" -> {
                 openActivity(AddNewTaskActivity())
@@ -108,22 +107,20 @@ class HomeActivity : AppCompatActivity() {
 
     private fun hideSearchAddIcon(){
 
-        val addButton = findViewById<ImageButton>(R.id.btn_AddNewElement)
-        val searchButton = findViewById<ImageButton>(R.id.btn_Search)
-        val title = titleFragment.text.toString()
+        val title = binding.titleActiveFragment.text.toString()
         if (title == "Weather"){
 
-            addButton.visibility = View.GONE
-            searchButton.visibility = View.GONE
+            binding.btnAddNewElement.visibility = View.GONE
+            binding.btnSearch.visibility = View.GONE
         }else{
-            addButton.visibility = View.VISIBLE
-            searchButton.visibility = View.VISIBLE
+            binding.btnAddNewElement.visibility = View.VISIBLE
+            binding.btnSearch.visibility = View.VISIBLE
 
         }
     }
     private fun openActivity(activity: Activity){
         val intent = Intent(this , activity::class.java)
-        intent.putExtra("SearchKey" , titleFragment.text.toString())
+        intent.putExtra("SearchKey" , binding.titleActiveFragment.text.toString())
         startActivity(intent)
         finish()
     }
@@ -135,19 +132,19 @@ class HomeActivity : AppCompatActivity() {
         when(selectedFragment){
 
             ID_CHECKLIST ->{
-                bottomNavigationBar.show(ID_CHECKLIST , true)
+                binding.bottomNavigation.show(ID_CHECKLIST , true)
             }
             ID_CONTACT ->{
-                bottomNavigationBar.show(ID_CONTACT , true)
+                binding.bottomNavigation.show(ID_CONTACT , true)
             }
             else ->{
-                bottomNavigationBar.show(ID_TASKS , true)
+                binding.bottomNavigation.show(ID_TASKS , true)
             }
         }
     }
 
     fun openSearchActivity(view: View) {
-        when(titleFragment.text){
+        when(binding.titleActiveFragment.text){
 
             "Task" -> {
                 openActivity(SearchActivity())
@@ -162,4 +159,29 @@ class HomeActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun setToastMessage(greetingMessage:String){
+        val toast = Toast.makeText(this, greetingMessage, Toast.LENGTH_LONG)
+        val view = toast.view
+        view!!.background.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
+        toast.show()
+    }
+
+    private fun getGreetingMessage(){
+
+        val calender = Calendar.getInstance()
+        val handEmo = "\uD83D\uDC4B"
+        when (calender.get(Calendar.HOUR_OF_DAY)) {
+
+            in 0..11 -> setToastMessage("Good Morning  $handEmo")
+            in 12..15 -> setToastMessage("Good Afternoon $handEmo")
+            in 16..20 -> setToastMessage("Good Evening $handEmo")
+            in 21..23 -> setToastMessage("Good Night $handEmo")
+            else -> Toast.makeText(this , "Hello" , Toast.LENGTH_LONG).show()
+        }
+
+
+    }
+
+
 }
