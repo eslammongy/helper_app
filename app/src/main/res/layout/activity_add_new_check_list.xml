@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.AddNewCheckListActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/custom_dark_shape"
+        android:padding="8dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintTop_toTopOf="@id/guideline15"
+        tools:layout_editor_absoluteX="10dp">
+
+        <TextView
+            android:id="@+id/title_ActiveFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="center"
+            android:text="@string/title"
+            android:textColor="@color/White"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_AddNewChl"
+            app:layout_constraintStart_toEndOf="@+id/btn_arrowToHome"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageButton
+            android:id="@+id/btn_AddNewChl"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/custom_one_shape_button"
+            android:contentDescription="@string/todo"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_iconfinder_ic_done"
+            android:tint="@color/White"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/title_ActiveFragment" />
+
+        <ImageButton
+            android:id="@+id/btn_arrowToHome"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/custom_one_shape_button"
+            android:contentDescription="@string/todo"
+            android:onClick="backToHomeActivity"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_iconfinder_left_arrow_back_previous_navigation"
+            android:tint="@color/White"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/title_ActiveFragment" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/dateTime"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/custom_dark_shape"
+        android:orientation="horizontal"
+        android:layout_margin="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/topBar"
+        tools:layout_editor_absoluteX="10dp">
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_ShowTaskTime"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:hint="@string/time"
+            android:inputType="time"
+            android:maxLines="1"
+            android:padding="5dp"
+            android:drawableStart="@drawable/ic_round_timer_24"
+            android:drawableTint="@color/White"
+            android:drawablePadding="10dp"
+            android:textColor="@color/White"
+            android:textColorHint="@color/ColorDefaultNote"
+            android:textSize="17sp" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:alpha="0.7"
+            android:background="@color/ColorOrangeNote" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_ShowTaskDate"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="@string/date"
+            android:inputType="date"
+            android:maxLines="1"
+            android:padding="6dp"
+            android:gravity="center"
+            android:drawableStart="@drawable/ic_round_calendar_today_24"
+            android:drawableTint="@color/White"
+            android:textColor="@color/White"
+            android:drawablePadding="10dp"
+            android:textColorHint="@color/ColorDefaultNote"
+            android:textSize="17sp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btn_OpenColorPicker"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            app:cardCornerRadius="40dp"
+            app:cardBackgroundColor="@color/ColorPurpleNote"
+            android:onClick="openColorPickerDialog"
+            android:layout_marginEnd="8dp"
+            />
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateTime"
+         />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/custom_dark_shape"
+        android:drawableStart="@drawable/ic_iconfinder_ic_playlist_add"
+        android:drawableTint="@color/White"
+        android:paddingStart="15dp"
+        android:text="@string/add_item_to_list"
+        android:textAllCaps="false"
+        android:textColor="@color/White"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="RtlSymmetry" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.01" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
