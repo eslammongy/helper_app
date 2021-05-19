@@ -31,6 +31,8 @@ class OnboardingItemAdapter(private val listOnboardingItem: List<OnboardingItem>
             imageOnboarding.setImageResource(onboardingItem.onboardingImage)
             textTitle = onboardingItem.titleText
             descText = onboardingItem.descriptionText
+
+
         }
 
     }

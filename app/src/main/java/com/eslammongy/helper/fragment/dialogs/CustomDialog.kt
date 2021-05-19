@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.eslammongy.helper.AddNewTaskActivity
 import com.eslammongy.helper.R
 import com.eslammongy.helper.databinding.FragmentCustomDialogBinding
 

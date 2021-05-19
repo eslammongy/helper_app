@@ -1,4 +1,4 @@
-package com.eslammongy.helper.dao
+package com.eslammongy.helper.database.dao
 
 import androidx.room.*
 import com.eslammongy.helper.database.entities.TaskEntities
@@ -10,12 +10,12 @@ interface TaskDao {
     fun getAllTasks():List<TaskEntities>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveNewTask(taskEntities: TaskEntities)
+     fun saveNewTask(taskEntities: TaskEntities)
 
     @Update
-    suspend fun updateCurrentTask(taskEntities: TaskEntities)
+     fun updateCurrentTask(taskEntities: TaskEntities)
 
     @Delete
-    suspend fun deleteSelectedTask(taskEntities: TaskEntities)
+     fun deleteSelectedTask(taskEntities: TaskEntities)
 
 }

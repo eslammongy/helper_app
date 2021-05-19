@@ -1,18 +1,50 @@
 package com.eslammongy.helper.database.entities
 
-import android.graphics.Bitmap
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "Task_Table")
-data class TaskEntities (
+data class TaskEntities(
+
+    @ColumnInfo(name = "title")
+    var taskTitle: String,
+    @ColumnInfo(name = "content")
+    var taskDesc: String,
+    @ColumnInfo(name = "time")
+    var taskTime: String,
+    @ColumnInfo(name = "date")
+    var taskDate: String,
+    @ColumnInfo(name = "link")
+    var taskLink: String,
+    @ColumnInfo(name = "color_task")
+    val taskColor: String,
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    val taskImage: ByteArray,
+
+) {
+
+
     @PrimaryKey(autoGenerate = true)
-    val taskId:Int =0,
-    val task_Title:String,
-    val task_Desc:String,
-    val task_Time:String,
-    val task_Date:String,
-    val task_Link:String,
-    val task_Color:String,
-    val task_Image:Bitmap
-        )
+    var taskId: Int = 0
+
+    @Override
+    override fun toString(): String {
+        return ("$taskTitle : $taskDesc : $taskTime : $taskDate : $taskLink")
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as TaskEntities
+
+        if (!taskImage.contentEquals(other.taskImage)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return taskImage.contentHashCode() ?: 0
+    }
+}

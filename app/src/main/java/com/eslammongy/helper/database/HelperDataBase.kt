@@ -5,19 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.eslammongy.helper.dao.CheckListDao
-import com.eslammongy.helper.dao.ContactDao
-import com.eslammongy.helper.dao.TaskDao
+import com.eslammongy.helper.database.dao.CheckListDao
+import com.eslammongy.helper.database.dao.ContactDao
+import com.eslammongy.helper.database.dao.TaskDao
 import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.database.entities.TaskEntities
 
-
 @Database(
     entities = [TaskEntities::class, ContactEntities::class, CheckListEntity::class],
     version = 1,
-    exportSchema = false
-)
+    exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class HelperDataBase : RoomDatabase() {
 

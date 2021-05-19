@@ -1,19 +1,16 @@
-package com.eslammongy.helper
+package com.eslammongy.helper.ui
 
 import android.content.Intent
-import android.media.Image
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.RecoverySystem
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.IntentCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.eslammongy.helper.databinding.ActivityHomeBinding
+import com.eslammongy.helper.R
 import com.eslammongy.helper.databinding.ActivityOnboardingBinding
 import com.eslammongy.helper.onboardingSetup.OnboardingItem
 import com.eslammongy.helper.onboardingSetup.OnboardingItemAdapter
@@ -36,11 +33,14 @@ class OnboardingActivity : AppCompatActivity() {
     private fun setOnboardingItemsAdapter() {
 
         onboardingItemsAdapter = OnboardingItemAdapter(listOf(
-                OnboardingItem(R.drawable.manage_your_task_image, "Manage Your Task",
+                OnboardingItem(
+                    R.drawable.manage_your_task_image, "Manage Your Task",
                         "Organize all your do,s and tasks. Color tag them to set priorities and categories."),
-                OnboardingItem(R.drawable.work_on_time_image, "Work On Time",
+                OnboardingItem(
+                    R.drawable.work_on_time_image, "Work On Time",
                         "When you are overwhelmed by the amount of the work you have on your plate , stop and rethink."),
-                OnboardingItem(R.drawable.reminder_me_task_image, "Get Reminder On Time",
+                OnboardingItem(
+                    R.drawable.reminder_me_task_image, "Get Reminder On Time",
                         "when you encounter a small task that takes less than 5 minutes to complete.")
         ))
 
@@ -80,7 +80,9 @@ class OnboardingActivity : AppCompatActivity() {
 
             points[i] = ImageView(applicationContext)
             points[i]?.let {
-                it.setImageDrawable(ContextCompat.getDrawable(applicationContext, R.drawable.point_inactive_background))
+                it.setImageDrawable(ContextCompat.getDrawable(applicationContext,
+                    R.drawable.point_inactive_background
+                ))
                 it.layoutParams = layoutParams
                 binding.pointLinearLayout.addView(it)
             }
@@ -95,10 +97,14 @@ class OnboardingActivity : AppCompatActivity() {
 
             val imageView = binding.pointLinearLayout.getChildAt(i) as ImageView
             if (i == position){
-                imageView.setImageDrawable(ContextCompat.getDrawable(applicationContext , R.drawable.point_active_background))
+                imageView.setImageDrawable(ContextCompat.getDrawable(applicationContext ,
+                    R.drawable.point_active_background
+                ))
             }else{
 
-                imageView.setImageDrawable(ContextCompat.getDrawable(applicationContext , R.drawable.point_inactive_background))
+                imageView.setImageDrawable(ContextCompat.getDrawable(applicationContext ,
+                    R.drawable.point_inactive_background
+                ))
             }
         }
     }

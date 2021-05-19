@@ -1,14 +1,17 @@
-package com.eslammongy.helper
+package com.eslammongy.helper.ui
 
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.eslammongy.helper.R
 import com.eslammongy.helper.databinding.ActivityHomeBinding
 import com.eslammongy.helper.fragment.CheckListFragment
 import com.eslammongy.helper.fragment.ContactFragment
@@ -34,11 +37,24 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        getGreetingMessage();
-        binding.bottomNavigation.add(MeowBottomNavigation.Model(ID_TASKS, R.drawable.ic_iconfinder_calendar))
-        binding.bottomNavigation.add(MeowBottomNavigation.Model(ID_CHECKLIST , R.drawable.ic_iconfinder_check_list))
-        binding.bottomNavigation.add(MeowBottomNavigation.Model(ID_CONTACT , R.drawable.ic_iconfinder_contact_user))
-        binding.bottomNavigation.add(MeowBottomNavigation.Model(ID_WEATHER , R.drawable.ic_iconfinder_snowflake))
+        val greetingCode = intent.getIntExtra("ToastMessage" , 0)
+        if (greetingCode == 101) getGreetingMessage()
+        binding.bottomNavigation.add(MeowBottomNavigation.Model(
+            ID_TASKS,
+            R.drawable.ic_iconfinder_calendar
+        ))
+        binding.bottomNavigation.add(MeowBottomNavigation.Model(
+            ID_CHECKLIST ,
+            R.drawable.ic_iconfinder_check_list
+        ))
+        binding.bottomNavigation.add(MeowBottomNavigation.Model(
+            ID_CONTACT ,
+            R.drawable.ic_iconfinder_contact_user
+        ))
+        binding.bottomNavigation.add(MeowBottomNavigation.Model(
+            ID_WEATHER ,
+            R.drawable.ic_iconfinder_snowflake
+        ))
 
         selectFragmentWhenBack()
        // bottomNavigationBar.show(ID_TASKS , true)
@@ -84,10 +100,11 @@ class HomeActivity : AppCompatActivity() {
     private fun replaceFragment(fragment:Fragment){
 
         val fragmentTransition = supportFragmentManager.beginTransaction()
-        fragmentTransition.replace(R.id.fragment_holder , fragment)
+        fragmentTransition.replace(R.id.fragment_holder, fragment)
             .commit()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun openNewSelectedActivity(view: View) {
 
         when(binding.titleActiveFragment.text){
@@ -171,7 +188,8 @@ class HomeActivity : AppCompatActivity() {
 
         val calender = Calendar.getInstance()
         val handEmo = "\uD83D\uDC4B"
-        when (calender.get(Calendar.HOUR_OF_DAY)) {
+        val timeOfDay = calender.get(Calendar.HOUR_OF_DAY)
+        when (timeOfDay) {
 
             in 0..11 -> setToastMessage("Good Morning  $handEmo")
             in 12..15 -> setToastMessage("Good Afternoon $handEmo")

@@ -1,11 +1,11 @@
-package com.eslammongy.helper
+package com.eslammongy.helper.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.eslammongy.helper.R
 import com.eslammongy.helper.databinding.ActivitySearchBinding
 
 class SearchActivity : AppCompatActivity() {

@@ -5,7 +5,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import androidx.core.content.withStyledAttributes
+import com.eslammongy.helper.ui.HomeActivity
+import com.eslammongy.helper.ui.OnboardingActivity
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {

@@ -6,10 +6,12 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import com.eslammongy.helper.R
 import com.eslammongy.helper.databinding.FragmentTaskBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -17,7 +19,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String): BottomSheetDialogFragment(), View.OnClickListener {
 
     private var _binding: FragmentTaskBottomSheetBinding? = null
@@ -59,7 +61,7 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String)
         super.onStart()
 
         val sheetContainer = requireView().parent as? ViewGroup ?: return
-        val height = (resources.displayMetrics.heightPixels * 0.90).toInt()
+        val height = (resources.displayMetrics.heightPixels * 0.95).toInt()
         sheetContainer.layoutParams.height = height
         sheetContainer.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
     }
@@ -107,7 +109,7 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String)
                 calender.set(Calendar.MONTH, month)
                 calender.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                 val dateFormatted =
-                    DateFormat.getDateInstance(DateFormat.FULL).format(calender.time)
+                    DateFormat.getDateInstance(DateFormat.MEDIUM).format(calender.time)
 
                 binding.tvSheetDate.text = dateFormatted
 

@@ -1,4 +1,4 @@
-package com.eslammongy.helper.dao
+package com.eslammongy.helper.database.dao
 
 import androidx.room.*
 import com.eslammongy.helper.database.entities.CheckListEntity
