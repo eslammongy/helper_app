@@ -36,7 +36,7 @@ class TaskAdapter(var context: Context, var listOFTasks: List<TaskEntities>) :
         holder.binding.circularCardView.chipBackgroundColor =
             ColorStateList.valueOf(Integer.parseInt(taskModel.taskColor))
         val imageConverter = Converter()
-        holder.binding.taskLayoutImage.setImageBitmap(imageConverter.toBitMap(taskModel.taskImage))
+        holder.binding.taskLayoutImage.setImageBitmap(imageConverter.toBitMap(taskModel.taskImage!!))
         holder.binding.root.setOnClickListener {
 
             val taskIntent = Intent(context , AddNewTaskActivity::class.java)

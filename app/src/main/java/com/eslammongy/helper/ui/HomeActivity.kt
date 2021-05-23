@@ -188,8 +188,7 @@ class HomeActivity : AppCompatActivity() {
 
         val calender = Calendar.getInstance()
         val handEmo = "\uD83D\uDC4B"
-        val timeOfDay = calender.get(Calendar.HOUR_OF_DAY)
-        when (timeOfDay) {
+        when (calender.get(Calendar.HOUR_OF_DAY)) {
 
             in 0..11 -> setToastMessage("Good Morning  $handEmo")
             in 12..15 -> setToastMessage("Good Afternoon $handEmo")

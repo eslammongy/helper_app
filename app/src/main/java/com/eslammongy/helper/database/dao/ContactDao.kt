@@ -10,11 +10,11 @@ interface ContactDao {
     fun getAllContacts():List<ContactEntities>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveNewContact(contactEntities: ContactEntities)
+     fun saveNewContact(contactEntities: ContactEntities)
 
     @Update
-    suspend fun updateCurrentContact(contactEntities: ContactEntities)
+     fun updateCurrentContact(contactEntities: ContactEntities)
 
     @Delete
-    suspend fun deleteSelectedContact(contactEntities: ContactEntities)
+     fun deleteSelectedContact(contactEntities: ContactEntities)
 }

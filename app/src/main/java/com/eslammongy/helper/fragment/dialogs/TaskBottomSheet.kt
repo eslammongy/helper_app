@@ -11,13 +11,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.eslammongy.helper.R
+import com.eslammongy.helper.adapters.FriendsAdapter
+import com.eslammongy.helper.database.entities.FriendModel
 import com.eslammongy.helper.databinding.FragmentTaskBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.Pattern
 
 @RequiresApi(Build.VERSION_CODES.O)
 class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String): BottomSheetDialogFragment(), View.OnClickListener {
@@ -28,6 +33,8 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String)
     private var time:String? = null
     private var date:String? = null
     private var link:String? = null
+    var listMyFriends = ArrayList<FriendModel>()
+    var friendAdapter: FriendsAdapter? = null
     init {
         this.taskColor = taskColor
         this.time = time
@@ -44,18 +51,34 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String)
 
         binding.enterLinkText.setText(link)
         binding.chlPaletteColor.setSelectedColor(taskColor!!)
+        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
+        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
+        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
+        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
+        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
+        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
+        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
+        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
+        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
+        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
+        listMyFriends.add(FriendModel("Eslam Mongy" ,R.mipmap.ic_launcher_round))
+        friendAdapter = FriendsAdapter(context!! , listMyFriends)
+        binding.taskFiendRecycler.setHasFixedSize(true)
+        binding.taskFiendRecycler.layoutManager = LinearLayoutManager(context )
+        binding.taskFiendRecycler.adapter = friendAdapter
         binding.tvSheetTime.text = time
         binding.tvSheetDate.text = date
         binding.saveTaskInfo.setOnClickListener(this)
         binding.tvSheetDate.setOnClickListener(this)
         binding.tvSheetTime.setOnClickListener(this)
-        taskColor = resources.getColor(R.color.ColorDefaultNote)
+        //taskColor = resources.getColor(R.color.ColorDefaultNote)
         binding.chlPaletteColor.setOnColorSelectedListener { clr ->
             taskColor = clr
 
         }
         return binding.root
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -70,12 +93,17 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String)
 
         when(v!!.id){
             R.id.saveTaskInfo ->{
-                val selectedColor = this.taskColor.toString()
-                 val link = binding.enterLinkText.text.toString()
-                 val time = binding.tvSheetTime.text.toString()
-                 val date = binding.tvSheetDate.text.toString()
-                sheetListener.setTaskInfo(selectedColor , link , time , date )
-              dismiss()
+               if (checkValidateUrl()){
+                   val selectedColor = this.taskColor
+                   val link = binding.enterLinkText.text.toString()
+                   val time = binding.tvSheetTime.text.toString()
+                   val date = binding.tvSheetDate.text.toString()
+                   sheetListener.setTaskInfo(selectedColor.toString() , link , time , date )
+                   dismiss()
+               }else{
+                   binding.enterLinkText.error = "Url is not valid!!"
+                   Toast.makeText(activity!!, "please make sure that the url is valid or not.", Toast.LENGTH_SHORT).show()
+               }
             }
             R.id.tv_SheetDate ->{
                  openTaskDateDialog()
@@ -86,6 +114,21 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String)
         }
     }
 
+    private fun checkValidateUrl():Boolean{
+        val linkSample = ("((http|https)://)(www.)?"
+                + "[a-zA-Z0-9@:%._\\+~#?&//=]"
+                + "{2,256}\\.[a-z]"
+                + "{2,6}\\b([-a-zA-Z0-9@:%"
+                + "._\\+~#?&//=]*)")
+
+        val uRL: Pattern = Pattern.compile(linkSample)
+
+        if (uRL.matcher(binding.enterLinkText.text.toString()).matches()) {
+             return true
+        }
+
+        return false
+    }
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {

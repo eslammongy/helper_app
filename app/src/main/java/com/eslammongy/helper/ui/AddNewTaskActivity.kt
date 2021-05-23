@@ -1,4 +1,3 @@
-
 package com.eslammongy.helper.ui
 
 import android.content.Intent
@@ -17,13 +16,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.eslammongy.helper.R
 import com.eslammongy.helper.crop.PickAndCropImage
 import com.eslammongy.helper.database.Converter
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.ActivityAddNewTaskBinding
-import com.eslammongy.helper.fragment.dialogs.CustomDialog
+import com.eslammongy.helper.fragment.WebViewFragment
+import com.eslammongy.helper.fragment.dialogs.CustomDeleteDialog
 import com.eslammongy.helper.fragment.dialogs.TaskBottomSheet
 import com.yalantis.ucrop.UCrop
 import java.util.*
@@ -36,25 +37,26 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
     private val galleryPermissionCode = 101
     private val locationPermissionCode = 102
     private val pickImageCode = 1000
+    private lateinit var imageConverter: Converter
+    private lateinit var pickAndCropImage: PickAndCropImage
     private var imageResultCropping: Uri? = null
     private lateinit var startAnimation: Animation
     private lateinit var endAnimation: Animation
     private var taskColor: Int = 0
-    private var taskID:Int = 0
-    private lateinit var imageConverter:Converter
-    private lateinit var pickAndCropImage:PickAndCropImage
+    private var taskID: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddNewTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //*****/
-        pickAndCropImage = PickAndCropImage(this , pickImageCode)
+        pickAndCropImage = PickAndCropImage(this, pickImageCode)
         imageConverter = Converter()
-        taskID = intent.getIntExtra("ID" , 0)
+        taskID = intent.getIntExtra("ID", 0)
         binding.bottomView.setBackgroundColor(resources.getColor(R.color.ColorDefaultNote))
 
-        if (taskID != 0){
+        if (taskID != 0) {
 
             binding.tiTaskTitle.setText(intent.getStringExtra("Title"))
             binding.tiTaskContent.setText(intent.getStringExtra("Content"))
@@ -63,18 +65,17 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
             binding.tvShowTaskLink.text = intent.getStringExtra("Link")
             taskColor = intent.getStringExtra("Color")!!.toInt()
             binding.bottomView.setBackgroundColor(taskColor)
-
             binding.taskImageView.setImageBitmap(imageConverter.toBitMap(intent.getByteArrayExtra("ImagePath")!!))
         }
 
         startAnimation = AnimationUtils.loadAnimation(this, R.anim.starting_animation)
         endAnimation = AnimationUtils.loadAnimation(this, R.anim.ending_animation)
-
         binding.btnSaveTask.setOnClickListener(this)
         binding.btnDeleteTask.setOnClickListener(this)
         binding.btnBackToHomeMT.setOnClickListener(this)
         binding.btnOpenBottomSheet.setOnClickListener(this)
         binding.btnOpenMyGallery.setOnClickListener(this)
+        binding.tvShowTaskLink.setOnClickListener(this)
 
 
     }
@@ -156,8 +157,6 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
             imageResultCropping = UCrop.getOutput(data!!)
             if (imageResultCropping != null) binding.taskImageView.setImageURI(imageResultCropping)
         }
-
-
     }
 
     private fun saveNewTask() {
@@ -170,27 +169,58 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
         val imageDrawable = binding.taskImageView.drawable as BitmapDrawable
         val imageByteArray = converter.fromBitMap(imageDrawable.bitmap)
 
-         val taskEntities = TaskEntities(title , desc , time , date , link , taskColor.toString() , imageByteArray)
-        if (title.isEmpty() || desc.isEmpty() || time.isEmpty() || date.isEmpty()){
+        val taskEntities =
+            TaskEntities(title, desc, time, date, link, taskColor.toString(), imageByteArray)
 
-            Toast.makeText(this, "Error required filed is empty.. $taskColor!", Toast.LENGTH_SHORT).show()
-        }else{
+        when (taskID) {
 
-            HelperDataBase.getDataBaseInstance(this).taskDao().saveNewTask(taskEntities)
-            val intent = Intent(this , HomeActivity::class.java)
-            startActivity(intent)
-            finish()
-            Toast.makeText(this, "Task Saved", Toast.LENGTH_SHORT).show()
+            0 -> {
+                if (title.isEmpty() || desc.isEmpty() || time.isEmpty() || date.isEmpty()) {
+
+                    Toast.makeText(
+                        this,
+                        "Error required filed is empty.. $taskColor!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+
+                    HelperDataBase.getDataBaseInstance(this).taskDao().saveNewTask(taskEntities)
+                    val intent = Intent(this, HomeActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    Toast.makeText(this, "Task Saved", Toast.LENGTH_SHORT).show()
+
+                }
+            }
+            intent.getIntExtra("ID", 0) -> {
+
+                if (title == intent.getStringExtra("Title") && desc == intent.getStringExtra("Content") && time == intent.getStringExtra(
+                        "Time"
+                    ) && date == intent.getStringExtra("Date")
+                ) {
+                    Toast.makeText(
+                        this,
+                        "Sorry You Don't Update Anything In This Task",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+
+                    taskEntities.taskId = taskID
+                    HelperDataBase.getDataBaseInstance(this).taskDao().updateCurrentTask(
+                        taskEntities
+                    )
+                    val intent = Intent(this, HomeActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    Toast.makeText(this, "Task Updated", Toast.LENGTH_SHORT).show()
+
+                }
+            }
 
         }
 
     }
 
-    private fun deleteCurrentTask() {
-        val dialogFragment = CustomDialog()
-        dialogFragment.show(supportFragmentManager, "TAG")
-
-    }
 
     private fun backToHomeActivity() {
         val intent = Intent(this, HomeActivity::class.java)
@@ -210,7 +240,8 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
                 saveNewTask()
             }
             R.id.btn_DeleteTask -> {
-                deleteCurrentTask()
+                val dialogFragment = CustomDeleteDialog(taskID)
+                openFrameLayout(dialogFragment)
             }
             R.id.btn_BackToHomeMT -> {
                 backToHomeActivity()
@@ -231,9 +262,21 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
                     galleryPermissionCode
                 )
             }
+            R.id.tv_ShowTaskLink -> {
+                val fragment = WebViewFragment(binding.tvShowTaskLink.text.toString())
+                openFrameLayout(fragment)
+            }
 
         }
 
+    }
+
+    private fun openFrameLayout(fragment:Fragment){
+        binding.fragmentContainer.visibility = View.VISIBLE
+        binding.fragmentContainer.startAnimation(startAnimation)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.fragment_container, fragment)
+        transaction.commit()
     }
 
     override fun setTaskInfo(color: String, lintText: String, time: String, date: String) {

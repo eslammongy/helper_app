@@ -8,25 +8,26 @@ import androidx.room.PrimaryKey
 data class TaskEntities(
 
     @ColumnInfo(name = "title")
-    var taskTitle: String,
+    var taskTitle: String = "",
     @ColumnInfo(name = "content")
-    var taskDesc: String,
+    var taskDesc: String = "",
     @ColumnInfo(name = "time")
-    var taskTime: String,
+    var taskTime: String = "",
     @ColumnInfo(name = "date")
-    var taskDate: String,
+    var taskDate: String = "",
     @ColumnInfo(name = "link")
-    var taskLink: String,
+    var taskLink: String = "",
     @ColumnInfo(name = "color_task")
-    val taskColor: String,
+    val taskColor: String = "",
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    val taskImage: ByteArray,
+    val taskImage: ByteArray? = null,
 
-) {
-
+    ) {
 
     @PrimaryKey(autoGenerate = true)
     var taskId: Int = 0
+
+    private constructor() : this("", "", "", "", "", "", null)
 
     @Override
     override fun toString(): String {

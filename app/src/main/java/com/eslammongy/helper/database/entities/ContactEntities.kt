@@ -1,17 +1,32 @@
 package com.eslammongy.helper.database.entities
 
-import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "Contact_Table")
 data class ContactEntities(
-    @PrimaryKey(autoGenerate = true)
-    val contactId: Int= 0,
+
     val contact_Name: String,
     val contact_Phone: String,
     val contact_Email: String,
     val contact_Address: String,
     val contact_Color: String,
-    val contact_Image: Bitmap
-)
+    val contact_Image: ByteArray?=null
+){
+    @PrimaryKey(autoGenerate = true)
+    var contactId: Int= 0
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ContactEntities
+
+        if (contactId != other.contactId) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return contactId
+    }
+}

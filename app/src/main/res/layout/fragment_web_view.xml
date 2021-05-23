@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/webView_layout"
+    tools:context=".fragment.WebViewFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/task_WEBView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark">
+
+        <ImageButton
+            android:id="@+id/btn_exitWebView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:scaleType="centerCrop"
+            android:tint="@color/White"
+            android:src="@drawable/ic_iconfinder_left_arrow_back_previous_navigation"
+            android:background="@color/colorPrimaryDark"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_ShowLinkInWebView"
+            app:layout_constraintEnd_toStartOf="@+id/tv_ShowLinkInWebView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_ShowLinkInWebView" />
+
+        <TextView
+            android:id="@+id/tv_ShowLinkInWebView"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background="@drawable/custom_dark_shape"
+            android:maxLines="1"
+            android:textColor="@color/White"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/task_WebView"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintStart_toEndOf="@+id/btn_exitWebView" />
+
+        <WebView
+            android:id="@+id/task_WebView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/colorPrimaryDark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_exitWebView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
