@@ -7,7 +7,7 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.eslammongy.helper.database.Converter
+import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.TaskLayoutViewBinding
 import com.eslammongy.helper.ui.AddNewTaskActivity
@@ -48,6 +48,8 @@ class TaskAdapter(var context: Context, var listOFTasks: List<TaskEntities>) :
             taskIntent.putExtra("Link", taskModel.taskLink)
             taskIntent.putExtra("Color", taskModel.taskColor)
             taskIntent.putExtra("ImagePath", taskModel.taskImage)
+            taskIntent.putExtra("FriendName", taskModel.taskFriendName)
+            taskIntent.putExtra("TaskImagePath", taskModel.taskFriendImage)
             context.startActivity(taskIntent)
             (context as Activity).finish()
 

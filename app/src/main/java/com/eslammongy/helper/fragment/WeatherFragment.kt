@@ -1,12 +1,10 @@
 package com.eslammongy.helper.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.eslammongy.helper.R
-import com.eslammongy.helper.databinding.FragmentTaskBinding
+import androidx.fragment.app.Fragment
 import com.eslammongy.helper.databinding.FragmentWeatherBinding
 
 class WeatherFragment : Fragment() {
@@ -23,5 +21,10 @@ class WeatherFragment : Fragment() {
         return binding.root
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 
 }

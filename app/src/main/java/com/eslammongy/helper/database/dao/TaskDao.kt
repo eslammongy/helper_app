@@ -18,4 +18,10 @@ interface TaskDao {
     @Delete
      fun deleteSelectedTask(taskEntities: TaskEntities)
 
+    @Query("SELECT * FROM task_table WHERE friend_name LIKE :searchQuery")
+    fun getTaskWithFriend(searchQuery: String): List<TaskEntities>
+
+    @Query("SELECT * FROM task_table WHERE title LIKE :searchQuery")
+    fun searchInTaskDataBase(searchQuery: String): List<TaskEntities>
+
 }

@@ -1,11 +1,10 @@
 package com.eslammongy.helper.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.eslammongy.helper.R
+import androidx.fragment.app.Fragment
 import com.eslammongy.helper.databinding.FragmentCheckListBinding
 
 class CheckListFragment : Fragment() {
@@ -23,4 +22,9 @@ class CheckListFragment : Fragment() {
         return binding.root
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

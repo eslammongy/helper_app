@@ -32,9 +32,11 @@
             android:textColor="@color/white"
             android:textSize="17sp"
             app:chipBackgroundColor="@color/ColorPurpleNote"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/contact_LayoutImage" />
 
         <androidx.cardview.widget.CardView

@@ -13,6 +13,8 @@ data class ContactEntities(
     val contact_Color: String,
     val contact_Image: ByteArray?=null
 ){
+    constructor() : this("", "", "", "", "",  null)
+
     @PrimaryKey(autoGenerate = true)
     var contactId: Int= 0
     override fun equals(other: Any?): Boolean {

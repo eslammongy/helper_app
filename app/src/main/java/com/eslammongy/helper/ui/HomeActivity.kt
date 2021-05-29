@@ -110,13 +110,13 @@ class HomeActivity : AppCompatActivity() {
         when(binding.titleActiveFragment.text){
 
             "Task" -> {
-                openActivity(AddNewTaskActivity())
+                openActivity(AddNewTaskActivity() , "None")
             }
             "CheckList" -> {
-                openActivity(AddNewCheckListActivity())
+                openActivity(AddNewCheckListActivity(), "None")
             }
             "Contact" -> {
-                openActivity(AddNewContactActivity())
+                openActivity(AddNewContactActivity(), "None")
             }
 
         }
@@ -135,9 +135,9 @@ class HomeActivity : AppCompatActivity() {
 
         }
     }
-    private fun openActivity(activity: Activity){
+    private fun openActivity(activity: Activity , text:String){
         val intent = Intent(this , activity::class.java)
-        intent.putExtra("SearchKey" , binding.titleActiveFragment.text.toString())
+        intent.putExtra("SearchKey" , text)
         startActivity(intent)
         finish()
     }
@@ -164,13 +164,13 @@ class HomeActivity : AppCompatActivity() {
         when(binding.titleActiveFragment.text){
 
             "Task" -> {
-                openActivity(SearchActivity())
+                openActivity(SearchActivity(), "Task" )
             }
             "CheckList" -> {
-                openActivity(SearchActivity())
+                openActivity(SearchActivity(), "CheckList" )
             }
             "Contact" -> {
-                openActivity(SearchActivity())
+                openActivity(SearchActivity(), "Contact")
             }
 
         }

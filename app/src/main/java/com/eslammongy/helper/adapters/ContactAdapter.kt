@@ -7,7 +7,7 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.eslammongy.helper.database.Converter
+import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.ContactLayoutViewBinding
 import com.eslammongy.helper.ui.AddNewContactActivity

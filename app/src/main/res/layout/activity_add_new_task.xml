@@ -180,14 +180,14 @@
                     android:textSize="16sp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/task_FriendName"
+                    android:id="@+id/task_FriendImage"
                     android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_height="34dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher_round" />
+                    android:src="@drawable/work_on_time_image" />
 
             </LinearLayout>
 
@@ -233,8 +233,8 @@
 
             <ImageButton
                 android:id="@+id/btn_OpenBottomSheet"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:padding="10dp"
                 android:background="@drawable/custom_one_shape_button"
@@ -245,8 +245,8 @@
 
             <ImageButton
                 android:id="@+id/btnOpenMyGallery"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:padding="10dp"
                 android:layout_marginStart="10dp"
@@ -258,8 +258,8 @@
 
             <ImageButton
                 android:id="@+id/btn_DeleteTask"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="10dp"
                 android:background="@drawable/delete_button_shape"
                 android:contentDescription="@string/todo"
@@ -272,8 +272,8 @@
 
             <ImageButton
                 android:id="@+id/btn_SaveTask"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/custom_one_shape_button"

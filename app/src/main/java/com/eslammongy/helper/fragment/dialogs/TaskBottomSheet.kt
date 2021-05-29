@@ -16,7 +16,8 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eslammongy.helper.R
 import com.eslammongy.helper.adapters.FriendsAdapter
-import com.eslammongy.helper.database.entities.FriendModel
+import com.eslammongy.helper.database.HelperDataBase
+import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.FragmentTaskBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.DateFormat
@@ -25,7 +26,14 @@ import java.util.*
 import java.util.regex.Pattern
 
 @RequiresApi(Build.VERSION_CODES.O)
-class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String): BottomSheetDialogFragment(), View.OnClickListener {
+class TaskBottomSheet(
+    taskColor: Int?,
+    time: String,
+    date: String,
+    link: String,
+    friendName: String,
+    friendImage: ByteArray
+): BottomSheetDialogFragment(), View.OnClickListener ,FriendsAdapter.OnItemClickerListener{
 
     private var _binding: FragmentTaskBottomSheetBinding? = null
     private val binding get() = _binding!!
@@ -33,14 +41,17 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String)
     private var time:String? = null
     private var date:String? = null
     private var link:String? = null
-    var listMyFriends = ArrayList<FriendModel>()
-    var friendAdapter: FriendsAdapter? = null
+    private var friendName:String? = null
+    private var friendImage:ByteArray? = null
+    private var listMyFriends = ArrayList<ContactEntities>()
+    private var friendAdapter: FriendsAdapter? = null
     init {
         this.taskColor = taskColor
         this.time = time
         this.date = date
         this.link = link
-
+        this.friendName = friendName
+        this.friendImage = friendImage
     }
     private lateinit var sheetListener: BottomSheetInterface
     override fun onCreateView(
@@ -51,26 +62,13 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String)
 
         binding.enterLinkText.setText(link)
         binding.chlPaletteColor.setSelectedColor(taskColor!!)
-        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
-        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
-        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
-        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
-        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
-        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
-        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
-        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
-        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
-        listMyFriends.add(FriendModel("Eslam Mongy" , R.mipmap.ic_launcher_round))
-        listMyFriends.add(FriendModel("Eslam Mongy" ,R.mipmap.ic_launcher_round))
-        friendAdapter = FriendsAdapter(context!! , listMyFriends)
-        binding.taskFiendRecycler.setHasFixedSize(true)
-        binding.taskFiendRecycler.layoutManager = LinearLayoutManager(context )
-        binding.taskFiendRecycler.adapter = friendAdapter
+        displayFriendsRecyclerView()
         binding.tvSheetTime.text = time
         binding.tvSheetDate.text = date
         binding.saveTaskInfo.setOnClickListener(this)
         binding.tvSheetDate.setOnClickListener(this)
         binding.tvSheetTime.setOnClickListener(this)
+
         //taskColor = resources.getColor(R.color.ColorDefaultNote)
         binding.chlPaletteColor.setOnColorSelectedListener { clr ->
             taskColor = clr
@@ -84,7 +82,8 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String)
         super.onStart()
 
         val sheetContainer = requireView().parent as? ViewGroup ?: return
-        val height = (resources.displayMetrics.heightPixels * 0.95).toInt()
+        //val height = (resources.displayMetrics.heightPixels * 0.95).toInt()
+        val height = (resources.displayMetrics.heightPixels).toInt()
         sheetContainer.layoutParams.height = height
         sheetContainer.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
     }
@@ -92,28 +91,47 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String)
     override fun onClick(v: View?) {
 
         when(v!!.id){
-            R.id.saveTaskInfo ->{
-               if (checkValidateUrl()){
-                   val selectedColor = this.taskColor
-                   val link = binding.enterLinkText.text.toString()
-                   val time = binding.tvSheetTime.text.toString()
-                   val date = binding.tvSheetDate.text.toString()
-                   sheetListener.setTaskInfo(selectedColor.toString() , link , time , date )
-                   dismiss()
-               }else{
-                   binding.enterLinkText.error = "Url is not valid!!"
-                   Toast.makeText(activity!!, "please make sure that the url is valid or not.", Toast.LENGTH_SHORT).show()
-               }
+            R.id.saveTaskInfo -> {
+              getTaskInfoFromBottomSheet()
             }
-            R.id.tv_SheetDate ->{
-                 openTaskDateDialog()
+            R.id.tv_SheetDate -> {
+                openTaskDateDialog()
             }
-            R.id.tv_SheetTime ->{
+            R.id.tv_SheetTime -> {
                 openTaskTimeDialog()
             }
         }
     }
 
+    private fun displayFriendsRecyclerView(){
+        listMyFriends = HelperDataBase.getDataBaseInstance(activity!!).contactDao().getAllContacts() as ArrayList<ContactEntities>
+        friendAdapter = FriendsAdapter(context!!, listMyFriends, this)
+        binding.taskFiendRecycler.setHasFixedSize(true)
+        binding.taskFiendRecycler.layoutManager = LinearLayoutManager(context)
+        binding.taskFiendRecycler.adapter = friendAdapter
+
+    }
+
+    private fun getTaskInfoFromBottomSheet(){
+        if (checkValidateUrl() || binding.enterLinkText.text!!.isEmpty()) {
+            val selectedColor = this.taskColor
+            val link = binding.enterLinkText.text.toString()
+            val time = binding.tvSheetTime.text.toString()
+            val date = binding.tvSheetDate.text.toString()
+            sheetListener.setTaskInfo(
+                selectedColor.toString(), link, time, date,
+                friendName!!, friendImage!!
+            )
+            dismiss()
+        } else {
+            binding.enterLinkText.error = "Url is not valid!!"
+            Toast.makeText(
+                activity!!,
+                "please make sure that the url is valid or not.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
     private fun checkValidateUrl():Boolean{
         val linkSample = ("((http|https)://)(www.)?"
                 + "[a-zA-Z0-9@:%._\\+~#?&//=]"
@@ -180,6 +198,30 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, link: String)
 
     interface BottomSheetInterface {
 
-        fun setTaskInfo(color: String, lintText: String, time: String, date: String)
+        fun setTaskInfo(
+            color: String,
+            lintText: String,
+            time: String,
+            date: String,
+            friendName: String,
+            friendImage: ByteArray
+        )
+    }
+
+    override fun onClicked(contactEntities: ContactEntities, position: Int) {
+
+        friendName = contactEntities.contact_Name
+        friendImage = contactEntities.contact_Image
+        Toast.makeText(activity!!, "You Select Your Friend Named $friendName", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onItemClickListener(position: Int, view: View?) {
+        friendAdapter!!.selectedItem()
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

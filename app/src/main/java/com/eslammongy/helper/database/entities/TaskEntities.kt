@@ -21,13 +21,17 @@ data class TaskEntities(
     val taskColor: String = "",
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     val taskImage: ByteArray? = null,
+    @ColumnInfo(name = "friend_name")
+    val taskFriendName: String = "",
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    val taskFriendImage: ByteArray? = null,
 
     ) {
 
     @PrimaryKey(autoGenerate = true)
     var taskId: Int = 0
 
-    private constructor() : this("", "", "", "", "", "", null)
+    constructor() : this("", "", "", "", "", "", null)
 
     @Override
     override fun toString(): String {
@@ -40,12 +44,23 @@ data class TaskEntities(
 
         other as TaskEntities
 
-        if (!taskImage.contentEquals(other.taskImage)) return false
+        if (taskImage != null) {
+            if (other.taskImage == null) return false
+            if (!taskImage.contentEquals(other.taskImage)) return false
+        } else if (other.taskImage != null) return false
+        if (taskFriendImage != null) {
+            if (other.taskFriendImage == null) return false
+            if (!taskFriendImage.contentEquals(other.taskFriendImage)) return false
+        } else if (other.taskFriendImage != null) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return taskImage.contentHashCode() ?: 0
+        var result = taskImage?.contentHashCode() ?: 0
+        result = 31 * result + (taskFriendImage?.contentHashCode() ?: 0)
+        return result
     }
+
+
 }

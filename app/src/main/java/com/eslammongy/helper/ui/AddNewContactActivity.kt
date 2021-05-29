@@ -1,5 +1,6 @@
 package com.eslammongy.helper.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.BitmapDrawable
@@ -7,54 +8,57 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.eslammongy.helper.R
 import com.eslammongy.helper.crop.PickAndCropImage
-import com.eslammongy.helper.database.Converter
 import com.eslammongy.helper.database.HelperDataBase
+import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.ActivityAddNewContactBinding
+import com.eslammongy.helper.fragment.TaskWithFriendFragment
+import com.eslammongy.helper.fragment.dialogs.CustomDeleteDialog
 import com.yalantis.ucrop.UCrop
 
+@SuppressLint("SetTextI18n")
 class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityAddNewContactBinding
     private var taskColor: Int? = null
     private val galleryPermissionCode = 101
     private val locationPermissionCode = 102
     private val pickImageCode = 1000
-    var contactID:Int = 0
+    var contactID: Int = 0
+    private var showing = false
+    private lateinit var startAnimation: Animation
     private lateinit var imageConverter: Converter
     private lateinit var pickAndCropImage: PickAndCropImage
     private var imageResultCropping: Uri? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddNewContactBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        startAnimation = AnimationUtils.loadAnimation(this, R.anim.starting_animation)
         pickAndCropImage = PickAndCropImage(this, pickImageCode)
         imageConverter = Converter()
-
-        contactID = intent.getIntExtra("ID" , 0)
-        if (contactID != 0){
-            binding.contactInputName.setText(intent.getStringExtra("Name"))
-            binding.contactInputPhone.setText(intent.getStringExtra("Phone"))
-            binding.contactInputEmail.setText(intent.getStringExtra("Email"))
-            binding.contactInputAddress.setText(intent.getStringExtra("Address"))
-            taskColor = Integer.parseInt(intent.getStringExtra("Color")!!)
-            binding.btnOpenColorPicker.setCardBackgroundColor(taskColor!!)
-            binding.chlPaletteColor.setSelectedColor(taskColor!!)
-
-            binding.contactProfilePhoto.setImageBitmap(imageConverter.toBitMap(intent.getByteArrayExtra("ImagePath")!!))
-        }
+        taskColor = resources.getColor(R.color.ColorDefaultNote)
+        contactID = intent.getIntExtra("ID", 0)
+        getSelectedContactInfo(contactID)
         binding.btnOpenColorPicker.setOnClickListener(this)
+        binding.btnDeleteCurrentContact.setOnClickListener(this)
         binding.btnBackToHome.setOnClickListener(this)
         binding.ChangeProfilePhoto.setOnClickListener(this)
         binding.btnSaveNewContact.setOnClickListener(this)
-        binding.chlPaletteColor.setSelectedColor(resources.getColor(R.color.ColorDefaultNote))
+        binding.btnShowTwF.setOnClickListener(this)
+        binding.btnOpenEmailForm.setOnClickListener(this)
+        binding.btnCallMyContact.setOnClickListener(this)
         binding.chlPaletteColor.setOnColorSelectedListener { clr ->
             taskColor = clr
             binding.btnOpenColorPicker.setCardBackgroundColor(taskColor!!)
@@ -136,23 +140,47 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
         } else if (requestCode == UCrop.REQUEST_CROP) {
 
             imageResultCropping = UCrop.getOutput(data!!)
-            if (imageResultCropping != null) binding.contactProfilePhoto.setImageURI(imageResultCropping)
+            if (imageResultCropping != null) binding.contactProfilePhoto.setImageURI(
+                imageResultCropping
+            )
         }
 
 
     }
+
     private fun backToHomeActivity() {
-        val intent = Intent(this , HomeActivity::class.java)
-        intent.putExtra("ArrowKey" , 3)
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.putExtra("ArrowKey", 3)
         startActivity(intent)
         finish()
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-       backToHomeActivity()
+        backToHomeActivity()
     }
 
+    private fun getSelectedContactInfo(ID:Int){
+        if (ID != 0) {
+            binding.contactInputName.setText(intent.getStringExtra("Name"))
+            binding.contactTopName.text = intent.getStringExtra("Name")
+            binding.contactInputPhone.setText(intent.getStringExtra("Phone"))
+            binding.contactInputEmail.setText(intent.getStringExtra("Email"))
+            binding.contactInputAddress.setText(intent.getStringExtra("Address"))
+            taskColor = Integer.parseInt(intent.getStringExtra("Color")!!)
+            binding.btnOpenColorPicker.setCardBackgroundColor(taskColor!!)
+            binding.chlPaletteColor.setSelectedColor(taskColor!!)
+
+            binding.contactProfilePhoto.setImageBitmap(
+                imageConverter.toBitMap(
+                    intent.getByteArrayExtra(
+                        "ImagePath"
+                    )!!
+                )
+            )
+            binding.btnSaveNewContact.text = "Update"
+        }
+    }
     private fun saveNewContact() {
 
         val contactName = binding.contactInputName.text.toString()
@@ -160,9 +188,17 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
         val contactEmail = binding.contactInputEmail.text.toString()
         val contactAddress = binding.contactInputAddress.text.toString()
         //val contactColor = binding.contactInputName.text.toString()
+
         val imageDrawable = binding.contactProfilePhoto.drawable as BitmapDrawable
         val imageByteArray = imageConverter.fromBitMap(imageDrawable.bitmap)
-        val contactEntities = ContactEntities(contactName , contactPhone , contactEmail , contactAddress , taskColor.toString() , imageByteArray)
+        val contactEntities = ContactEntities(
+            contactName,
+            contactPhone,
+            contactEmail,
+            contactAddress,
+            taskColor.toString(),
+            imageByteArray
+        )
 
         when (contactID) {
 
@@ -176,7 +212,8 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
                     ).show()
                 } else {
 
-                    HelperDataBase.getDataBaseInstance(this).contactDao().saveNewContact(contactEntities)
+                    HelperDataBase.getDataBaseInstance(this).contactDao()
+                        .saveNewContact(contactEntities)
                     backToHomeActivity()
                     Toast.makeText(this, "Task Saved", Toast.LENGTH_SHORT).show()
 
@@ -184,7 +221,9 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
             }
             intent.getIntExtra("ID", 0) -> {
 
-                if (contactName == intent.getStringExtra("Name") && contactPhone == intent.getStringExtra("Phone") && contactEmail == intent.getStringExtra(
+                if (contactName == intent.getStringExtra("Name") && contactPhone == intent.getStringExtra(
+                        "Phone"
+                    ) && contactEmail == intent.getStringExtra(
                         "Email"
                     ) && contactAddress == intent.getStringExtra("Address")
                 ) {
@@ -196,8 +235,9 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
                 } else {
 
                     contactEntities.contactId = contactID
-                    HelperDataBase.getDataBaseInstance(this).contactDao().updateCurrentContact(contactEntities)
-                   backToHomeActivity()
+                    HelperDataBase.getDataBaseInstance(this).contactDao()
+                        .updateCurrentContact(contactEntities)
+                    backToHomeActivity()
                     Toast.makeText(this, "Task Updated", Toast.LENGTH_SHORT).show()
 
                 }
@@ -205,36 +245,69 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
 
         }
     }
-//    fun deleteCurrentContact() {}
-//    fun makePhoneCall() {}
-//    fun sendEmailMessage() {}
-//    fun shareMyContact() {}
-//    fun pickContactProfilePhoto() {}
+
+    private fun makePhoneCall() {
+        val phoneNumber = binding.contactInputPhone.text.toString()
+        val intent = Intent(Intent.ACTION_DIAL).apply {
+            data = Uri.parse("tel:$phoneNumber")
+        }
+        startActivity(intent)
+    }
 
     override fun onClick(v: View?) {
 
-        when(v!!.id){
-            R.id.btn_SaveNewContact ->{
+        when (v!!.id) {
+            R.id.btn_SaveNewContact -> {
                 saveNewContact()
             }
-            R.id.btn_DeleteCurrentContact ->{}
-            R.id.btn_CallMyContact ->{}
-            R.id.btn_SendEmailMessage ->{}
-            R.id.btn_ShareMyContact ->{}
-            R.id.btn_OpenColorPicker ->{
-                binding.chlPaletteColor.visibility = View.VISIBLE
+            R.id.btn_DeleteCurrentContact -> {
+                val dialogFragment = CustomDeleteDialog(contactID , 2)
+                openFrameLayout(dialogFragment)
             }
-            R.id.Change_ProfilePhoto ->{
+            R.id.btn_CallMyContact -> {
+                makePhoneCall()
+            }
+            R.id.btn_OpenEmailForm -> {
+                val twfFragment = TaskWithFriendFragment(
+                    binding.contactTopName.text.toString(),
+                    binding.contactInputEmail.text.toString()
+                )
+                openFrameLayout(twfFragment)
+            }
+            R.id.btn_ShowTwF -> {
+                val twfFragment =
+                    TaskWithFriendFragment(binding.contactTopName.text.toString(), "ShowTask")
+                openFrameLayout(twfFragment)
+            }
+            R.id.btn_OpenColorPicker -> {
+                if (showing) {
+                    binding.chlPaletteColor.visibility = View.GONE
+                    showing = false
+                } else {
+                    binding.chlPaletteColor.visibility = View.VISIBLE
+                    showing = true
+                }
+            }
+            R.id.Change_ProfilePhoto -> {
                 checkUserPermission(
                     android.Manifest.permission.READ_EXTERNAL_STORAGE,
                     "gallery",
                     galleryPermissionCode
                 )
             }
-            R.id.btn_BackToHome ->{
+            R.id.btn_BackToHome -> {
                 backToHomeActivity()
             }
 
         }
+    }
+
+    private fun openFrameLayout(fragment: Fragment) {
+        binding.fragmentContainer.visibility = View.VISIBLE
+        binding.fragmentContainer.startAnimation(startAnimation)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.fragment_container, fragment)
+        transaction.commit()
+
     }
 }

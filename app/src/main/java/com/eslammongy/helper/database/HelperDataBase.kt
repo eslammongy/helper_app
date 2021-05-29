@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.dao.CheckListDao
 import com.eslammongy.helper.database.dao.ContactDao
 import com.eslammongy.helper.database.dao.TaskDao

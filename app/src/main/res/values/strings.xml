@@ -32,7 +32,7 @@
     <string name="exit">Exit</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="delete_text">Are You Sure You Want To Delete This Task OR Undo Deleted It ..</string>
+    <string name="delete_text">Are You Sure You Want To Delete This Item OR Undo Deleted It ..</string>
     <string name="sunrise">Sunrise</string>
     <string name="wind">Wind</string>
     <string name="pressure">Pressure</string>
@@ -42,4 +42,8 @@
     <string name="created_by">Created By</string>
     <string name="email">email</string>
     <string name="add_more">Add More</string>
+    <string name="you_didn_t_have_any_task">You dosn\'t have any task with</string>
+    <string name="subject">subject</string>
+    <string name="send">Send</string>
+    <string name="message">message</string>
 </resources>

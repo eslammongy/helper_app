@@ -19,8 +19,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.eslammongy.helper.R
 import com.eslammongy.helper.crop.PickAndCropImage
-import com.eslammongy.helper.database.Converter
 import com.eslammongy.helper.database.HelperDataBase
+import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.ActivityAddNewTaskBinding
 import com.eslammongy.helper.fragment.WebViewFragment
@@ -55,7 +55,6 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
         imageConverter = Converter()
         taskID = intent.getIntExtra("ID", 0)
         binding.bottomView.setBackgroundColor(resources.getColor(R.color.ColorDefaultNote))
-
         if (taskID != 0) {
 
             binding.tiTaskTitle.setText(intent.getStringExtra("Title"))
@@ -63,9 +62,12 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
             binding.tvShowTaskTime.text = intent.getStringExtra("Time")
             binding.tvShowTaskDate.text = intent.getStringExtra("Date")
             binding.tvShowTaskLink.text = intent.getStringExtra("Link")
+            binding.tvShowTaskFriend.text = intent.getStringExtra("FriendName")
             taskColor = intent.getStringExtra("Color")!!.toInt()
             binding.bottomView.setBackgroundColor(taskColor)
             binding.taskImageView.setImageBitmap(imageConverter.toBitMap(intent.getByteArrayExtra("ImagePath")!!))
+            binding.taskFriendImage.setImageBitmap(imageConverter.toBitMap(intent.getByteArrayExtra("TaskImagePath")!!))
+
         }
 
         startAnimation = AnimationUtils.loadAnimation(this, R.anim.starting_animation)
@@ -166,11 +168,14 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
         val time = binding.tvShowTaskTime.text.toString()
         val date = binding.tvShowTaskDate.text.toString()
         val link = binding.tvShowTaskLink.text.toString()
-        val imageDrawable = binding.taskImageView.drawable as BitmapDrawable
-        val imageByteArray = converter.fromBitMap(imageDrawable.bitmap)
+        val friendName = binding.tvShowTaskFriend.text.toString()
+        val imageTaskDrawable = binding.taskImageView.drawable as BitmapDrawable
+        val imageByteArray = converter.fromBitMap(imageTaskDrawable.bitmap)
+        val imageTaskFDrawable = binding.taskFriendImage.drawable as BitmapDrawable
+        val friendImageByteArray = converter.fromBitMap(imageTaskFDrawable.bitmap)
 
         val taskEntities =
-            TaskEntities(title, desc, time, date, link, taskColor.toString(), imageByteArray)
+            TaskEntities(title, desc, time, date, link, taskColor.toString(), imageByteArray , friendName , friendImageByteArray)
 
         when (taskID) {
 
@@ -240,7 +245,7 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
                 saveNewTask()
             }
             R.id.btn_DeleteTask -> {
-                val dialogFragment = CustomDeleteDialog(taskID)
+                val dialogFragment = CustomDeleteDialog(taskID , 1)
                 openFrameLayout(dialogFragment)
             }
             R.id.btn_BackToHomeMT -> {
@@ -248,11 +253,14 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
             }
             R.id.btn_OpenBottomSheet -> {
                 val color = (binding.bottomView.background as ColorDrawable).color
+                val imageTaskFDrawable = binding.taskFriendImage.drawable as BitmapDrawable
                 TaskBottomSheet(
                     color,
                     binding.tvShowTaskTime.text.toString(),
                     binding.tvShowTaskDate.text.toString(),
-                    binding.tvShowTaskLink.text.toString()
+                    binding.tvShowTaskLink.text.toString(),
+                    binding.tvShowTaskFriend.text.toString(),
+                    imageConverter.fromBitMap(imageTaskFDrawable.bitmap)
                 ).show(supportFragmentManager, "TAG")
             }
             R.id.btnOpenMyGallery -> {
@@ -279,12 +287,21 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
         transaction.commit()
     }
 
-    override fun setTaskInfo(color: String, lintText: String, time: String, date: String) {
+    override fun setTaskInfo(
+        color: String,
+        lintText: String,
+        time: String,
+        date: String,
+        friendName: String,
+        friendImage: ByteArray
+    ) {
         taskColor = color.toInt()
         binding.bottomView.setBackgroundColor(taskColor)
         binding.tvShowTaskTime.text = time
         binding.tvShowTaskDate.text = date
         binding.tvShowTaskLink.text = lintText
+        binding.tvShowTaskFriend.text = friendName
+        binding.taskFriendImage.setImageBitmap(imageConverter.toBitMap(friendImage))
     }
 
 }

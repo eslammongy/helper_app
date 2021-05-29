@@ -8,7 +8,7 @@
     tools:context=".ui.SearchActivity">
 
     <SearchView
-        android:id="@+id/recive_Intent"
+        android:id="@+id/searchViewListener"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginEnd="10dp"
@@ -16,6 +16,7 @@
         android:background="@drawable/custom_dark_shape"
         android:iconifiedByDefault="false"
         android:queryHint="Search"
+
         android:searchIcon="@drawable/ic_iconfinder_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_BackToHomeMT"
@@ -28,7 +29,19 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="30sp"
-        android:text="@string/hello_blank_fragment" />
+        android:textColor="@color/White"
+      />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_RecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintTop_toBottomOf="@id/searchViewListener"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="15dp"
+        tools:layout_editor_absoluteX="10dp"/>
 
     <ImageButton
         android:id="@+id/btn_BackToHomeMT"
@@ -43,7 +56,7 @@
         android:scaleType="fitCenter"
         android:src="@drawable/ic_iconfinder_left_arrow_back_previous_navigation"
         android:tint="@color/White"
-        app:layout_constraintEnd_toStartOf="@+id/recive_Intent"
+        app:layout_constraintEnd_toStartOf="@+id/searchViewListener"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/guideline9" />
 

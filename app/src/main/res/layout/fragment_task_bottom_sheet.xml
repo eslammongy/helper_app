@@ -114,15 +114,15 @@
 
     <ImageButton
         android:id="@+id/saveTaskInfo"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/todo"
         android:padding="10dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_round_send_24"
         android:tint="@color/white"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toTopOf="@+id/chl_paletteColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

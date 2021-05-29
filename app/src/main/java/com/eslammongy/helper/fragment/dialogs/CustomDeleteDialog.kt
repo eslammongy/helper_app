@@ -12,20 +12,23 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.eslammongy.helper.R
 import com.eslammongy.helper.database.HelperDataBase
+import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.DeleteDialogLayoutBinding
 import com.eslammongy.helper.ui.HomeActivity
 
-class CustomDeleteDialog(itemDeletedID: Int) : Fragment() ,View.OnClickListener{
+class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int) : Fragment() ,View.OnClickListener{
 
     private var _binding: DeleteDialogLayoutBinding? = null
     private val binding get() = _binding!!
     private var itemDeletedID: Int? = null
+    private var selectedDialog:Int = 0
     private lateinit var endAnimation: Animation
-
+    private lateinit var contactEntities: ContactEntities
     private lateinit var taskEntities: TaskEntities
     init {
         this.itemDeletedID = itemDeletedID
+        this.selectedDialog = selectedDialog
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,27 +60,48 @@ class CustomDeleteDialog(itemDeletedID: Int) : Fragment() ,View.OnClickListener{
         when (v!!.id) {
 
             R.id.btn_ExitDeleteDialog -> {
-                binding.deleteDialogLayout.visibility = View.GONE
-                binding.deleteDialogLayout.startAnimation(endAnimation)
+                binding.parentView.visibility = View.GONE
+                binding.parentView.startAnimation(endAnimation)
 
             }
             R.id.btn_SetDeleteDialog -> {
                 taskEntities = TaskEntities()
+                contactEntities = ContactEntities()
                 taskEntities.taskId = itemDeletedID!!
-                if (itemDeletedID == 0) {
-                    Toast.makeText(activity!! , "not found anything to delete it !!" , Toast.LENGTH_SHORT).show()
+                contactEntities.contactId = itemDeletedID!!
 
+                if (selectedDialog == 1){
+                    if (itemDeletedID == 0) {
+                        Toast.makeText(activity!! , "not found anything to delete it !!" , Toast.LENGTH_SHORT).show()
+
+                    }else{
+
+                        HelperDataBase.getDataBaseInstance(activity!!).taskDao().deleteSelectedTask(taskEntities)
+                        val intent = Intent(activity!! , HomeActivity::class.java)
+                        startActivity(intent)
+                        activity!!.finish()
+
+                    }
                 }else{
+                    if (itemDeletedID == 0) {
+                        Toast.makeText(activity!! , "not found anything to delete it !!" , Toast.LENGTH_SHORT).show()
 
-                    HelperDataBase.getDataBaseInstance(activity!!).taskDao().deleteSelectedTask(taskEntities)
-                    val intent = Intent(activity!! , HomeActivity::class.java)
-                    startActivity(intent)
-                    activity!!.finish()
+                    }else{
 
+                        HelperDataBase.getDataBaseInstance(activity!!).contactDao().deleteSelectedContact(contactEntities)
+                        val intent = Intent(activity!! , HomeActivity::class.java)
+                        startActivity(intent)
+                        activity!!.finish()
+
+                    }
                 }
 
             }
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

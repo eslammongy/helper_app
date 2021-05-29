@@ -14,15 +14,11 @@ class WebViewFragment(private var webViewUrl: String? = null) : Fragment(){
     private var _binding: FragmentWebViewBinding? = null
     private val binding get() = _binding!!
     private lateinit var endAnimation: Animation
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState) }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View{
-        // Inflate the layout for this fragment
+        savedInstanceState: Bundle?): View{
         _binding = FragmentWebViewBinding.inflate(inflater , container , false)
         endAnimation = AnimationUtils.loadAnimation(activity!!, R.anim.ending_animation)
 
@@ -31,7 +27,7 @@ class WebViewFragment(private var webViewUrl: String? = null) : Fragment(){
         webViewSetting.javaScriptEnabled = true
         binding.taskWebView.webViewClient = WebViewClient()
         binding.taskWebView.canGoBack()
-        binding.taskWebView.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+        binding.taskWebView.setOnKeyListener(View.OnKeyListener { _ , keyCode, event ->
 
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP && binding.taskWebView.canGoBack()) {
 
@@ -50,4 +46,9 @@ class WebViewFragment(private var webViewUrl: String? = null) : Fragment(){
         return binding.root
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }
