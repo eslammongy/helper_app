@@ -17,7 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.eslammongy.helper.R
-import com.eslammongy.helper.crop.PickAndCropImage
+import com.eslammongy.helper.commonfun.PickAndCropImage
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.entities.ContactEntities
@@ -33,13 +33,14 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
     private val galleryPermissionCode = 101
     private val locationPermissionCode = 102
     private val pickImageCode = 1000
-    var contactID: Int = 0
+    private var contactID: Int = 0
     private var showing = false
     private lateinit var startAnimation: Animation
     private lateinit var imageConverter: Converter
     private lateinit var pickAndCropImage: PickAndCropImage
     private var imageResultCropping: Uri? = null
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddNewContactBinding.inflate(layoutInflater)
@@ -188,7 +189,6 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
         val contactEmail = binding.contactInputEmail.text.toString()
         val contactAddress = binding.contactInputAddress.text.toString()
         //val contactColor = binding.contactInputName.text.toString()
-
         val imageDrawable = binding.contactProfilePhoto.drawable as BitmapDrawable
         val imageByteArray = imageConverter.fromBitMap(imageDrawable.bitmap)
         val contactEntities = ContactEntities(

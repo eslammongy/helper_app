@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/weather_CardView"
     android:layout_width="180dp"
     android:layout_height="200dp"
-    app:cardCornerRadius="20dp"
-    android:layout_marginStart="10dp"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="10dp"
     app:cardBackgroundColor="@color/Blue">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,7 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/daily_DayName"
-            app:tint="@color/White"
+
             android:contentDescription="@string/todo" />
 
         <TextView

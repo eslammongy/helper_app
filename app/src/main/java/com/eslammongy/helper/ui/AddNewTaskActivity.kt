@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.eslammongy.helper.ui
 
 import android.content.Intent
@@ -18,7 +20,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.eslammongy.helper.R
-import com.eslammongy.helper.crop.PickAndCropImage
+import com.eslammongy.helper.commonfun.PickAndCropImage
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.entities.TaskEntities
@@ -252,16 +254,7 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
                 backToHomeActivity()
             }
             R.id.btn_OpenBottomSheet -> {
-                val color = (binding.bottomView.background as ColorDrawable).color
-                val imageTaskFDrawable = binding.taskFriendImage.drawable as BitmapDrawable
-                TaskBottomSheet(
-                    color,
-                    binding.tvShowTaskTime.text.toString(),
-                    binding.tvShowTaskDate.text.toString(),
-                    binding.tvShowTaskLink.text.toString(),
-                    binding.tvShowTaskFriend.text.toString(),
-                    imageConverter.fromBitMap(imageTaskFDrawable.bitmap)
-                ).show(supportFragmentManager, "TAG")
+               openTaskBottomSheet()
             }
             R.id.btnOpenMyGallery -> {
                 checkUserPermission(
@@ -277,6 +270,19 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
 
         }
 
+    }
+
+    private fun openTaskBottomSheet(){
+        val color = (binding.bottomView.background as ColorDrawable).color
+        val imageTaskFDrawable = binding.taskFriendImage.drawable as BitmapDrawable
+        TaskBottomSheet(
+            color,
+            binding.tvShowTaskTime.text.toString(),
+            binding.tvShowTaskDate.text.toString(),
+            binding.tvShowTaskLink.text.toString(),
+            binding.tvShowTaskFriend.text.toString(),
+            imageConverter.fromBitMap(imageTaskFDrawable.bitmap)
+        ).show(supportFragmentManager, "TAG")
     }
 
     private fun openFrameLayout(fragment:Fragment){

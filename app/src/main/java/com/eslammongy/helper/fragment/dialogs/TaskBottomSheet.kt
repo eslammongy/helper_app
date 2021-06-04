@@ -45,6 +45,7 @@ class TaskBottomSheet(
     private var friendImage:ByteArray? = null
     private var listMyFriends = ArrayList<ContactEntities>()
     private var friendAdapter: FriendsAdapter? = null
+
     init {
         this.taskColor = taskColor
         this.time = time
@@ -83,7 +84,7 @@ class TaskBottomSheet(
 
         val sheetContainer = requireView().parent as? ViewGroup ?: return
         //val height = (resources.displayMetrics.heightPixels * 0.95).toInt()
-        val height = (resources.displayMetrics.heightPixels).toInt()
+        val height = (resources.displayMetrics.heightPixels)
         sheetContainer.layoutParams.height = height
         sheetContainer.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
     }
@@ -99,6 +100,7 @@ class TaskBottomSheet(
             }
             R.id.tv_SheetTime -> {
                 openTaskTimeDialog()
+
             }
         }
     }

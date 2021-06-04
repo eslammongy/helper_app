@@ -19,6 +19,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOnboardingBinding
     private lateinit var onboardingItemsAdapter: OnboardingItemAdapter
+    private val listOnBoardingItem = ArrayList<OnboardingItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,18 +32,17 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun setOnboardingItemsAdapter() {
+        listOnBoardingItem.add(OnboardingItem(
+            R.drawable.manage_your_task_image, "Manage Your Task",
+            "Organize all your do,s and tasks. Color tag them to set priorities and categories."))
+        listOnBoardingItem.add( OnboardingItem(
+            R.drawable.work_on_time_image, "Work On Time",
+            "When you are overwhelmed by the amount of the work you have on your plate , stop and rethink."))
+        listOnBoardingItem.add(OnboardingItem(
+            R.drawable.reminder_me_task_image, "Get Reminder On Time",
+            "when you encounter a small task that takes less than 5 minutes to complete."))
 
-        onboardingItemsAdapter = OnboardingItemAdapter(listOf(
-                OnboardingItem(
-                    R.drawable.manage_your_task_image, "Manage Your Task",
-                        "Organize all your do,s and tasks. Color tag them to set priorities and categories."),
-                OnboardingItem(
-                    R.drawable.work_on_time_image, "Work On Time",
-                        "When you are overwhelmed by the amount of the work you have on your plate , stop and rethink."),
-                OnboardingItem(
-                    R.drawable.reminder_me_task_image, "Get Reminder On Time",
-                        "when you encounter a small task that takes less than 5 minutes to complete.")
-        ))
+        onboardingItemsAdapter = OnboardingItemAdapter(this , listOnBoardingItem)
 
         binding.onBoardingViewPager2.adapter = onboardingItemsAdapter
 

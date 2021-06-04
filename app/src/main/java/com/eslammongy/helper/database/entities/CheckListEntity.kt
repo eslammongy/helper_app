@@ -10,7 +10,7 @@ data class CheckListEntity(
     val checkList_Time: String,
     val checkList_Date: String,
     val checkList_Color: String,
-    val checkList_Completed: Boolean,
+    var checkList_Completed: Boolean,
 ){
     @PrimaryKey(autoGenerate = true)
     var checkListId: Int = 0

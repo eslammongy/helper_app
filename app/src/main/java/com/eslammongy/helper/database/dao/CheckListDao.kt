@@ -2,6 +2,7 @@ package com.eslammongy.helper.database.dao
 
 import androidx.room.*
 import com.eslammongy.helper.database.entities.CheckListEntity
+import com.eslammongy.helper.database.entities.SubCheckList
 
 @Dao
 interface CheckListDao {
@@ -9,12 +10,23 @@ interface CheckListDao {
     @Query("SELECT * FROM CheckList_Table ORDER BY checkListId DESC")
     fun getAllCheckLists():List<CheckListEntity>
 
+    //@Transaction
+    @Query("SELECT * FROM SubChl_Table WHERE parentChListId = :chlID")
+    fun getAllSubCheckLists(chlID:Int):List<SubCheckList>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveNewCheckList(checkListEntity: CheckListEntity)
+     fun saveNewCheckList(checkListEntity: CheckListEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun saveNewSubCheckList(subCheckList: SubCheckList)
 
     @Update
-    suspend fun updateCurrentCheckList(checkListEntity: CheckListEntity)
+     fun updateCurrentCheckList(checkListEntity: CheckListEntity)
+
+     @Query("UPDATE checklist_table SET checkList_Completed = :isComplete WHERE checkListId = :id")
+     fun getCompleteStatus(id:Int , isComplete:Boolean)
+
 
     @Delete
-    suspend fun deleteSelectedCheckList(checkListEntity: CheckListEntity)
+     fun deleteSelectedCheckList(checkListEntity: CheckListEntity)
 }

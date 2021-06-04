@@ -40,25 +40,13 @@
             app:layout_constraintStart_toEndOf="@+id/materialCheckBox"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/tomorrow_chip"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:text="@string/counter"
-            android:textSize="18sp"
-            app:chipBackgroundColor="@color/ColorPinkNote"
-            android:layout_marginEnd="15dp"
-            app:chipIcon="@drawable/ic_iconfinder_snowflake"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/chl_circularCardView"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
             android:id="@+id/materialCheckBox"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:buttonTint="@color/Blue"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

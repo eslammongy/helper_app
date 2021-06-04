@@ -11,10 +11,11 @@ import com.eslammongy.helper.database.dao.ContactDao
 import com.eslammongy.helper.database.dao.TaskDao
 import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.database.entities.ContactEntities
+import com.eslammongy.helper.database.entities.SubCheckList
 import com.eslammongy.helper.database.entities.TaskEntities
 
 @Database(
-    entities = [TaskEntities::class, ContactEntities::class, CheckListEntity::class],
+    entities = [TaskEntities::class, ContactEntities::class, CheckListEntity::class , SubCheckList::class],
     version = 1,
     exportSchema = false)
 @TypeConverters(Converter::class)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="80dp"
     app:cardBackgroundColor="@color/colorDark"
     app:cardCornerRadius="10dp"
     android:layout_margin="8dp"
@@ -32,15 +32,25 @@
             android:fontFamily="@font/roboto_regular"
             android:maxLength="20"
             android:padding="5dp"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="8dp"
             android:text="@string/title"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:chipBackgroundColor="@color/ColorPinkNote"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/materialCheckBox"
+            app:layout_constraintStart_toEndOf="@+id/chlCompleted"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <View
+            android:id="@+id/line1"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:visibility="gone"
+            android:background="@color/ColorDefaultNote"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/chlCompleted"
+            app:layout_constraintTop_toTopOf="parent" />
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/chl_LayoutTime"
             android:layout_width="wrap_content"
@@ -51,17 +61,17 @@
             android:text="@string/time"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/chl_circularCardView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
-            android:id="@+id/materialCheckBox"
+            android:id="@+id/chlCompleted"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:buttonTint="@color/Blue"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
