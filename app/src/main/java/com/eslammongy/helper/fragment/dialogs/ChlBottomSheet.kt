@@ -16,7 +16,6 @@ import com.eslammongy.helper.databinding.FragmentChlBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ChlBottomSheet(parentChlID:Int) : BottomSheetDialogFragment(),View.OnClickListener {
 
@@ -25,7 +24,6 @@ class ChlBottomSheet(parentChlID:Int) : BottomSheetDialogFragment(),View.OnClick
     private var parentChlID: Int = 0
     private var isComplete:Boolean = false
     private var subChlColor: Int? = null
-    private var listOfSubChl = ArrayList<SubCheckList>()
 
 
     init {
@@ -95,13 +93,7 @@ class ChlBottomSheet(parentChlID:Int) : BottomSheetDialogFragment(),View.OnClick
             ).show()
         }else{
             HelperDataBase.getDataBaseInstance(activity!!).checkListDao().saveNewSubCheckList(subCheckList)
-
-//            Toast.makeText(
-//                activity,
-//                "CheckList Saved. ${listSubChl[1].subCheckLId} !",
-//                Toast.LENGTH_LONG
-//            ).show()
-            dismiss()
+            dialog!!.dismiss()
         }
 
     }

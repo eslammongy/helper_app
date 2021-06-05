@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
     android:id="@+id/parentView"
+    android:background="@color/colorPrimaryDark"
     tools:context=".fragment.TaskWithFriendFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -57,9 +57,21 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
+        <ImageView
+            android:id="@+id/emptyImageView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_margin="20dp"
+            android:src="@drawable/ic_nodata"
+            android:visibility="gone"
+            android:scaleType="fitCenter"
+            android:padding="20dp"
+            app:layout_constraintBottom_toTopOf="@id/emptyListText"
+            app:layout_constraintTop_toBottomOf="@+id/tv_ShowFriendName"
+            android:contentDescription="@string/todo" />
         <TextView
             android:id="@+id/emptyListText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/you_didn_t_have_any_task"
             android:textSize="30sp"
@@ -67,12 +79,9 @@
             android:layout_margin="15dp"
             android:padding="10dp"
             android:gravity="center"
-            android:visibility="visible"
+            android:visibility="gone"
             android:fontFamily="@font/roboto_regular"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/emptyImageView" />
 
         <LinearLayout
             android:id="@+id/SecondLayout"

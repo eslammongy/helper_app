@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.eslammongy.helper.R
 import com.eslammongy.helper.database.HelperDataBase
+import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.DeleteDialogLayoutBinding
@@ -23,9 +24,11 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int) : Fragment() ,
     private val binding get() = _binding!!
     private var itemDeletedID: Int? = null
     private var selectedDialog:Int = 0
+    private lateinit var startAnimation: Animation
     private lateinit var endAnimation: Animation
-    private lateinit var contactEntities: ContactEntities
-    private lateinit var taskEntities: TaskEntities
+    private var contactEntities = ContactEntities()
+    private var taskEntities = TaskEntities()
+    private var checkListEntity = CheckListEntity()
     init {
         this.itemDeletedID = itemDeletedID
         this.selectedDialog = selectedDialog
@@ -34,8 +37,6 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int) : Fragment() ,
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View{
         _binding = DeleteDialogLayoutBinding.inflate(inflater, container, false)
-
-
         return binding.root
     }
 
@@ -43,7 +44,10 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int) : Fragment() ,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        startAnimation = AnimationUtils.loadAnimation(activity!!, R.anim.starting_animation)
         endAnimation = AnimationUtils.loadAnimation(activity!!, R.anim.ending_animation)
+        binding.deleteDialogLayout.startAnimation(startAnimation)
+        setDeleteDialogText(selectedDialog)
         binding.btnExitDeleteDialog.setOnClickListener(this)
         binding.btnSetDeleteDialog.setOnClickListener(this)
         Toast.makeText(
@@ -55,6 +59,47 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int) : Fragment() ,
 
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun setDeleteDialogText(selectText:Int){
+        when(selectText){
+            1 ->{
+                binding.deleteDialogText.text = "Are You Sure You Want To Delete This Task OR Undo Deleted It .."
+            }
+            2 ->{
+                binding.deleteDialogText.text = "Are You Sure You Want To Delete This Friend OR Undo Deleted It .."
+            }
+            3 ->{
+                binding.deleteDialogText.text = "If you think this to-do list is over. Delete it to devote time to other tasks. Let's get it done. and take a rest"
+            }
+        }
+
+    }
+
+    private fun setDeleteDialogFun(itemID:Int , dialogID:Int){
+        taskEntities.taskId = itemID
+        contactEntities.contactId = itemID
+        checkListEntity.checkListId = itemID
+        when(dialogID){
+            1 ->{
+                HelperDataBase.getDataBaseInstance(activity!!).taskDao().deleteSelectedTask(taskEntities)
+                val intent = Intent(activity!! , HomeActivity::class.java)
+                startActivity(intent)
+                activity!!.finish()
+            }
+            2 ->{
+                HelperDataBase.getDataBaseInstance(activity!!).contactDao().deleteSelectedContact(contactEntities)
+                val intent = Intent(activity!! , HomeActivity::class.java)
+                startActivity(intent)
+                activity!!.finish()
+            }
+            3 ->{
+                HelperDataBase.getDataBaseInstance(activity!!).checkListDao().deleteSelectedCheckList(checkListEntity)
+                binding.parentView.visibility = View.GONE
+                binding.parentView.startAnimation(endAnimation)
+            }
+        }
+
+    }
     override fun onClick(v: View?) {
 
         when (v!!.id) {
@@ -65,37 +110,7 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int) : Fragment() ,
 
             }
             R.id.btn_SetDeleteDialog -> {
-                taskEntities = TaskEntities()
-                contactEntities = ContactEntities()
-                taskEntities.taskId = itemDeletedID!!
-                contactEntities.contactId = itemDeletedID!!
-
-                if (selectedDialog == 1){
-                    if (itemDeletedID == 0) {
-                        Toast.makeText(activity!! , "not found anything to delete it !!" , Toast.LENGTH_SHORT).show()
-
-                    }else{
-
-                        HelperDataBase.getDataBaseInstance(activity!!).taskDao().deleteSelectedTask(taskEntities)
-                        val intent = Intent(activity!! , HomeActivity::class.java)
-                        startActivity(intent)
-                        activity!!.finish()
-
-                    }
-                }else{
-                    if (itemDeletedID == 0) {
-                        Toast.makeText(activity!! , "not found anything to delete it !!" , Toast.LENGTH_SHORT).show()
-
-                    }else{
-
-                        HelperDataBase.getDataBaseInstance(activity!!).contactDao().deleteSelectedContact(contactEntities)
-                        val intent = Intent(activity!! , HomeActivity::class.java)
-                        startActivity(intent)
-                        activity!!.finish()
-
-                    }
-                }
-
+                setDeleteDialogFun(itemDeletedID!!, selectedDialog)
             }
         }
     }

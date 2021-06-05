@@ -78,7 +78,7 @@
         android:contentDescription="@string/todo" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/input_likeDialog"
+        android:id="@+id/deleteDialogText"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:fontFamily="@font/roboto_light"

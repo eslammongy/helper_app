@@ -17,4 +17,7 @@ interface ContactDao {
 
     @Delete
      fun deleteSelectedContact(contactEntities: ContactEntities)
+
+    @Query("SELECT * FROM contact_table WHERE contact_Name LIKE :searchQuery")
+    fun searchInContactDataBase(searchQuery: String): List<ContactEntities>
 }

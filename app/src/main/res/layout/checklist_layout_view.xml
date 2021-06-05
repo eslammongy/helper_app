@@ -13,7 +13,7 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/chl_circularCardView"
-            android:layout_width="20dp"
+            android:layout_width="15dp"
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
@@ -60,7 +60,8 @@
             android:padding="5dp"
             android:text="@string/time"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="17sp"
+            android:alpha="0.7"
             android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/chl_circularCardView"

@@ -66,13 +66,12 @@
 
     <LinearLayout
         android:id="@+id/SecondLayout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/guideline13"
         app:layout_constraintTop_toBottomOf="@id/firstLayout">
 
 
@@ -80,13 +79,13 @@
             android:id="@+id/chl_paletteColor"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:visibility="gone"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:spectrum_colors="@array/demo_color" />
 
         <com.google.android.material.textfield.TextInputEditText
@@ -115,9 +114,9 @@
             android:drawablePadding="10dp"
             android:drawableTint="@color/ColorOrangeNote"
             android:hint="@string/enter_phone"
-            android:textColor="@color/White"
             android:inputType="phone"
             android:paddingStart="10dp"
+            android:textColor="@color/White"
             android:textColorHint="@color/ColorDefaultNote"
             tools:ignore="RtlSymmetry" />
 
@@ -131,10 +130,10 @@
             android:drawablePadding="10dp"
             android:drawableTint="@color/ColorOrangeNote"
             android:hint="@string/email"
-            android:textColor="@color/White"
             android:inputType="textEmailAddress"
             android:maxLength="25"
             android:paddingStart="10dp"
+            android:textColor="@color/White"
             android:textColorHint="@color/ColorDefaultNote"
             tools:ignore="RtlSymmetry" />
 
@@ -161,11 +160,11 @@
             android:layout_height="60dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/custom_one_shape_button"
+            android:fontFamily="@font/roboto_regular"
             android:text="@string/save"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="25sp"
-            android:fontFamily="@font/roboto_regular"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -189,9 +188,8 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
-            app:cardCornerRadius="40dp"
             app:cardBackgroundColor="@color/purple_700"
-            />
+            app:cardCornerRadius="40dp" />
 
         <ImageButton
             android:id="@+id/btn_ShowTwF"
@@ -243,7 +241,8 @@
             android:padding="10dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_iconfinder_delete"
-            android:tint="@color/white" />
+            android:tint="@color/ColorRedNote"
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -251,14 +250,20 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="2dp" />
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

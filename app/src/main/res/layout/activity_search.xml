@@ -16,7 +16,6 @@
         android:background="@drawable/custom_dark_shape"
         android:iconifiedByDefault="false"
         android:queryHint="Search"
-
         android:searchIcon="@drawable/ic_iconfinder_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_BackToHomeMT"
@@ -29,6 +28,8 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="30sp"
+        android:fontFamily="@font/roboto_regular"
+        android:layout_margin="20dp"
         android:textColor="@color/White"
       />
 

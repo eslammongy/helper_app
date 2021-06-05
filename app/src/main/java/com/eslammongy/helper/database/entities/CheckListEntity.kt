@@ -12,6 +12,8 @@ data class CheckListEntity(
     val checkList_Color: String,
     var checkList_Completed: Boolean,
 ){
+
+    constructor():this("" , "" , "" , "" , false)
     @PrimaryKey(autoGenerate = true)
     var checkListId: Int = 0
 }

@@ -45,7 +45,6 @@ import java.util.*
         uCropOption.setCompressionQuality(80)
         uCropOption.setCompressionFormat(Bitmap.CompressFormat.PNG)
         uCropOption.setCompressionFormat(Bitmap.CompressFormat.JPEG)
-
         uCropOption.setHideBottomControls(false)
         uCropOption.setFreeStyleCropEnabled(true)
         uCropOption.setStatusBarColor(currentActivity.resources.getColor(R.color.colorDark))

@@ -5,13 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.eslammongy.helper.R
 import com.eslammongy.helper.adapters.CheckListAdapter
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.databinding.FragmentCheckListBinding
+import com.eslammongy.helper.fragment.dialogs.CustomDeleteDialog
+import com.google.android.material.snackbar.Snackbar
 
-class CheckListFragment : Fragment() {
+class CheckListFragment : Fragment(), CheckListAdapter.OnItemSelectedListener {
 
     private var _binding:FragmentCheckListBinding? = null
     private val binding get() = _binding!!
@@ -29,15 +34,73 @@ class CheckListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        listOfCheckList = HelperDataBase.getDataBaseInstance(activity!!).checkListDao().getAllCheckLists() as ArrayList<CheckListEntity>
-        checkListAdapter = CheckListAdapter(activity!! , listOfCheckList)
+        displayRecyclerView()
+        binding.reFreshRecyclerView.setOnRefreshListener {
+            binding.reFreshRecyclerView.isRefreshing = false
+            displayRecyclerView()
+        }
+        val itemTouchHelperCallback =
+            object :
+                ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+                    val position: Int = viewHolder.adapterPosition
+                    val listChl:CheckListEntity = listOfCheckList[position]
+                    HelperDataBase.getDataBaseInstance(activity!!).checkListDao().deleteSelectedCheckList(listChl)
+                    val deletedItem =
+                        "Are You Sure You Want To Delete This " + listChl.checkList_Title + "OR Undo Deleted .."
+                    listOfCheckList.removeAt(viewHolder.adapterPosition)
+                    checkListAdapter!!.notifyDataSetChanged()
+                    Snackbar.make(binding.chlRecyclerView, deletedItem, Snackbar.LENGTH_LONG)
+                        .setAction(
+                            "Undo"
+                        ) {
+
+                            listOfCheckList.add(position, listChl)
+                            HelperDataBase.getDataBaseInstance(activity!!).checkListDao().saveNewCheckList(listChl)
+                            checkListAdapter!!.notifyItemInserted(position)
+
+                        }.show()
+                }
+            }
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(binding.chlRecyclerView)
+    }
+
+    private fun displayRecyclerView(){
         binding.chlRecyclerView.setHasFixedSize(true)
         binding.chlRecyclerView.layoutManager = LinearLayoutManager(activity!!)
+        checkListAdapter = CheckListAdapter(activity!!)
         binding.chlRecyclerView.adapter = checkListAdapter
+        listOfCheckList = HelperDataBase.getDataBaseInstance(activity!!).checkListDao().getAllCheckLists() as ArrayList<CheckListEntity>
+        checkListAdapter!!.setData(listOfCheckList)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onClicked(checkListEntity: CheckListEntity, position: Int) {
+        val dialogFragment = CustomDeleteDialog(checkListEntity.checkListId , 3)
+        openFrameLayout(dialogFragment)
+    }
+
+    private fun openFrameLayout(fragment: Fragment) {
+
+        val transaction = fragmentManager!!.beginTransaction()
+        transaction.add(R.id.chlFragmentContainer, fragment)
+        transaction.commit()
+
     }
 }

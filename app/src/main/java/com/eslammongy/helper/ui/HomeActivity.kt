@@ -20,7 +20,7 @@ import com.eslammongy.helper.fragment.WeatherFragment
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import java.util.*
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
 
@@ -39,6 +39,9 @@ class HomeActivity : AppCompatActivity() {
 
         val greetingCode = intent.getIntExtra("ToastMessage" , 0)
         if (greetingCode == 101) getGreetingMessage()
+
+        binding.btnAddNewElement.setOnClickListener(this)
+        binding.btnSearch.setOnClickListener(this)
         binding.bottomNavigation.add(MeowBottomNavigation.Model(
             ID_TASKS,
             R.drawable.ic_iconfinder_calendar
@@ -105,18 +108,18 @@ class HomeActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun openNewSelectedActivity(view: View) {
+    private fun openNewSelectedActivity() {
 
         when(binding.titleActiveFragment.text){
 
             "Task" -> {
-                openActivity(AddNewTaskActivity() , "None")
+                openActivity(AddNewTaskActivity() , "None" ,0)
             }
             "CheckList" -> {
-                openActivity(AddNewCheckListActivity(), "None")
+                openActivity(AddNewCheckListActivity(), "None" ,0)
             }
             "Contact" -> {
-                openActivity(AddNewContactActivity(), "None")
+                openActivity(AddNewContactActivity(), "None" ,0)
             }
 
         }
@@ -124,20 +127,32 @@ class HomeActivity : AppCompatActivity() {
 
     private fun hideSearchAddIcon(){
 
-        val title = binding.titleActiveFragment.text.toString()
-        if (title == "Weather"){
+        when(binding.titleActiveFragment.text.toString()){
+            "Task" ->{
+                binding.btnAddNewElement.visibility = View.VISIBLE
+                binding.btnSearch.visibility = View.VISIBLE
 
-            binding.btnAddNewElement.visibility = View.GONE
-            binding.btnSearch.visibility = View.GONE
-        }else{
-            binding.btnAddNewElement.visibility = View.VISIBLE
-            binding.btnSearch.visibility = View.VISIBLE
+            }
+            "Contact" ->{
+                binding.btnAddNewElement.visibility = View.VISIBLE
+                binding.btnSearch.visibility = View.VISIBLE
 
+            }
+            "CheckList" ->{
+                binding.btnAddNewElement.visibility = View.VISIBLE
+                binding.btnSearch.visibility = View.VISIBLE
+            }
+            "Weather" ->{
+                binding.btnAddNewElement.visibility = View.GONE
+                binding.btnSearch.visibility = View.GONE
+            }
         }
+
     }
-    private fun openActivity(activity: Activity , text:String){
+    private fun openActivity(activity: Activity , text:String , searchID:Int){
         val intent = Intent(this , activity::class.java)
         intent.putExtra("SearchKey" , text)
+        intent.putExtra("SearchID" , searchID)
         startActivity(intent)
         finish()
     }
@@ -160,23 +175,24 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    fun openSearchActivity(view: View) {
+    private fun openSearchActivity() {
         when(binding.titleActiveFragment.text){
 
             "Task" -> {
-                openActivity(SearchActivity(), "Task" )
+                openActivity(SearchActivity(), "Task"  , 1)
             }
             "CheckList" -> {
-                openActivity(SearchActivity(), "CheckList" )
+                openActivity(SearchActivity(), "CheckList" , 3 )
             }
             "Contact" -> {
-                openActivity(SearchActivity(), "Contact")
+                openActivity(SearchActivity(), "Contact" , 2)
             }
 
         }
 
     }
 
+    @Suppress("DEPRECATION")
     private fun setToastMessage(greetingMessage:String){
         val toast = Toast.makeText(this, greetingMessage, Toast.LENGTH_LONG)
         val view = toast.view
@@ -200,5 +216,16 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onClick(v: View?) {
+       when(v!!.id){
+           R.id.btn_AddNewElement ->{
+               openNewSelectedActivity()
+           }
+           R.id.btn_Search ->{
+             openSearchActivity()
+           }
+       }
+    }
 
 }

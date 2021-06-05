@@ -7,6 +7,12 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".fragment.CheckListFragment">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/reFreshRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chl_RecyclerView"
@@ -16,9 +22,16 @@
         android:layout_marginEnd="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_marginBottom="5dp"
-        >
+        />
 
-    </androidx.recyclerview.widget.RecyclerView>
 
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <FrameLayout
+        android:id="@+id/chlFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        />
 
 </FrameLayout>

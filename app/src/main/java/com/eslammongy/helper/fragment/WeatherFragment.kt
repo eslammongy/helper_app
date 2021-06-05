@@ -69,7 +69,7 @@ class WeatherFragment : Fragment() {
         val lang = sharedPreferences.getString("UserLang", null)
         disableView()
         if (checkUserLocationPermission()){
-            enableView()
+
             getCurrentWeatherDate(lats.toString(), lang.toString())
             getWeatherDaily(lats.toString(), lang.toString())
 
@@ -115,7 +115,7 @@ class WeatherFragment : Fragment() {
 
 
     private fun checkUserPermission(permission: String, name: String, requestCode: Int) {
-           disableView()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             when {
                 ContextCompat.checkSelfPermission(
@@ -174,7 +174,6 @@ class WeatherFragment : Fragment() {
             } else {
                 Toast.makeText(activity!!, "Location permission granted", Toast.LENGTH_LONG)
                     .show()
-                enableView()
                 getCurrentLocation()
             }
 
@@ -214,7 +213,6 @@ class WeatherFragment : Fragment() {
     }
 
     private fun getCurrentWeatherDate(lats: String, longs: String) {
-
         disableView()
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
@@ -226,8 +224,8 @@ class WeatherFragment : Fragment() {
         call.enqueue(object : Callback<WeatherResponse> {
             @SuppressLint("SetTextI18n")
             override fun onResponse(
-                call: Call<WeatherResponse>?, response: Response<WeatherResponse>?
-            ) {
+                call: Call<WeatherResponse>?, response: Response<WeatherResponse>?) {
+
                 enableView()
                 if (response!!.code() == 200) {
                     val weatherResponse = response.body()!!
@@ -262,7 +260,7 @@ class WeatherFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<WeatherResponse>?, t: Throwable?) {
-                enableView()
+
                 Toast.makeText(activity, " Time Out ..  ${t!!.message}", Toast.LENGTH_LONG).show()
             }
 

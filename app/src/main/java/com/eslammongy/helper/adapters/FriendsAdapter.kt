@@ -16,7 +16,6 @@ class FriendsAdapter(
 ) :
     RecyclerView.Adapter<FriendsAdapter.FriendsViewModel>() {
 
-    private var isSelect:Boolean = false
     private var checkedPosition:Int = -1
     private var onItemClickListener:OnItemClickerListener? = null
     init {

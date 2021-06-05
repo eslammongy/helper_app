@@ -57,6 +57,20 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
         imageConverter = Converter()
         taskID = intent.getIntExtra("ID", 0)
         binding.bottomView.setBackgroundColor(resources.getColor(R.color.ColorDefaultNote))
+        displayDateFromAdapter()
+        startAnimation = AnimationUtils.loadAnimation(this, R.anim.starting_animation)
+        endAnimation = AnimationUtils.loadAnimation(this, R.anim.ending_animation)
+        binding.btnSaveTask.setOnClickListener(this)
+        binding.btnDeleteTask.setOnClickListener(this)
+        binding.btnBackToHomeMT.setOnClickListener(this)
+        binding.btnOpenBottomSheet.setOnClickListener(this)
+        binding.btnOpenMyGallery.setOnClickListener(this)
+        binding.tvShowTaskLink.setOnClickListener(this)
+
+
+    }
+
+    private fun displayDateFromAdapter(){
         if (taskID != 0) {
 
             binding.tiTaskTitle.setText(intent.getStringExtra("Title"))
@@ -69,19 +83,9 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
             binding.bottomView.setBackgroundColor(taskColor)
             binding.taskImageView.setImageBitmap(imageConverter.toBitMap(intent.getByteArrayExtra("ImagePath")!!))
             binding.taskFriendImage.setImageBitmap(imageConverter.toBitMap(intent.getByteArrayExtra("TaskImagePath")!!))
+            binding.btnDeleteTask.visibility = View.VISIBLE
 
         }
-
-        startAnimation = AnimationUtils.loadAnimation(this, R.anim.starting_animation)
-        endAnimation = AnimationUtils.loadAnimation(this, R.anim.ending_animation)
-        binding.btnSaveTask.setOnClickListener(this)
-        binding.btnDeleteTask.setOnClickListener(this)
-        binding.btnBackToHomeMT.setOnClickListener(this)
-        binding.btnOpenBottomSheet.setOnClickListener(this)
-        binding.btnOpenMyGallery.setOnClickListener(this)
-        binding.tvShowTaskLink.setOnClickListener(this)
-
-
     }
 
     private fun checkUserPermission(permission: String, name: String, requestCode: Int) {
@@ -247,6 +251,7 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
                 saveNewTask()
             }
             R.id.btn_DeleteTask -> {
+
                 val dialogFragment = CustomDeleteDialog(taskID , 1)
                 openFrameLayout(dialogFragment)
             }
@@ -287,7 +292,6 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
 
     private fun openFrameLayout(fragment:Fragment){
         binding.fragmentContainer.visibility = View.VISIBLE
-        binding.fragmentContainer.startAnimation(startAnimation)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.fragment_container, fragment)
         transaction.commit()

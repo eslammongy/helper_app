@@ -19,14 +19,6 @@
         android:layout_marginEnd="15dp"
         app:layout_constraintTop_toTopOf="@id/guideline15">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/chlRefresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/checkListTitle"
             android:layout_width="wrap_content"
@@ -167,38 +159,12 @@
         app:layout_constraintTop_toBottomOf="@+id/dateTime"
         app:spectrum_colors="@array/demo_color" />
 
-
-    <Button
-        android:id="@+id/btnOpenSubChlSheet"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:background="@drawable/custom_dark_shape"
-        android:drawableStart="@drawable/ic_iconfinder_ic_playlist_add"
-        android:drawableTint="@color/White"
-        android:paddingStart="15dp"
-        android:text="@string/add_item_to_list"
-        android:textAllCaps="false"
-        android:textColor="@color/White"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline16"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="RtlSymmetry" />
-
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/subChl_RecyclerView"
+    <FrameLayout
+        android:id="@+id/subChlFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnOpenSubChlSheet"
-        app:layout_constraintTop_toBottomOf="@+id/chl_paletteColor"
-        tools:layout_editor_absoluteX="10dp">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintBottom_toTopOf="@id/guideline16"
+        app:layout_constraintTop_toBottomOf="@+id/chl_paletteColor" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline15"

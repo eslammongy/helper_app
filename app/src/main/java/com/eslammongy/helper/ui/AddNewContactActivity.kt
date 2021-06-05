@@ -8,8 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -35,7 +33,6 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
     private val pickImageCode = 1000
     private var contactID: Int = 0
     private var showing = false
-    private lateinit var startAnimation: Animation
     private lateinit var imageConverter: Converter
     private lateinit var pickAndCropImage: PickAndCropImage
     private var imageResultCropping: Uri? = null
@@ -46,7 +43,7 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityAddNewContactBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        startAnimation = AnimationUtils.loadAnimation(this, R.anim.starting_animation)
+
         pickAndCropImage = PickAndCropImage(this, pickImageCode)
         imageConverter = Converter()
         taskColor = resources.getColor(R.color.ColorDefaultNote)
@@ -180,6 +177,7 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
                 )
             )
             binding.btnSaveNewContact.text = "Update"
+            binding.btnDeleteCurrentContact.visibility = View.VISIBLE
         }
     }
     private fun saveNewContact() {
@@ -268,16 +266,10 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
                 makePhoneCall()
             }
             R.id.btn_OpenEmailForm -> {
-                val twfFragment = TaskWithFriendFragment(
-                    binding.contactTopName.text.toString(),
-                    binding.contactInputEmail.text.toString()
-                )
-                openFrameLayout(twfFragment)
+              openEmailAndTaskFragment(binding.contactInputName.text.toString() , binding.contactInputEmail.text.toString())
             }
             R.id.btn_ShowTwF -> {
-                val twfFragment =
-                    TaskWithFriendFragment(binding.contactTopName.text.toString(), "ShowTask")
-                openFrameLayout(twfFragment)
+               openEmailAndTaskFragment(binding.contactInputName.text.toString() ,"ShowTaskView")
             }
             R.id.btn_OpenColorPicker -> {
                 if (showing) {
@@ -302,9 +294,20 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    private fun openEmailAndTaskFragment(name:String , email:String){
+        if (binding.contactInputName.text!!.isEmpty() || contactID == 0){
+            Toast.makeText(applicationContext, "there is no friend here !!", Toast.LENGTH_LONG).show()
+        }else{
+            val twfFragment = TaskWithFriendFragment(
+                name,
+                email
+            )
+            openFrameLayout(twfFragment)
+        }
+    }
     private fun openFrameLayout(fragment: Fragment) {
+
         binding.fragmentContainer.visibility = View.VISIBLE
-        binding.fragmentContainer.startAnimation(startAnimation)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.fragment_container, fragment)
         transaction.commit()

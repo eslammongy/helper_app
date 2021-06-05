@@ -8,18 +8,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.eslammongy.helper.R
-import com.eslammongy.helper.adapters.SubChlAdapter
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.CheckListEntity
-import com.eslammongy.helper.database.entities.SubCheckList
 import com.eslammongy.helper.databinding.ActivityAddNewCheckListBinding
-import com.eslammongy.helper.fragment.dialogs.ChlBottomSheet
+import com.eslammongy.helper.fragment.SubChlFragment
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class AddNewCheckListActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -28,8 +24,6 @@ class AddNewCheckListActivity : AppCompatActivity(), View.OnClickListener {
     private var chlColor: Int? = null
     private var checkLId: Int = 0
     private var isComplete:Boolean = false
-    private var listOfSubChl = ArrayList<SubCheckList>()
-    private var subChlAdapter:SubChlAdapter? = null
 
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,42 +33,26 @@ class AddNewCheckListActivity : AppCompatActivity(), View.OnClickListener {
 
         // receive data from adapter by id
         checkLId = intent.getIntExtra("chlID", 0)
+        isComplete =  intent.getBooleanExtra("chlComplete" , false)
         chlColor = resources.getColor(R.color.ColorDefaultNote)
         displayInfoFromAdapter()
-        displaySubCheckList()
+        replaceFragment(checkLId)
         binding.btnArrowToHome.setOnClickListener(this)
         binding.btnAddNewChl.setOnClickListener(this)
         binding.tvShowChlDate.setOnClickListener(this)
         binding.tvShowChlTime.setOnClickListener(this)
         binding.btnChlColorPicker.setOnClickListener(this)
-        binding.btnOpenSubChlSheet.setOnClickListener(this)
 
         binding.chlPaletteColor.setOnColorSelectedListener { clr ->
             chlColor = clr
             binding.btnChlColorPicker.setCardBackgroundColor(chlColor!!)
         }
 
-        binding.chlRefresh.setOnRefreshListener {
-            binding.chlRefresh.isRefreshing = false
-            displaySubCheckList()
-        }
-
-    }
-
-    private fun displaySubCheckList(){
-
-        listOfSubChl = HelperDataBase.getDataBaseInstance(this).checkListDao().getAllSubCheckLists(checkLId) as ArrayList<SubCheckList>
-        subChlAdapter = SubChlAdapter(this , listOfSubChl)
-        binding.subChlRecyclerView.setHasFixedSize(true)
-        subChlAdapter!!.notifyDataSetChanged()
-        binding.subChlRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.subChlRecyclerView.adapter = subChlAdapter!!
-
     }
 
     private fun displayInfoFromAdapter(){
         if (checkLId != 0) {
-            isComplete =  intent.getBooleanExtra("chlComplete" , false)
+
             binding.checkListTitle.setText(intent.getStringExtra("chlTitle"))
             binding.tvShowChlTime.text = intent.getStringExtra("chlTime")
             binding.tvShowChlDate.text = intent.getStringExtra("chlDate")
@@ -83,6 +61,12 @@ class AddNewCheckListActivity : AppCompatActivity(), View.OnClickListener {
             binding.chlPaletteColor.setSelectedColor(chlColor!!)
 
         }
+    }
+    private fun replaceFragment(subChlId:Int){
+        val subChlFragment = SubChlFragment(subChlId)
+        val fragmentTransition = supportFragmentManager.beginTransaction()
+        fragmentTransition.replace(R.id.subChlFrameLayout, subChlFragment)
+            .commit()
     }
     private fun openTaskDateDialog() {
 
@@ -182,6 +166,7 @@ class AddNewCheckListActivity : AppCompatActivity(), View.OnClickListener {
                     ).show()
                 } else {
                     checkListEntities.checkListId = checkLId
+                    checkListEntities.checkList_Completed = isComplete
                     HelperDataBase.getDataBaseInstance(this).checkListDao()
                         .updateCurrentCheckList(checkListEntities)
                     backToHomeActivity()
@@ -214,13 +199,7 @@ class AddNewCheckListActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btn_AddNewChl -> {
                 saveNewCheckList()
             }
-            R.id.btnOpenSubChlSheet -> {
-               if (checkLId == 0){
-                   Toast.makeText(this , "You need to create parent checklist first then can do this." , Toast.LENGTH_LONG).show()
-               }else{
-                   ChlBottomSheet(checkLId).show(supportFragmentManager, "Tag")
-               }
-            }
+
         }
     }
 

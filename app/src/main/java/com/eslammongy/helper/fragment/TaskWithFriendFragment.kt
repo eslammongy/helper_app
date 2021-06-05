@@ -28,6 +28,7 @@ class TaskWithFriendFragment(contactName: String, displayOption: String) : Fragm
     private var twfAdapter: TaskAdapter? = null
     private var contactName: String? = null
     private var displayOption: String? = null
+    private lateinit var startAnimation: Animation
     private lateinit var endAnimation: Animation
 
     init {
@@ -46,16 +47,17 @@ class TaskWithFriendFragment(contactName: String, displayOption: String) : Fragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        startAnimation = AnimationUtils.loadAnimation(activity!!, R.anim.starting_animation)
         endAnimation = AnimationUtils.loadAnimation(activity!!, R.anim.ending_animation)
+        binding.parentView.startAnimation(startAnimation)
         binding.tvShowFriendName.text = contactName
         listMyTasksWFriend = HelperDataBase.getDataBaseInstance(activity!!).taskDao()
             .getTaskWithFriend(contactName!!) as ArrayList<TaskEntities>
 
-        if (displayOption == "ShowTask") {
+        if (displayOption == "ShowTaskView") {
             displayTaskWithSelectedFriend()
 
         } else {
-
             showSendingEmailForm()
         }
 
@@ -73,10 +75,10 @@ class TaskWithFriendFragment(contactName: String, displayOption: String) : Fragm
     private fun displayTaskWithSelectedFriend() {
         if (listMyTasksWFriend.isEmpty()) {
             binding.emptyListText.visibility = View.VISIBLE
-            binding.emptyListText.text = "${R.string.you_didn_t_have_any_task}$contactName"
+            binding.emptyImageView.visibility = View.VISIBLE
+            binding.emptyListText.text = "${resources.getString(R.string.you_didn_t_have_any_task)} $contactName"
             binding.twfRecyclerView.visibility = View.GONE
         } else {
-            binding.emptyListText.visibility = View.GONE
             twfAdapter = TaskAdapter(context!!, listMyTasksWFriend)
             binding.twfRecyclerView.setHasFixedSize(true)
             binding.twfRecyclerView.layoutManager = LinearLayoutManager(context)

@@ -29,4 +29,10 @@ interface CheckListDao {
 
     @Delete
      fun deleteSelectedCheckList(checkListEntity: CheckListEntity)
+
+    @Delete
+    fun deleteSelectedSubCheckList(subCheckList: SubCheckList)
+
+    @Query("SELECT * FROM checklist_table WHERE checkList_Title LIKE :searchQuery")
+    fun searchInCheckListDataBase(searchQuery: String): List<CheckListEntity>
 }
