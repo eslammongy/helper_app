@@ -18,7 +18,7 @@
             android:layout_margin="10dp"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="10dp" />
+            />
 
 
         <LinearLayout
@@ -32,10 +32,9 @@
 
             <ImageButton
                 android:id="@+id/btnOpenSubChlSheet"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="30dp"
-                android:layout_marginEnd="10dp"
                 android:background="@drawable/custom_one_shape_button"
                 android:contentDescription="@string/todo"
                 android:padding="10dp"
@@ -45,10 +44,9 @@
 
             <ImageButton
                 android:id="@+id/btnRefreshRecyclerView"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="50dp"
-                android:layout_marginEnd="15dp"
                 android:background="@drawable/point_active_background"
                 android:contentDescription="@string/todo"
                 android:padding="10dp"
@@ -57,6 +55,20 @@
                 android:tint="@color/White" />
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/emptyImageView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_margin="20dp"
+            android:contentDescription="@string/todo"
+            android:padding="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_happy_music"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/subChl_RecyclerView"
+            app:layout_constraintTop_toTopOf="@+id/subChl_RecyclerView"
+            tools:layout_editor_absoluteX="20dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

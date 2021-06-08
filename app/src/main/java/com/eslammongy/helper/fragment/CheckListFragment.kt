@@ -15,6 +15,8 @@ import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.databinding.FragmentCheckListBinding
 import com.eslammongy.helper.fragment.dialogs.CustomDeleteDialog
 import com.google.android.material.snackbar.Snackbar
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CheckListFragment : Fragment(), CheckListAdapter.OnItemSelectedListener {
 
@@ -41,14 +43,19 @@ class CheckListFragment : Fragment(), CheckListAdapter.OnItemSelectedListener {
         }
         val itemTouchHelperCallback =
             object :
-                ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+                ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
                 override fun onMove(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
                     target: RecyclerView.ViewHolder
                 ): Boolean {
 
-                    return false
+                    val startPosition = viewHolder.adapterPosition
+                    val endPosition = target.adapterPosition
+                    Collections.swap(listOfCheckList, startPosition, endPosition)
+                    binding.chlRecyclerView.adapter!!.notifyItemMoved(startPosition, endPosition)
+
+                    return true
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -78,12 +85,20 @@ class CheckListFragment : Fragment(), CheckListAdapter.OnItemSelectedListener {
     }
 
     private fun displayRecyclerView(){
-        binding.chlRecyclerView.setHasFixedSize(true)
-        binding.chlRecyclerView.layoutManager = LinearLayoutManager(activity!!)
-        checkListAdapter = CheckListAdapter(activity!!)
-        binding.chlRecyclerView.adapter = checkListAdapter
         listOfCheckList = HelperDataBase.getDataBaseInstance(activity!!).checkListDao().getAllCheckLists() as ArrayList<CheckListEntity>
-        checkListAdapter!!.setData(listOfCheckList)
+
+        if (listOfCheckList.isNullOrEmpty()){
+                binding.emptyImageView.visibility = View.VISIBLE
+            }else{
+            binding.emptyImageView.visibility = View.GONE
+            binding.chlRecyclerView.setHasFixedSize(true)
+            binding.chlRecyclerView.layoutManager = LinearLayoutManager(activity!!)
+            checkListAdapter = CheckListAdapter(activity!!)
+            binding.chlRecyclerView.adapter = checkListAdapter
+            checkListAdapter!!.setData(listOfCheckList)
+
+        }
+
     }
 
     override fun onDestroy() {

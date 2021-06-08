@@ -21,21 +21,21 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/checkListTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:background="@drawable/custom_dark_shape"
             android:fontFamily="@font/roboto_regular"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:hint="@string/title"
             android:inputType="text"
-            android:maxLength="30"
+            android:maxLength="15"
             android:textColor="@color/White"
             android:textColorHint="@color/ColorDefaultNote"
             android:textSize="25sp"
-            app:layout_constraintEnd_toEndOf="@+id/btn_AddNewChl"
-            app:layout_constraintStart_toStartOf="@+id/btn_arrowToHome"
-           />
+            app:layout_constraintEnd_toStartOf="@+id/btn_AddNewChl"
+            app:layout_constraintStart_toEndOf="@+id/btn_arrowToHome"
+            />
 
         <ImageButton
             android:id="@+id/btn_AddNewChl"
@@ -72,7 +72,7 @@
     <LinearLayout
         android:id="@+id/dateTime"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_margin="15dp"
         android:background="@drawable/custom_dark_shape"
         android:orientation="horizontal"
@@ -100,7 +100,7 @@
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="5dp"
             android:alpha="0.7"
             android:background="@color/ColorOrangeNote" />
 
@@ -127,7 +127,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             app:cardBackgroundColor="@color/ColorPurpleNote"
             app:cardCornerRadius="40dp" >
@@ -151,7 +151,8 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:gravity="center_horizontal"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -178,7 +179,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
+        app:layout_constraintGuide_percent="0.97" />
 
 
 

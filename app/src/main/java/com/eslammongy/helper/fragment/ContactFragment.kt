@@ -42,7 +42,8 @@ class ContactFragment : Fragment() {
                     target: RecyclerView.ViewHolder
                 ): Boolean {
 
-                    return false
+                   return false
+
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -75,12 +76,17 @@ class ContactFragment : Fragment() {
     }
 
     private fun displayRecyclerView() {
-
         listOfMyContacts = HelperDataBase.getDataBaseInstance(activity!!).contactDao().getAllContacts() as ArrayList<ContactEntities>
-        contactAdapter = ContactAdapter(activity!! , listOfMyContacts)
-        binding.contactRecyclerView.setHasFixedSize(true)
-        binding.contactRecyclerView.layoutManager = StaggeredGridLayoutManager(2 , StaggeredGridLayoutManager.VERTICAL)
-        binding.contactRecyclerView.adapter = contactAdapter!!
+
+        if (listOfMyContacts.isEmpty()){
+            binding.emptyImageView.visibility = View.VISIBLE
+        }else{
+            contactAdapter = ContactAdapter(activity!! , listOfMyContacts)
+            binding.contactRecyclerView.setHasFixedSize(true)
+            binding.contactRecyclerView.layoutManager = StaggeredGridLayoutManager(2 , StaggeredGridLayoutManager.VERTICAL)
+            binding.contactRecyclerView.adapter = contactAdapter!!
+        }
+
     }
 
     override fun onDestroy() {

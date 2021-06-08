@@ -11,6 +11,7 @@ import java.io.File
 import java.util.*
 
 
+ @Suppress("DEPRECATION")
  class PickAndCropImage(private val currentActivity: Activity, private val pickImageCode:Int){
 
     fun pickImageFromGallery() {
@@ -22,8 +23,6 @@ import java.util.*
         currentActivity.startActivityForResult(intent, pickImageCode)
 
     }
-
-
 
     fun startCropImage(imageUri: Uri) {
 
@@ -52,7 +51,7 @@ import java.util.*
 
         uCropOption.setToolbarTitle("cropping image")
 
-        return uCropOption;
+        return uCropOption
 
     }
 }

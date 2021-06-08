@@ -47,6 +47,7 @@
         android:layout_margin="10dp"
         android:autofillHints="@string/title"
         android:hint="@string/title"
+        android:maxLength="20"
         android:inputType="textPersonName"
         android:padding="10dp"
         android:textColorHint="@color/ColorDefaultNote"

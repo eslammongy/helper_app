@@ -23,9 +23,22 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_marginBottom="5dp"
         />
-
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ImageView
+        android:id="@+id/emptyImageView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_margin="20dp"
+        android:contentDescription="@string/todo"
+        android:padding="20dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_happy_music"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/subChl_RecyclerView"
+        app:layout_constraintTop_toTopOf="@+id/subChl_RecyclerView"
+        tools:layout_editor_absoluteX="20dp" />
 
     <FrameLayout
         android:id="@+id/chlFragmentContainer"

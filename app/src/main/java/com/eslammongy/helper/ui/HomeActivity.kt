@@ -104,7 +104,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
         val fragmentTransition = supportFragmentManager.beginTransaction()
         fragmentTransition.replace(R.id.fragment_holder, fragment)
-            .commit()
+            .commitAllowingStateLoss()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

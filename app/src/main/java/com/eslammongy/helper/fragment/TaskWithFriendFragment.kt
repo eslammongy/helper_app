@@ -102,7 +102,7 @@ class TaskWithFriendFragment(contactName: String, displayOption: String) : Fragm
 
         val intent = Intent(Intent.ACTION_SEND).apply {
             data = Uri.parse("mailto")
-            putExtra(Intent.EXTRA_EMAIL, arrayOf<String>(address))
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(address))
             putExtra(Intent.EXTRA_SUBJECT, subject)
             putExtra(Intent.EXTRA_TEXT, message)
             type = "message/rfc822"

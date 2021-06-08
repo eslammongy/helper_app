@@ -14,4 +14,6 @@ data class SubCheckList(
 
     @PrimaryKey(autoGenerate = true)
     var subCheckLId: Int = 0
+
+
 }

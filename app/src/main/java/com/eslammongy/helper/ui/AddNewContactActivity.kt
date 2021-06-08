@@ -5,17 +5,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.eslammongy.helper.R
 import com.eslammongy.helper.commonfun.PickAndCropImage
+import com.eslammongy.helper.commonfun.UserPermission
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.entities.ContactEntities
@@ -29,12 +26,12 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityAddNewContactBinding
     private var taskColor: Int? = null
     private val galleryPermissionCode = 101
-    private val locationPermissionCode = 102
     private val pickImageCode = 1000
     private var contactID: Int = 0
     private var showing = false
     private lateinit var imageConverter: Converter
     private lateinit var pickAndCropImage: PickAndCropImage
+    private val userPermission by lazy { UserPermission(this) }
     private var imageResultCropping: Uri? = null
 
     @Suppress("DEPRECATION")
@@ -63,50 +60,6 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun checkUserPermission(permission: String, name: String, requestCode: Int) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            when {
-                ContextCompat.checkSelfPermission(
-                    applicationContext,
-                    permission
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    Toast.makeText(
-                        applicationContext,
-                        "$name Permission Granted.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    pickAndCropImage.pickImageFromGallery()
-                }
-                shouldShowRequestPermissionRationale(permission) -> {
-                    showRequestPermissionDialog(permission, name, requestCode)
-                }
-                else -> {
-                    ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
-                }
-            }
-        }
-    }
-
-    private fun showRequestPermissionDialog(permissions: String, name: String, requestCode: Int) {
-
-        val builder = AlertDialog.Builder(this)
-        builder.apply {
-            setMessage("You need to access your $name permission is required to use this app")
-            setTitle("Permission Required")
-            setPositiveButton("Ok") { _, _ ->
-
-                ActivityCompat.requestPermissions(
-                    this@AddNewContactActivity,
-                    arrayOf(permissions),
-                    requestCode
-                )
-            }
-        }
-        val dialog = builder.create()
-        dialog.show()
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -123,9 +76,8 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
         when (requestCode) {
-
             galleryPermissionCode -> innerCheck("Gallery")
-            locationPermissionCode -> innerCheck("Location")
+
         }
     }
 
@@ -142,8 +94,6 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
                 imageResultCropping
             )
         }
-
-
     }
 
     private fun backToHomeActivity() {
@@ -186,7 +136,6 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
         val contactPhone = binding.contactInputPhone.text.toString()
         val contactEmail = binding.contactInputEmail.text.toString()
         val contactAddress = binding.contactInputAddress.text.toString()
-        //val contactColor = binding.contactInputName.text.toString()
         val imageDrawable = binding.contactProfilePhoto.drawable as BitmapDrawable
         val imageByteArray = imageConverter.fromBitMap(imageDrawable.bitmap)
         val contactEntities = ContactEntities(
@@ -281,11 +230,10 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             R.id.Change_ProfilePhoto -> {
-                checkUserPermission(
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    "gallery",
-                    galleryPermissionCode
-                )
+                    userPermission. checkUserPermission(
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        "gallery",
+                        galleryPermissionCode)
             }
             R.id.btn_BackToHome -> {
                 backToHomeActivity()

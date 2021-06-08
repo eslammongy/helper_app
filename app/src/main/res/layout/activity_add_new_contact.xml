@@ -98,7 +98,7 @@
             android:drawableTint="@color/ColorOrangeNote"
             android:hint="@string/enter_name"
             android:inputType="textPersonName"
-            android:maxLength="25"
+            android:maxLength="15"
             android:paddingStart="10dp"
             android:textColor="@color/White"
             android:textColorHint="@color/ColorDefaultNote"

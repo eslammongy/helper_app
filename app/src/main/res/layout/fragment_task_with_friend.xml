@@ -62,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_margin="20dp"
-            android:src="@drawable/ic_nodata"
+            android:src="@drawable/ic_empty_box"
             android:visibility="gone"
             android:scaleType="fitCenter"
             android:padding="20dp"

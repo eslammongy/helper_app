@@ -1,14 +1,12 @@
 package com.eslammongy.helper.commonfun
 
-import android.app.Activity
+import android.content.Context
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.eslammongy.helper.R
 import java.util.*
 
-class DailyForeCast(var activity: Activity) {
-    var locationLat: String? = null
-    var locationLang: String? = null
+class WeatherConditions(var activity: Context) {
 
      fun getWeatherDescriptionIconByID(weatherID: Int , imageView: ImageView) {
 

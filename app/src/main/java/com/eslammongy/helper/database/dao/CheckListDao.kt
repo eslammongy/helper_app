@@ -26,6 +26,9 @@ interface CheckListDao {
      @Query("UPDATE checklist_table SET checkList_Completed = :isComplete WHERE checkListId = :id")
      fun getCompleteStatus(id:Int , isComplete:Boolean)
 
+    @Query("UPDATE subchl_table SET subChl_Completed = :isComplete WHERE subCheckLId = :id")
+    fun getSubChlCompleteStatus(id:Int , isComplete:Boolean)
+
 
     @Delete
      fun deleteSelectedCheckList(checkListEntity: CheckListEntity)

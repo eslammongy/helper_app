@@ -1,5 +1,6 @@
-package com.eslammongy.helper.weathermodel
+package com.eslammongy.helper.weathermodel.remote
 
+import com.eslammongy.helper.weathermodel.WeatherResponse
 import com.eslammongy.helper.weathermodel.dailyforecast.MyListDaily
 import retrofit2.Call
 import retrofit2.http.GET

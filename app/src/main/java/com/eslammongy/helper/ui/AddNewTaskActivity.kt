@@ -14,13 +14,11 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.eslammongy.helper.R
 import com.eslammongy.helper.commonfun.PickAndCropImage
+import com.eslammongy.helper.commonfun.UserPermission
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.entities.TaskEntities
@@ -29,18 +27,16 @@ import com.eslammongy.helper.fragment.WebViewFragment
 import com.eslammongy.helper.fragment.dialogs.CustomDeleteDialog
 import com.eslammongy.helper.fragment.dialogs.TaskBottomSheet
 import com.yalantis.ucrop.UCrop
-import java.util.*
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
     TaskBottomSheet.BottomSheetInterface {
     private lateinit var binding: ActivityAddNewTaskBinding
-    private val galleryPermissionCode = 101
-    private val locationPermissionCode = 102
-    private val pickImageCode = 1000
     private lateinit var imageConverter: Converter
-    private lateinit var pickAndCropImage: PickAndCropImage
+    private val galleryPermissionCode = 101
+    private val pickImageCode = 1000
+    private val pickAndCropImage by lazy { PickAndCropImage(this , galleryPermissionCode) }
+    private val userPermission by lazy { UserPermission(this) }
     private var imageResultCropping: Uri? = null
     private lateinit var startAnimation: Animation
     private lateinit var endAnimation: Animation
@@ -53,7 +49,6 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
         setContentView(binding.root)
 
         //*****/
-        pickAndCropImage = PickAndCropImage(this, pickImageCode)
         imageConverter = Converter()
         taskID = intent.getIntExtra("ID", 0)
         binding.bottomView.setBackgroundColor(resources.getColor(R.color.ColorDefaultNote))
@@ -66,7 +61,6 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
         binding.btnOpenBottomSheet.setOnClickListener(this)
         binding.btnOpenMyGallery.setOnClickListener(this)
         binding.tvShowTaskLink.setOnClickListener(this)
-
 
     }
 
@@ -88,50 +82,6 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
         }
     }
 
-    private fun checkUserPermission(permission: String, name: String, requestCode: Int) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            when {
-                ContextCompat.checkSelfPermission(
-                    applicationContext,
-                    permission
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    Toast.makeText(
-                        applicationContext,
-                        "$name Permission Granted.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    pickAndCropImage.pickImageFromGallery()
-                }
-                shouldShowRequestPermissionRationale(permission) -> {
-                    showRequestPermissionDialog(permission, name, requestCode)
-                }
-                else -> {
-                    ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
-                }
-            }
-        }
-    }
-
-    private fun showRequestPermissionDialog(permissions: String, name: String, requestCode: Int) {
-
-        val builder = AlertDialog.Builder(this)
-        builder.apply {
-            setMessage("You need to access your $name permission is required to use this app")
-            setTitle("Permission Required")
-            setPositiveButton("Ok") { _, _ ->
-
-                ActivityCompat.requestPermissions(
-                    this@AddNewTaskActivity,
-                    arrayOf(permissions),
-                    requestCode
-                )
-            }
-        }
-        val dialog = builder.create()
-        dialog.show()
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -150,7 +100,6 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
         when (requestCode) {
 
             galleryPermissionCode -> innerCheck("Gallery")
-            locationPermissionCode -> innerCheck("Location")
         }
     }
 
@@ -232,7 +181,6 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
 
     }
 
-
     private fun backToHomeActivity() {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
@@ -262,7 +210,7 @@ class AddNewTaskActivity : AppCompatActivity(), View.OnClickListener,
                openTaskBottomSheet()
             }
             R.id.btnOpenMyGallery -> {
-                checkUserPermission(
+                userPermission.checkUserPermission(
                     android.Manifest.permission.READ_EXTERNAL_STORAGE,
                     "gallery",
                     galleryPermissionCode

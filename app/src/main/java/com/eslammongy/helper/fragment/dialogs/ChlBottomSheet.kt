@@ -88,12 +88,12 @@ class ChlBottomSheet(parentChlID:Int) : BottomSheetDialogFragment(),View.OnClick
         if (title.isEmpty() || time.isEmpty()){
             Toast.makeText(
                 activity!!,
-                "Error required filed is empty.. ${title}!",
+                "Error required filed is empty !",
                 Toast.LENGTH_SHORT
             ).show()
         }else{
             HelperDataBase.getDataBaseInstance(activity!!).checkListDao().saveNewSubCheckList(subCheckList)
-            dialog!!.dismiss()
+            dismiss()
         }
 
     }
