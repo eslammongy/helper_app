@@ -9,6 +9,9 @@ activity .. fragment .. animation.. recyclerview .. bottom sheet .. dialog .. we
 Room Library
 for app database and i create some realationships between table
 
+Coroutines Library
+to manage long-running tasks in app
+
 Retrofit Library
 
 for connecting app with weather api and get the current weather data and get Daily forecast for 7 days
