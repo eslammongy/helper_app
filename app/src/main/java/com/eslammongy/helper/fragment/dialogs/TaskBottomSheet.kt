@@ -17,8 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.eslammongy.helper.R
 import com.eslammongy.helper.adapters.FriendsAdapter
 import com.eslammongy.helper.database.HelperDataBase
+import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.FragmentTaskBottomSheetBinding
+import com.eslammongy.helper.services.AlarmService
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -30,6 +32,7 @@ class TaskBottomSheet(
     taskColor: Int?,
     time: String,
     date: String,
+    titleTask:String,
     link: String,
     friendName: String,
     friendImage: ByteArray
@@ -38,18 +41,21 @@ class TaskBottomSheet(
     private var _binding: FragmentTaskBottomSheetBinding? = null
     private val binding get() = _binding!!
     private var taskColor: Int? = null
-    private var time:String? = null
-    private var date:String? = null
+    private var timeTask:String? = null
+    private var dateTask:String? = null
+    private var titleTask:String? = null
     private var link:String? = null
     private var friendName:String? = null
     private var friendImage:ByteArray? = null
     private var listMyFriends = ArrayList<ContactEntities>()
     private var friendAdapter: FriendsAdapter? = null
+    private lateinit var alarmService: AlarmService
 
     init {
         this.taskColor = taskColor
-        this.time = time
-        this.date = date
+        this.timeTask = time
+        this.dateTask = date
+        this.titleTask = titleTask
         this.link = link
         this.friendName = friendName
         this.friendImage = friendImage
@@ -61,16 +67,15 @@ class TaskBottomSheet(
     ): View {
         _binding = FragmentTaskBottomSheetBinding.inflate(inflater, container, false)
 
+        alarmService = AlarmService(requireContext())
         binding.enterLinkText.setText(link)
         binding.chlPaletteColor.setSelectedColor(taskColor!!)
         displayFriendsRecyclerView()
-        binding.tvSheetTime.text = time
-        binding.tvSheetDate.text = date
+        binding.tvSheetTime.text = timeTask
+        binding.tvSheetDate.text = dateTask
         binding.saveTaskInfo.setOnClickListener(this)
         binding.tvSheetDate.setOnClickListener(this)
         binding.tvSheetTime.setOnClickListener(this)
-
-        //taskColor = resources.getColor(R.color.ColorDefaultNote)
         binding.chlPaletteColor.setOnColorSelectedListener { clr ->
             taskColor = clr
 
@@ -96,18 +101,19 @@ class TaskBottomSheet(
               getTaskInfoFromBottomSheet()
             }
             R.id.tv_SheetDate -> {
-                openTaskDateDialog()
+                setAlarm { alarmService.setExactAlarm(it ,titleTask.toString() ,"You Have A New Task With Your Friend Named $friendName .. Let's Go To Do It." , 1) }
             }
             R.id.tv_SheetTime -> {
-                openTaskTimeDialog()
+                //openTaskTimeDialog()
+                setAlarm { alarmService.setExactAlarm(it , titleTask.toString(),"You Have A New Task With Your Friend Named $friendName .. Let's Go To Do It." , 1) }
 
             }
         }
     }
 
     private fun displayFriendsRecyclerView(){
-        listMyFriends = HelperDataBase.getDataBaseInstance(activity!!).contactDao().getAllContacts() as ArrayList<ContactEntities>
-        friendAdapter = FriendsAdapter(context!!, listMyFriends, this)
+        listMyFriends = HelperDataBase.getDataBaseInstance(requireContext()).contactDao().getAllContacts() as ArrayList<ContactEntities>
+        friendAdapter = FriendsAdapter(requireContext() , listMyFriends, this)
         binding.taskFiendRecycler.setHasFixedSize(true)
         binding.taskFiendRecycler.layoutManager = LinearLayoutManager(context)
         binding.taskFiendRecycler.adapter = friendAdapter
@@ -128,7 +134,7 @@ class TaskBottomSheet(
         } else {
             binding.enterLinkText.error = "Url is not valid!!"
             Toast.makeText(
-                activity!!,
+                requireContext(),
                 "please make sure that the url is valid or not.",
                 Toast.LENGTH_SHORT
             ).show()
@@ -161,11 +167,12 @@ class TaskBottomSheet(
         }
     }
 
+    /*
     private fun openTaskDateDialog() {
 
         val calender = Calendar.getInstance()
         DatePickerDialog(
-            activity!!,
+            requireContext(),
             { _, year, month, dayOfMonth ->
 
                 calender.set(Calendar.YEAR, year)
@@ -182,6 +189,50 @@ class TaskBottomSheet(
             calender.get(Calendar.DAY_OF_MONTH)
         ).show()
     }
+
+     */
+
+    @SuppressLint("SimpleDateFormat")
+    private fun setAlarm(callback: (Long) -> Unit) {
+        Calendar.getInstance().apply {
+            this.set(Calendar.SECOND, 0)
+            this.set(Calendar.MILLISECOND, 0)
+            DatePickerDialog(
+                requireContext(),
+                0,
+                { _, year, month, day ->
+                    this.set(Calendar.YEAR, year)
+                    this.set(Calendar.MONTH, month)
+                    this.set(Calendar.DAY_OF_MONTH, day)
+                    TimePickerDialog(
+                        requireContext(),
+                        0,
+                        { _, hour, minute ->
+                            this.set(Calendar.HOUR_OF_DAY, hour)
+                            this.set(Calendar.MINUTE, minute)
+                            callback(this.timeInMillis)
+                            val timeFormatted = SimpleDateFormat("hh:mm a").format(this.time)
+                            timeTask = timeFormatted.toString()
+                            binding.tvSheetTime.text = timeTask
+                        },
+                        this.get(Calendar.HOUR_OF_DAY),
+                        this.get(Calendar.MINUTE),
+                        false
+                    ).show()
+
+                    val dateFormatted =
+                        DateFormat.getDateInstance(DateFormat.MEDIUM).format(this.time)
+                    dateTask = dateFormatted.toString()
+                    binding.tvSheetDate.text = dateTask
+
+                },
+                this.get(Calendar.YEAR),
+                this.get(Calendar.MONTH),
+                this.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
+    }
+    /*
     @SuppressLint("SimpleDateFormat")
     private fun openTaskTimeDialog() {
         val calender = Calendar.getInstance()
@@ -191,12 +242,16 @@ class TaskBottomSheet(
             calender.set(Calendar.MINUTE, minute)
             val timeFormatted = SimpleDateFormat("hh:mm a").format(calender.time)
             binding.tvSheetTime.text = timeFormatted.toString()
+
+            alarmService.setExactAlarm(calender.timeInMillis)
         }
         TimePickerDialog(
-            activity!!, timePicker, calender.get(Calendar.HOUR_OF_DAY),
+            requireContext(), timePicker, calender.get(Calendar.HOUR_OF_DAY),
             calender.get(Calendar.MINUTE), isSystem24Hour
         ).show()
     }
+
+     */
 
     interface BottomSheetInterface {
 
@@ -213,8 +268,9 @@ class TaskBottomSheet(
     override fun onClicked(contactEntities: ContactEntities, position: Int) {
 
         friendName = contactEntities.contact_Name
-        friendImage = contactEntities.contact_Image
-        Toast.makeText(activity!!, "You Select Your Friend Named $friendName", Toast.LENGTH_LONG).show()
+        val convertImage = Converter().fromBitMap(contactEntities.contact_Image!!)
+        friendImage = convertImage
+       // Toast.makeText(requireContext(), "You Select Your Friend Named $friendName", Toast.LENGTH_LONG).show()
     }
 
     override fun onItemClickListener(position: Int, view: View?) {

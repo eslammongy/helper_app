@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.eslammongy.helper.adapters.TaskAdapter
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.TaskEntities
@@ -17,7 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 class TaskFragment : Fragment() {
 
     var listMyTasks = ArrayList<TaskEntities>()
-    var taskAdapter: TaskAdapter? = null
+    private var taskAdapter: TaskAdapter? = null
     private var _binding: FragmentTaskBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
@@ -32,7 +33,7 @@ class TaskFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        displayRecyclerView()
+            displayRecyclerView()
         var deletedItem: String?
         val itemTouchHelperCallback =
             object :
@@ -53,7 +54,7 @@ class TaskFragment : Fragment() {
 
                     val position: Int = viewHolder.adapterPosition
                     val listTasks: TaskEntities = listMyTasks[position]
-                    HelperDataBase.getDataBaseInstance(activity!!).taskDao()
+                    HelperDataBase.getDataBaseInstance(requireContext()).taskDao()
                         .deleteSelectedTask(listTasks)
                     deletedItem =
                         "Are You Sure You Want To Delete This " + listTasks.taskTitle + "OR Undo Deleted .."
@@ -65,7 +66,7 @@ class TaskFragment : Fragment() {
                         ) {
 
                             listMyTasks.add(position, listTasks)
-                            HelperDataBase.getDataBaseInstance(activity!!).taskDao()
+                            HelperDataBase.getDataBaseInstance(requireContext()).taskDao()
                                 .saveNewTask(listTasks)
                             taskAdapter!!.notifyItemInserted(position)
 
@@ -81,18 +82,23 @@ class TaskFragment : Fragment() {
 
     private fun displayRecyclerView() {
 
-        listMyTasks = HelperDataBase.getDataBaseInstance(activity!!).taskDao()
-            .getAllTasks() as ArrayList<TaskEntities>
-        if (listMyTasks.isEmpty()) {
-            binding.emptyImageView.visibility = View.VISIBLE
-        } else {
-            taskAdapter = TaskAdapter(context!!, listMyTasks)
-            binding.tasksRecyclerView.setHasFixedSize(true)
-            binding.tasksRecyclerView.layoutManager = LinearLayoutManager(context)
-            binding.tasksRecyclerView.adapter = taskAdapter
+            listMyTasks = HelperDataBase.getDataBaseInstance(this.requireContext()).taskDao()
+                .getAllTasks() as ArrayList<TaskEntities>
+            if (listMyTasks.isEmpty()) {
+                binding.emptyImageView.visibility = View.VISIBLE
+            } else {
+                binding.tasksRecyclerView.setHasFixedSize(true)
+                taskAdapter = TaskAdapter(requireContext(), listMyTasks)
+                binding.tasksRecyclerView.layoutManager = LinearLayoutManager(context)
+                binding.tasksRecyclerView.adapter = taskAdapter
 
         }
 
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Glide.with(requireContext()).clear(binding.tasksRecyclerView)
     }
 
     override fun onDestroy() {

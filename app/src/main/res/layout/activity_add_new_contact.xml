@@ -17,9 +17,9 @@
         android:contentDescription="@string/todo"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_iconfinder_left_arrow_back_previous_navigation"
-        android:tint="@color/White"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/White" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/contact_ProfilePhoto"
@@ -43,9 +43,9 @@
         android:padding="8dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_iconfinder_icon_camera"
-        android:tint="@color/colorDark"
         app:layout_constraintBottom_toBottomOf="@id/contact_ProfilePhoto"
-        app:layout_constraintEnd_toEndOf="@id/contact_ProfilePhoto" />
+        app:layout_constraintEnd_toEndOf="@id/contact_ProfilePhoto"
+        app:tint="@color/colorDark" />
 
     <TextView
         android:id="@+id/contact_TopName"
@@ -202,7 +202,7 @@
             android:padding="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_iconfinder_calendar"
-            android:tint="@color/white" />
+            app:tint="@color/white" />
 
         <ImageButton
             android:id="@+id/btn_OpenEmailForm"
@@ -215,7 +215,7 @@
             android:padding="10dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_iconfinder_icons_email"
-            android:tint="@color/white" />
+            app:tint="@color/white" />
 
         <ImageButton
             android:id="@+id/btn_CallMyContact"
@@ -228,7 +228,7 @@
             android:padding="10dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_iconfinder_phone_call"
-            android:tint="@color/white" />
+            app:tint="@color/white" />
 
         <ImageButton
             android:id="@+id/btn_DeleteCurrentContact"
@@ -241,8 +241,8 @@
             android:padding="10dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_iconfinder_delete"
-            android:tint="@color/ColorRedNote"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:tint="@color/ColorRedNote" />
 
     </LinearLayout>
 

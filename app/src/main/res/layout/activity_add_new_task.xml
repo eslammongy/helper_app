@@ -43,9 +43,9 @@
                     android:padding="8dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_iconfinder_left_arrow_back_previous_navigation"
-                    android:tint="@color/White"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/White" />
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ti_TaskTitle"
@@ -57,7 +57,8 @@
                     android:gravity="center_vertical"
                     android:hint="@string/title"
                     android:inputType="text"
-                    android:maxLength="15"
+                    android:maxLength="10"
+                    android:layout_marginStart="50dp"
                     android:paddingStart="15dp"
                     android:textColor="@color/White"
                     android:textColorHint="@color/ColorDefaultNote"
@@ -104,6 +105,9 @@
                     android:inputType="time"
                     android:maxLines="1"
                     android:padding="5dp"
+                    android:drawablePadding="10dp"
+                    android:drawableStart="@drawable/ic_round_timer_24"
+                    app:drawableTint="@color/White"
                     android:textColor="@color/White"
                     android:textColorHint="@color/ColorDefaultNote"
                     android:textSize="17sp" />
@@ -125,6 +129,9 @@
                     android:inputType="date"
                     android:maxLines="1"
                     android:padding="6dp"
+                    android:drawablePadding="10dp"
+                    android:drawableStart="@drawable/ic_round_calendar_today_24"
+                    app:drawableTint="@color/White"
                     android:textColor="@color/White"
                     android:textColorHint="@color/ColorDefaultNote"
                     android:textSize="17sp" />
@@ -195,16 +202,14 @@
 
         <ImageView
             android:id="@+id/task_ImageView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="70dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginEnd="70dp"
             android:background="@drawable/custom_dark_shape"
             android:contentDescription="@string/todo"
             android:padding="10dp"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             android:src="@drawable/reminder_me_task_image"
             app:layout_constraintBottom_toTopOf="@+id/bottomButton"
             app:layout_constraintEnd_toEndOf="parent"
@@ -240,8 +245,8 @@
                 android:background="@drawable/custom_one_shape_button"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_iconfinder_add"
-                android:tint="@color/White"
-                android:contentDescription="@string/todo" />
+                android:contentDescription="@string/todo"
+                app:tint="@color/White" />
 
             <ImageButton
                 android:id="@+id/btnOpenMyGallery"
@@ -253,8 +258,8 @@
                 android:background="@drawable/custom_one_shape_button"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_iconfinder_icons_pic"
-                android:tint="@color/White"
-                android:contentDescription="@string/todo" />
+                android:contentDescription="@string/todo"
+                app:tint="@color/White" />
 
             <ImageButton
                 android:id="@+id/btn_DeleteTask"
@@ -266,9 +271,8 @@
                 android:padding="10dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_iconfinder_delete"
-                android:tint="@color/White"
                 android:visibility="gone"
-               />
+                app:tint="@color/White" />
 
             <ImageButton
                 android:id="@+id/btn_SaveTask"
@@ -281,8 +285,7 @@
                 android:padding="8dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_iconfinder_ic_done"
-                android:tint="@color/White"
-                />
+                app:tint="@color/White" />
         </LinearLayout>
 
 

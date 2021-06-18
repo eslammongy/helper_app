@@ -7,7 +7,6 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.HelperDataBase
@@ -20,10 +19,7 @@ class CheckListAdapter(var context: Context ) :
     RecyclerView.Adapter<CheckListAdapter.CheckListViewHolder>() {
 
     private var oldChList = ArrayList<CheckListEntity>()
-   // private var onItemSelectedListener:OnItemSelectedListener? = null
-//    init {
-//        this.onItemSelectedListener = onItemSelectedListener
-//    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckListViewHolder {
         return CheckListViewHolder(
             ChecklistLayoutViewBinding.inflate(
@@ -54,12 +50,12 @@ class CheckListAdapter(var context: Context ) :
                 holder.binding.root.alpha = 0.3F
                 HelperDataBase.getDataBaseInstance(context).checkListDao().getCompleteStatus(chlEntity.checkListId , true)
                 holder.binding.line1.visibility = View.VISIBLE
-                Toast.makeText(context, "${chlEntity.checkList_Completed}!", Toast.LENGTH_LONG).show()
+                //Toast.makeText(context, "${chlEntity.checkList_Completed}!", Toast.LENGTH_LONG).show()
             } else {
                 holder.binding.root.alpha = 1.0F
                 HelperDataBase.getDataBaseInstance(context).checkListDao().getCompleteStatus(chlEntity.checkListId , false)
                 holder.binding.line1.visibility = View.GONE
-                Toast.makeText(context, "${chlEntity.checkList_Completed}!", Toast.LENGTH_LONG).show()
+               // Toast.makeText(context, "${chlEntity.checkList_Completed}!", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -71,9 +67,10 @@ class CheckListAdapter(var context: Context ) :
             intent.putExtra("chlDate", chlEntity.checkList_Date)
             intent.putExtra("chlComplete", chlEntity.checkList_Completed)
             intent.putExtra("chlColor", chlEntity.checkList_Color)
-            Toast.makeText(context, "CheckList Saved. ${chlEntity.checkList_Completed} !", Toast.LENGTH_LONG).show()
+            //Toast.makeText(context, "CheckList Saved. ${chlEntity.checkList_Completed} !", Toast.LENGTH_LONG).show()
             context.startActivity(intent)
-            (context as Activity).finish()
+            (context as Activity)
+                .finish()
 
         }
     }

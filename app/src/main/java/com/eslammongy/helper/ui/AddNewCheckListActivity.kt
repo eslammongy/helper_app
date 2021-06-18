@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.eslammongy.helper.R
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.CheckListEntity
@@ -34,7 +35,7 @@ class AddNewCheckListActivity : AppCompatActivity(), View.OnClickListener {
         // receive data from adapter by id
         checkLId = intent.getIntExtra("chlID", 0)
         isComplete =  intent.getBooleanExtra("chlComplete" , false)
-        chlColor = resources.getColor(R.color.ColorDefaultNote)
+        chlColor = ResourcesCompat.getColor(resources, R.color.ColorDefaultNote, theme)
         displayInfoFromAdapter()
         replaceFragment(checkLId)
         binding.btnArrowToHome.setOnClickListener(this)
@@ -63,48 +64,52 @@ class AddNewCheckListActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
     private fun replaceFragment(subChlId:Int){
-        val subChlFragment = SubChlFragment(subChlId)
+        val subChlFragment = SubChlFragment(subChlId , binding.checkListTitle.text.toString())
         val fragmentTransition = supportFragmentManager.beginTransaction()
         fragmentTransition.replace(R.id.subChlFrameLayout, subChlFragment)
             .commit()
     }
-    private fun openTaskDateDialog() {
 
-        val calender = Calendar.getInstance()
-        DatePickerDialog(
-            this,
-            { _, year, month, dayOfMonth ->
-
-                calender.set(Calendar.YEAR, year)
-                calender.set(Calendar.MONTH, month)
-                calender.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                val dateFormatted =
-                    DateFormat.getDateInstance(DateFormat.MEDIUM).format(calender.time)
-
-                binding.tvShowChlDate.text = dateFormatted
-
-            },
-            calender.get(Calendar.YEAR),
-            calender.get(Calendar.MONTH),
-            calender.get(Calendar.DAY_OF_MONTH)
-        ).show()
-    }
     @SuppressLint("SimpleDateFormat")
-    private fun openTaskTimeDialog() {
-        val calender = Calendar.getInstance()
-        val isSystem24Hour = android.text.format.DateFormat.is24HourFormat(this)
-        val timePicker = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-            calender.set(Calendar.HOUR_OF_DAY, hourOfDay)
-            calender.set(Calendar.MINUTE, minute)
-            val timeFormatted = SimpleDateFormat("hh:mm a").format(calender.time)
-            binding.tvShowChlTime.text = timeFormatted.toString()
-        }
-        TimePickerDialog(
-            this, timePicker, calender.get(Calendar.HOUR_OF_DAY),
-            calender.get(Calendar.MINUTE), isSystem24Hour
-        ).show()
-    }
+    private fun setChlDateTime() {
+        Calendar.getInstance().apply {
+            this.set(Calendar.SECOND, 0)
+            this.set(Calendar.MILLISECOND, 0)
+            DatePickerDialog(
+                this@AddNewCheckListActivity,
+                0,
+                { _, year, month, day ->
+                    this.set(Calendar.YEAR, year)
+                    this.set(Calendar.MONTH, month)
+                    this.set(Calendar.DAY_OF_MONTH, day)
+                    TimePickerDialog(
+                        this@AddNewCheckListActivity,
+                        0,
+                        { _, hour, minute ->
+                            this.set(Calendar.HOUR_OF_DAY, hour)
+                            this.set(Calendar.MINUTE, minute)
 
+                            val timeFormatted = SimpleDateFormat("hh:mm a").format(this.time)
+                            binding.tvShowChlTime.text = timeFormatted.toString()
+
+                        },
+                        this.get(Calendar.HOUR_OF_DAY),
+                        this.get(Calendar.MINUTE),
+                        false
+                    ).show()
+
+                    val dateFormatted =
+                        DateFormat.getDateInstance(DateFormat.MEDIUM).format(this.time)
+                    binding.tvShowChlDate.text = dateFormatted.toString()
+
+
+                },
+                this.get(Calendar.YEAR),
+                this.get(Calendar.MONTH),
+                this.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
+    }
     private fun openColorPicker() {
         if (showing) {
             binding.chlPaletteColor.visibility = View.GONE
@@ -188,10 +193,10 @@ class AddNewCheckListActivity : AppCompatActivity(), View.OnClickListener {
                 backToHomeActivity()
             }
             R.id.tv_ShowChlDate -> {
-                openTaskDateDialog()
+                setChlDateTime()
             }
             R.id.tv_ShowChlTime -> {
-                openTaskTimeDialog()
+                setChlDateTime()
             }
             R.id.btn_ChlColorPicker -> {
                 openColorPicker()

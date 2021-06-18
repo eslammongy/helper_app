@@ -62,7 +62,7 @@ class CheckListFragment : Fragment(), CheckListAdapter.OnItemSelectedListener {
 
                     val position: Int = viewHolder.adapterPosition
                     val listChl:CheckListEntity = listOfCheckList[position]
-                    HelperDataBase.getDataBaseInstance(activity!!).checkListDao().deleteSelectedCheckList(listChl)
+                    HelperDataBase.getDataBaseInstance(requireActivity()).checkListDao().deleteSelectedCheckList(listChl)
                     val deletedItem =
                         "Are You Sure You Want To Delete This " + listChl.checkList_Title + "OR Undo Deleted .."
                     listOfCheckList.removeAt(viewHolder.adapterPosition)
@@ -73,7 +73,7 @@ class CheckListFragment : Fragment(), CheckListAdapter.OnItemSelectedListener {
                         ) {
 
                             listOfCheckList.add(position, listChl)
-                            HelperDataBase.getDataBaseInstance(activity!!).checkListDao().saveNewCheckList(listChl)
+                            HelperDataBase.getDataBaseInstance(requireActivity()).checkListDao().saveNewCheckList(listChl)
                             checkListAdapter!!.notifyItemInserted(position)
 
                         }.show()
@@ -85,15 +85,15 @@ class CheckListFragment : Fragment(), CheckListAdapter.OnItemSelectedListener {
     }
 
     private fun displayRecyclerView(){
-        listOfCheckList = HelperDataBase.getDataBaseInstance(activity!!).checkListDao().getAllCheckLists() as ArrayList<CheckListEntity>
+        listOfCheckList = HelperDataBase.getDataBaseInstance(requireActivity()).checkListDao().getAllCheckLists() as ArrayList<CheckListEntity>
 
         if (listOfCheckList.isNullOrEmpty()){
                 binding.emptyImageView.visibility = View.VISIBLE
             }else{
             binding.emptyImageView.visibility = View.GONE
             binding.chlRecyclerView.setHasFixedSize(true)
-            binding.chlRecyclerView.layoutManager = LinearLayoutManager(activity!!)
-            checkListAdapter = CheckListAdapter(activity!!)
+            binding.chlRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
+            checkListAdapter = CheckListAdapter(requireActivity())
             binding.chlRecyclerView.adapter = checkListAdapter
             checkListAdapter!!.setData(listOfCheckList)
 
@@ -113,7 +113,7 @@ class CheckListFragment : Fragment(), CheckListAdapter.OnItemSelectedListener {
 
     private fun openFrameLayout(fragment: Fragment) {
 
-        val transaction = fragmentManager!!.beginTransaction()
+        val transaction = parentFragmentManager.beginTransaction()
         transaction.add(R.id.chlFragmentContainer, fragment)
         transaction.commit()
 

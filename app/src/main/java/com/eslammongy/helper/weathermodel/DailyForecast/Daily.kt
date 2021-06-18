@@ -10,7 +10,7 @@ data class Daily(
         val dt: Int,
         val feels_like: FeelsLike,
         val humidity: Int,
-        val pop: Int,
+        val pop: Double,
         val pressure: Int,
         val rain: Double,
         val sunrise: Int,

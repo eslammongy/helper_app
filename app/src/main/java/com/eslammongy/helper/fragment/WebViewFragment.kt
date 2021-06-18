@@ -20,7 +20,7 @@ class WebViewFragment(private var webViewUrl: String? = null) : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View{
         _binding = FragmentWebViewBinding.inflate(inflater , container , false)
-        endAnimation = AnimationUtils.loadAnimation(activity!!, R.anim.ending_animation)
+        endAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.ending_animation)
 
         binding.taskWebView.loadUrl(webViewUrl!!)
         val webViewSetting = binding.taskWebView.settings

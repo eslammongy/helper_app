@@ -17,17 +17,16 @@ import com.eslammongy.helper.fragment.CheckListFragment
 import com.eslammongy.helper.fragment.ContactFragment
 import com.eslammongy.helper.fragment.TaskFragment
 import com.eslammongy.helper.fragment.WeatherFragment
-import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import java.util.*
 
 class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
 
-        const val ID_TASKS = 1
+       // const val ID_TASKS = 1
         const val ID_CHECKLIST = 2
         const val ID_CONTACT = 3
-        const val ID_WEATHER = 4
+        //const val ID_WEATHER = 4
     }
 
     private lateinit var binding:ActivityHomeBinding
@@ -39,61 +38,39 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
         val greetingCode = intent.getIntExtra("ToastMessage" , 0)
         if (greetingCode == 101) getGreetingMessage()
+        selectFragmentWhenBack()
 
         binding.btnAddNewElement.setOnClickListener(this)
         binding.btnSearch.setOnClickListener(this)
-        binding.bottomNavigation.add(MeowBottomNavigation.Model(
-            ID_TASKS,
-            R.drawable.ic_iconfinder_calendar
-        ))
-        binding.bottomNavigation.add(MeowBottomNavigation.Model(
-            ID_CHECKLIST ,
-            R.drawable.ic_iconfinder_check_list
-        ))
-        binding.bottomNavigation.add(MeowBottomNavigation.Model(
-            ID_CONTACT ,
-            R.drawable.ic_iconfinder_contact_user
-        ))
-        binding.bottomNavigation.add(MeowBottomNavigation.Model(
-            ID_WEATHER ,
-            R.drawable.ic_iconfinder_snowflake
-        ))
 
-        selectFragmentWhenBack()
-       // bottomNavigationBar.show(ID_TASKS , true)
-
-        binding.bottomNavigation.setOnShowListener {
-
-            when(it.id){
-
-                ID_TASKS ->{
+        binding.bottomNavigation.expand()
+        //binding.bottomNavigation.setItemSelected(R.id.task , true)
+        binding.bottomNavigation.setOnItemSelectedListener  {
+            when(it){
+                R.id.task ->{
+                   binding.titleActiveFragment.text = getString(R.string.task)
                     val taskFragment = TaskFragment()
                     replaceFragment(taskFragment)
-                    binding.titleActiveFragment.text = getString(R.string.task)
                     hideSearchAddIcon()
                 }
-                ID_CHECKLIST -> {
+                R.id.checkList -> {
+                    binding.titleActiveFragment.text = getString(R.string.check_list)
                     val checkListFragment = CheckListFragment()
                     replaceFragment(checkListFragment)
-                    binding.titleActiveFragment.text = getString(R.string.check_list)
                     hideSearchAddIcon()
                 }
-                ID_CONTACT -> {
+                R.id.contact -> {
+                   binding.titleActiveFragment.text = getString(R.string.contact)
                     val contactFragment = ContactFragment()
                     replaceFragment(contactFragment)
-                    binding.titleActiveFragment.text = getString(R.string.contact)
                     hideSearchAddIcon()
                 }
-                ID_WEATHER -> {
+                R.id.weather -> {
+                    binding.titleActiveFragment.text = getString(R.string.weather)
                     val weatherFragment = WeatherFragment()
                     replaceFragment(weatherFragment)
-                    binding.titleActiveFragment.text = getString(R.string.weather)
                     hideSearchAddIcon()
 
-                }
-                else ->{
-                    val taskFragment = TaskFragment()
-                    replaceFragment(taskFragment)
                 }
             }
         }
@@ -104,6 +81,7 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
 
         val fragmentTransition = supportFragmentManager.beginTransaction()
         fragmentTransition.replace(R.id.fragment_holder, fragment)
+            .disallowAddToBackStack()
             .commitAllowingStateLoss()
     }
 
@@ -128,23 +106,12 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     private fun hideSearchAddIcon(){
 
         when(binding.titleActiveFragment.text.toString()){
-            "Task" ->{
-                binding.btnAddNewElement.visibility = View.VISIBLE
-                binding.btnSearch.visibility = View.VISIBLE
-
-            }
-            "Contact" ->{
-                binding.btnAddNewElement.visibility = View.VISIBLE
-                binding.btnSearch.visibility = View.VISIBLE
-
-            }
-            "CheckList" ->{
-                binding.btnAddNewElement.visibility = View.VISIBLE
-                binding.btnSearch.visibility = View.VISIBLE
-            }
             "Weather" ->{
                 binding.btnAddNewElement.visibility = View.GONE
                 binding.btnSearch.visibility = View.GONE
+            }else ->{
+                binding.btnAddNewElement.visibility = View.VISIBLE
+                binding.btnSearch.visibility = View.VISIBLE
             }
         }
 
@@ -160,17 +127,25 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     private fun selectFragmentWhenBack(){
 
         selectedFragment = intent.getIntExtra("ArrowKey" , 0)
-
         when(selectedFragment){
 
             ID_CHECKLIST ->{
-                binding.bottomNavigation.show(ID_CHECKLIST , true)
+                binding.bottomNavigation.setItemSelected(R.id.checkList , true)
+                binding.titleActiveFragment.text = getString(R.string.check_list)
+                val checkListFragment = CheckListFragment()
+                replaceFragment(checkListFragment)
             }
             ID_CONTACT ->{
-                binding.bottomNavigation.show(ID_CONTACT , true)
+                binding.titleActiveFragment.text = getString(R.string.contact)
+                binding.bottomNavigation.setItemSelected(R.id.contact , true)
+                val contactFragment = ContactFragment()
+                replaceFragment(contactFragment)
             }
             else ->{
-                binding.bottomNavigation.show(ID_TASKS , true)
+                binding.titleActiveFragment.text = getString(R.string.task)
+                binding.bottomNavigation.setItemSelected(R.id.task , true)
+                val taskFragment = TaskFragment()
+                replaceFragment(taskFragment)
             }
         }
     }
@@ -213,7 +188,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             else -> Toast.makeText(this , "Hello" , Toast.LENGTH_LONG).show()
         }
 
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -223,9 +197,14 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                openNewSelectedActivity()
            }
            R.id.btn_Search ->{
-             openSearchActivity()
+              openSearchActivity()
            }
        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 
 }

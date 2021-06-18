@@ -47,11 +47,11 @@ class TaskWithFriendFragment(contactName: String, displayOption: String) : Fragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        startAnimation = AnimationUtils.loadAnimation(activity!!, R.anim.starting_animation)
-        endAnimation = AnimationUtils.loadAnimation(activity!!, R.anim.ending_animation)
+        startAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.starting_animation)
+        endAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.ending_animation)
         binding.parentView.startAnimation(startAnimation)
         binding.tvShowFriendName.text = contactName
-        listMyTasksWFriend = HelperDataBase.getDataBaseInstance(activity!!).taskDao()
+        listMyTasksWFriend = HelperDataBase.getDataBaseInstance(requireContext()).taskDao()
             .getTaskWithFriend(contactName!!) as ArrayList<TaskEntities>
 
         if (displayOption == "ShowTaskView") {
@@ -62,7 +62,7 @@ class TaskWithFriendFragment(contactName: String, displayOption: String) : Fragm
         }
 
         binding.btnExitTWF.setOnClickListener {
-            fragmentManager!!.beginTransaction().remove(TaskWithFriendFragment("none", "Noun"))
+            parentFragmentManager.beginTransaction().remove(TaskWithFriendFragment("none", "Noun"))
                 .commitAllowingStateLoss()
             binding.parentView.visibility = View.GONE
             binding.parentView.startAnimation(endAnimation)
@@ -79,7 +79,7 @@ class TaskWithFriendFragment(contactName: String, displayOption: String) : Fragm
             binding.emptyListText.text = "${resources.getString(R.string.you_didn_t_have_any_task)} $contactName"
             binding.twfRecyclerView.visibility = View.GONE
         } else {
-            twfAdapter = TaskAdapter(context!!, listMyTasksWFriend)
+            twfAdapter = TaskAdapter(requireContext(), listMyTasksWFriend)
             binding.twfRecyclerView.setHasFixedSize(true)
             binding.twfRecyclerView.layoutManager = LinearLayoutManager(context)
             binding.twfRecyclerView.adapter = twfAdapter
@@ -94,6 +94,7 @@ class TaskWithFriendFragment(contactName: String, displayOption: String) : Fragm
 
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun sendingEmailMessage() {
 
         val address = binding.formEmailAddress.text.toString()
@@ -109,15 +110,15 @@ class TaskWithFriendFragment(contactName: String, displayOption: String) : Fragm
         }
 
         if (address.isEmpty() || subject.isEmpty() || message.isEmpty()) {
-            if (intent.resolveActivity(context!!.packageManager) != null) {
+            if (intent.resolveActivity(requireActivity().packageManager) != null) {
                 startActivity(Intent.createChooser(intent, "Choose App"))
             } else {
-                Toast.makeText(activity!!, "Required Field Is Empty", Toast.LENGTH_LONG)
+                Toast.makeText(requireContext(), "Required Field Is Empty", Toast.LENGTH_LONG)
                     .show()
             }
         } else {
 
-            Toast.makeText(activity!!, "Required App Is Not Installed", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Required App Is Not Installed", Toast.LENGTH_LONG).show()
         }
 
     }

@@ -18,14 +18,14 @@
             android:layout_height="40dp"
             android:layout_marginStart="10dp"
             android:scaleType="centerCrop"
-            android:tint="@color/White"
             android:src="@drawable/ic_iconfinder_left_arrow_back_previous_navigation"
             android:background="@color/colorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="@+id/tv_ShowFriendName"
             app:layout_constraintEnd_toStartOf="@+id/tv_ShowFriendName"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_ShowFriendName"
-            android:contentDescription="@string/todo" />
+            android:contentDescription="@string/todo"
+            app:tint="@color/White" />
 
         <TextView
             android:id="@+id/tv_ShowFriendName"

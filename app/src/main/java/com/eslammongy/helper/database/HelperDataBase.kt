@@ -38,7 +38,8 @@ abstract class HelperDataBase : RoomDatabase() {
                     context.applicationContext,
                     HelperDataBase::class.java,
                     "helper.db"
-                ).allowMainThreadQueries().build()
+                ).allowMainThreadQueries()
+                    .build()
             }
             return dataBaseInstance!!
         }

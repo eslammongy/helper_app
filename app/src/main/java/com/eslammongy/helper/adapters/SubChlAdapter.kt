@@ -3,7 +3,6 @@ package com.eslammongy.helper.adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.HelperDataBase
@@ -36,12 +35,12 @@ class SubChlAdapter(var context: Context) : RecyclerView.Adapter<SubChlAdapter.S
             if (isChecked){
                 holder.binding.root.alpha = 0.3F
                 HelperDataBase.getDataBaseInstance(context).checkListDao().getSubChlCompleteStatus(subChlWithParentChl.subCheckLId , isChecked)
-                Toast.makeText(context, "${subChlWithParentChl.subChl_Completed}!", Toast.LENGTH_LONG).show()
+               // Toast.makeText(context, "${subChlWithParentChl.subChl_Completed}!", Toast.LENGTH_LONG).show()
 
             }else{
                 holder.binding.root.alpha = 1.0F
                 HelperDataBase.getDataBaseInstance(context).checkListDao().getSubChlCompleteStatus(subChlWithParentChl.subCheckLId , isChecked)
-                Toast.makeText(context, "${subChlWithParentChl.subChl_Completed}!", Toast.LENGTH_LONG).show()
+                    // Toast.makeText(context, "${subChlWithParentChl.subChl_Completed}!", Toast.LENGTH_LONG).show()
             }
         }
 

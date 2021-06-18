@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.FriendsLayoutViewBinding
+import com.eslammongy.helper.helperfun.GlideApp
 
 class FriendsAdapter(
     var context: Context,
@@ -39,7 +40,8 @@ class FriendsAdapter(
         val friends = listOFFriends[position]
         holder.binding.friendName.text = friends.contact_Name
         val imageConverter = Converter()
-        holder.binding.friendImage.setImageBitmap(imageConverter.toBitMap(friends.contact_Image!!))
+        val image = imageConverter.fromBitMap(friends.contact_Image!!)
+        GlideApp.with(context).asBitmap().load(image).into(holder.binding.friendImage).clearOnDetach()
        holder.binding.root.setOnClickListener {
             checkedPosition = position
            onItemClickListener!!.onClicked(listOFFriends[position], position)

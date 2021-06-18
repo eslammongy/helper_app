@@ -1,4 +1,4 @@
-package com.eslammongy.helper.commonfun
+package com.eslammongy.helper.helperfun
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -17,16 +17,18 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 
+
+@SuppressLint("MissingPermission")
 class UserPermission(var activity: Activity?) {
 
     private lateinit var editor: SharedPreferences.Editor
     private val galleryPermissionCode = 101
-    private val pickAndCropImage by lazy { PickAndCropImage(activity!! , galleryPermissionCode) }
-    lateinit var lat: String
-    lateinit var long: String
+    private val pickAndCropImage by lazy { PickAndCropImage(activity!!, galleryPermissionCode) }
+     var lat: String? = null
+     var long: String? = null
 
 
-     fun checkUserLocationPermission(): Boolean {
+    fun checkUserLocationPermission(): Boolean {
         if (ContextCompat.checkSelfPermission(
                 activity!!,
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -43,24 +45,19 @@ class UserPermission(var activity: Activity?) {
         return true
     }
 
-    fun checkUserPermission(permission: String, name: String, requestCode: Int) {
+    fun checkUserPermission(permission: String, name: String, requestCode: Int){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             when {
                 ContextCompat.checkSelfPermission(
-                    activity!!,
-                    permission
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    Toast.makeText(
-                        activity!!,
-                        "$name Permission Granted.",
-                        Toast.LENGTH_LONG
-                    ).show()
-
-                    if (name == "Location")
-                    getCurrentLocation()
-                    else
-                    pickAndCropImage.pickImageFromGallery()
+                    activity!!, permission) == PackageManager.PERMISSION_GRANTED -> {
+                    Toast.makeText(activity!!, "$name Permission Granted.", Toast.LENGTH_LONG).show()
+                    if (name == "Location" && requestCode == 10) {
+                        getCurrentLocation()
+                        Toast.makeText(activity, "$lat ... $long inside if checkPermission", Toast.LENGTH_LONG).show()
+                    } else {
+                        pickAndCropImage.pickImageFromGallery()
+                    }
                 }
                 activity!!.shouldShowRequestPermissionRationale(permission) -> {
                     showRequestPermissionDialog(permission, name, requestCode)
@@ -72,17 +69,15 @@ class UserPermission(var activity: Activity?) {
             }
         }
 
-
     }
 
-     private fun showRequestPermissionDialog(permissions: String, name: String, requestCode: Int) {
+    private fun showRequestPermissionDialog(permissions: String, name: String, requestCode: Int) {
 
         val builder = AlertDialog.Builder(activity!!)
         builder.apply {
             setMessage("You need to access your $name permission is required to use this app")
             setTitle("Permission Required")
             setPositiveButton("Ok") { _, _ ->
-
                 ActivityCompat.requestPermissions(
                     activity!!,
                     arrayOf(permissions),
@@ -96,7 +91,7 @@ class UserPermission(var activity: Activity?) {
 
     @SuppressLint("MissingPermission", "CommitPrefEdits")
     fun getCurrentLocation() {
-       val sharedPreferences = activity!!.getSharedPreferences("UserLocation", Context.MODE_PRIVATE)
+        val sharedPreferences = activity!!.getSharedPreferences("UserLocation", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
         val locationRequest = LocationRequest.create().apply {
             interval = 10000
@@ -118,6 +113,7 @@ class UserPermission(var activity: Activity?) {
                         editor.apply {
                             putString("UserLat", lat)
                             putString("UserLang", long)
+                            Toast.makeText(activity, "$lat ... $long inside if getCurrentLocation", Toast.LENGTH_LONG).show()
                             apply()
                         }
 
@@ -127,4 +123,5 @@ class UserPermission(var activity: Activity?) {
             }, Looper.getMainLooper())
 
     }
+
 }

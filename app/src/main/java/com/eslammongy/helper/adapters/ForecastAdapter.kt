@@ -1,12 +1,13 @@
 package com.eslammongy.helper.adapters
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.eslammongy.helper.commonfun.WeatherConditions
 import com.eslammongy.helper.databinding.WeatherLayoutBinding
+import com.eslammongy.helper.helperfun.WeatherConditions
 import com.eslammongy.helper.weathermodel.dailyforecast.MyListDaily
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,13 +22,13 @@ class ForecastAdapter(var context: Context, private var dailyForecastList: Array
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val dailyForeCast = WeatherConditions(context)
+        val weatherConditions by lazy { WeatherConditions(context as Activity) }
         val forecastDailyList = dailyForecastList[position]
         val datedAt = forecastDailyList.daily[position].dt
         val updatedText = SimpleDateFormat("EEEE,dd", Locale.ENGLISH).format(Date(datedAt.toLong() * 1000))
         holder.binding.dailyDayName.text = updatedText
         val iconId = forecastDailyList.daily[position].weather[0].id
-        dailyForeCast.getWeatherDescriptionIconByID(iconId , holder.binding.dailyWeatherIcon)
+        weatherConditions.getWeatherDescriptionIconByID(iconId , holder.binding.dailyWeatherIcon)
         val desc = forecastDailyList.daily[position].weather[0].description
         holder.binding.dailyWeatherStatus.text = desc
 

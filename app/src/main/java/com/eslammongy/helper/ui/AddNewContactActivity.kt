@@ -1,49 +1,54 @@
 package com.eslammongy.helper.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.eslammongy.helper.R
-import com.eslammongy.helper.commonfun.PickAndCropImage
-import com.eslammongy.helper.commonfun.UserPermission
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.ActivityAddNewContactBinding
 import com.eslammongy.helper.fragment.TaskWithFriendFragment
 import com.eslammongy.helper.fragment.dialogs.CustomDeleteDialog
+import com.eslammongy.helper.helperfun.CompressImage
+import com.eslammongy.helper.helperfun.GlideApp
+import com.eslammongy.helper.helperfun.PickAndCropImage
+import com.eslammongy.helper.helperfun.UserPermission
 import com.yalantis.ucrop.UCrop
+
 
 @SuppressLint("SetTextI18n")
 class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityAddNewContactBinding
     private var taskColor: Int? = null
     private val galleryPermissionCode = 101
-    private val pickImageCode = 1000
     private var contactID: Int = 0
     private var showing = false
     private lateinit var imageConverter: Converter
-    private lateinit var pickAndCropImage: PickAndCropImage
+    private val requestCropImage = 102
+    private val pickAndCropImage by lazy { PickAndCropImage(this , requestCropImage) }
     private val userPermission by lazy { UserPermission(this) }
-    private var imageResultCropping: Uri? = null
 
-    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddNewContactBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        pickAndCropImage = PickAndCropImage(this, pickImageCode)
         imageConverter = Converter()
-        taskColor = resources.getColor(R.color.ColorDefaultNote)
+        taskColor = ResourcesCompat.getColor(resources, R.color.ColorDefaultNote, theme)
         contactID = intent.getIntExtra("ID", 0)
         getSelectedContactInfo(contactID)
         binding.btnOpenColorPicker.setOnClickListener(this)
@@ -58,6 +63,7 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
             taskColor = clr
             binding.btnOpenColorPicker.setCardBackgroundColor(taskColor!!)
         }
+
     }
 
     override fun onRequestPermissionsResult(
@@ -65,6 +71,7 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         fun innerCheck(name: String) {
             if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(applicationContext, "$name permission refused", Toast.LENGTH_LONG)
@@ -72,7 +79,13 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
             } else {
                 Toast.makeText(applicationContext, "$name permission granted", Toast.LENGTH_LONG)
                     .show()
-                pickAndCropImage.pickImageFromGallery()
+                 //pickAndCropImage.pickImageFromGallery()
+                val intent = Intent(Intent.ACTION_GET_CONTENT , MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+                intent.type = "image/*"
+                val mimeTypes = arrayOf("image/jpeg", "image/png", "image/jpg")
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+              //  intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+
             }
         }
         when (requestCode) {
@@ -81,18 +94,23 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    @Suppress("DEPRECATION")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == requestCropImage && resultCode == Activity.RESULT_OK){
 
-        if (requestCode == pickImageCode) {
-            imageResultCropping = data!!.data!!
-            pickAndCropImage.startCropImage(imageResultCropping!!)
-        } else if (requestCode == UCrop.REQUEST_CROP) {
+            val imageUri = data!!.data
+            if (imageUri != null){
+                pickAndCropImage.startCropImage(imageUri)
+            }
 
-            imageResultCropping = UCrop.getOutput(data!!)
-            if (imageResultCropping != null) binding.contactProfilePhoto.setImageURI(
-                imageResultCropping
-            )
+        }else if(requestCode ==  UCrop.REQUEST_CROP && resultCode ==  RESULT_OK){
+
+            val imageResultCrop = UCrop.getOutput(data!!)
+            if (imageResultCrop != null){
+                binding.contactProfilePhoto.setImageURI(imageResultCrop)
+            }
+
         }
     }
 
@@ -108,7 +126,7 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
         backToHomeActivity()
     }
 
-    private fun getSelectedContactInfo(ID:Int){
+    private fun getSelectedContactInfo(ID: Int){
         if (ID != 0) {
             binding.contactInputName.setText(intent.getStringExtra("Name"))
             binding.contactTopName.text = intent.getStringExtra("Name")
@@ -118,14 +136,8 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
             taskColor = Integer.parseInt(intent.getStringExtra("Color")!!)
             binding.btnOpenColorPicker.setCardBackgroundColor(taskColor!!)
             binding.chlPaletteColor.setSelectedColor(taskColor!!)
-
-            binding.contactProfilePhoto.setImageBitmap(
-                imageConverter.toBitMap(
-                    intent.getByteArrayExtra(
-                        "ImagePath"
-                    )!!
-                )
-            )
+            val contactPhoto = imageConverter.toBitMap(intent.getByteArrayExtra("ImagePath")!!)
+            GlideApp.with(this).asBitmap().load(contactPhoto).into( binding.contactProfilePhoto).clearOnDetach()
             binding.btnSaveNewContact.text = "Update"
             binding.btnDeleteCurrentContact.visibility = View.VISIBLE
         }
@@ -138,13 +150,14 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
         val contactAddress = binding.contactInputAddress.text.toString()
         val imageDrawable = binding.contactProfilePhoto.drawable as BitmapDrawable
         val imageByteArray = imageConverter.fromBitMap(imageDrawable.bitmap)
+        val reduceImageContactSize = CompressImage.reduceBitmapSize(imageConverter.toBitMap(imageByteArray), 250000)
         val contactEntities = ContactEntities(
             contactName,
             contactPhone,
             contactEmail,
             contactAddress,
             taskColor.toString(),
-            imageByteArray
+            reduceImageContactSize
         )
 
         when (contactID) {
@@ -208,17 +221,20 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
                 saveNewContact()
             }
             R.id.btn_DeleteCurrentContact -> {
-                val dialogFragment = CustomDeleteDialog(contactID , 2)
+                val dialogFragment = CustomDeleteDialog(contactID, 2)
                 openFrameLayout(dialogFragment)
             }
             R.id.btn_CallMyContact -> {
                 makePhoneCall()
             }
             R.id.btn_OpenEmailForm -> {
-              openEmailAndTaskFragment(binding.contactInputName.text.toString() , binding.contactInputEmail.text.toString())
+                openEmailAndTaskFragment(
+                    binding.contactInputName.text.toString(),
+                    binding.contactInputEmail.text.toString()
+                )
             }
             R.id.btn_ShowTwF -> {
-               openEmailAndTaskFragment(binding.contactInputName.text.toString() ,"ShowTaskView")
+                openEmailAndTaskFragment(binding.contactInputName.text.toString(), "ShowTaskView")
             }
             R.id.btn_OpenColorPicker -> {
                 if (showing) {
@@ -230,10 +246,16 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             R.id.Change_ProfilePhoto -> {
-                    userPermission. checkUserPermission(
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    pickAndCropImage.pickImageFromGallery()
+                } else {
+                    userPermission.checkUserPermission(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
                         "gallery",
-                        galleryPermissionCode)
+                        galleryPermissionCode
+                    )
+                }
+
             }
             R.id.btn_BackToHome -> {
                 backToHomeActivity()
@@ -242,7 +264,7 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun openEmailAndTaskFragment(name:String , email:String){
+    private fun openEmailAndTaskFragment(name: String, email: String){
         if (binding.contactInputName.text!!.isEmpty() || contactID == 0){
             Toast.makeText(applicationContext, "there is no friend here !!", Toast.LENGTH_LONG).show()
         }else{
@@ -260,5 +282,10 @@ class AddNewContactActivity : AppCompatActivity(), View.OnClickListener {
         transaction.add(R.id.fragment_container, fragment)
         transaction.commit()
 
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Glide.with(this).clear(binding.contactProfilePhoto)
     }
 }

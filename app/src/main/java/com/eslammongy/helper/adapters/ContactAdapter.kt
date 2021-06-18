@@ -10,11 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.ContactLayoutViewBinding
+import com.eslammongy.helper.helperfun.GlideApp
 import com.eslammongy.helper.ui.AddNewContactActivity
 
 
 class ContactAdapter(var context: Context, var listOFContacts: List<ContactEntities>) :
-    RecyclerView.Adapter<ContactAdapter.ContactViewModel>() {
+    RecyclerView.Adapter<ContactAdapter.ContactViewModel>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewModel {
 
@@ -35,7 +36,8 @@ class ContactAdapter(var context: Context, var listOFContacts: List<ContactEntit
             ColorStateList.valueOf(Integer.parseInt(contactEntities.contact_Color))
         holder.binding.contactLayoutColor.setCardBackgroundColor(Integer.parseInt(contactEntities.contact_Color))
         val imageConverter = Converter()
-        holder.binding.contactLayoutImage.setImageBitmap(imageConverter.toBitMap(contactEntities.contact_Image!!))
+        val contactImage = imageConverter.fromBitMap(contactEntities.contact_Image!!)
+        GlideApp.with(context).asBitmap().load(contactImage).into(holder.binding.contactLayoutImage).clearOnDetach()
         holder.binding.root.setOnClickListener {
 
             val contactIntent = Intent(context , AddNewContactActivity::class.java)
@@ -45,12 +47,14 @@ class ContactAdapter(var context: Context, var listOFContacts: List<ContactEntit
             contactIntent.putExtra("Email", contactEntities.contact_Email)
             contactIntent.putExtra("Address", contactEntities.contact_Address)
             contactIntent.putExtra("Color", contactEntities.contact_Color)
-            contactIntent.putExtra("ImagePath", contactEntities.contact_Image)
+            contactIntent.putExtra("ImagePath", contactImage)
 
             context.startActivity(contactIntent)
             (context as Activity).finish()
 
         }
+
+        //Glide.with(context).clear(holder.binding.contactLayoutImage)
 
     }
 

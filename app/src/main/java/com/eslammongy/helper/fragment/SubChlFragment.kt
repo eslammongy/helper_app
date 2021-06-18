@@ -18,16 +18,19 @@ import com.eslammongy.helper.fragment.dialogs.ChlBottomSheet
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
-class SubChlFragment(parentChlID: Int) : Fragment(), View.OnClickListener {
+class SubChlFragment(parentChlID: Int , parentChlTitle:String) : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentSubChlBinding? = null
     private val binding get() = _binding!!
     private lateinit var listOfSubChl: ArrayList<SubCheckList>
-    private val subChlAdapter by lazy { SubChlAdapter(activity!!) }
+    private val subChlAdapter by lazy { SubChlAdapter(requireActivity()) }
     private var parentChlID: Int = 0
+    private var parentChlTitle:String? = null
+
 
     init {
         this.parentChlID = parentChlID
+        this.parentChlTitle = parentChlTitle
     }
 
     override fun onCreateView(
@@ -99,10 +102,10 @@ class SubChlFragment(parentChlID: Int) : Fragment(), View.OnClickListener {
     }
 
     private fun displaySubCheckList() {
-        binding.subChlRecyclerView.layoutManager = LinearLayoutManager(activity!!)
+        binding.subChlRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.subChlRecyclerView.setHasFixedSize(true)
         binding.subChlRecyclerView.adapter = subChlAdapter
-        listOfSubChl = HelperDataBase.getDataBaseInstance(activity!!).checkListDao()
+        listOfSubChl = HelperDataBase.getDataBaseInstance(requireContext()).checkListDao()
             .getAllSubCheckLists(parentChlID) as ArrayList<SubCheckList>
         if (listOfSubChl.isEmpty()) binding.emptyImageView.visibility =
             View.VISIBLE else subChlAdapter.setDate(listOfSubChl)
@@ -115,11 +118,11 @@ class SubChlFragment(parentChlID: Int) : Fragment(), View.OnClickListener {
         when (v!!.id) {
 
             R.id.btnRefreshRecyclerView -> {
-                listOfSubChl = HelperDataBase.getDataBaseInstance(activity!!).checkListDao()
+                listOfSubChl = HelperDataBase.getDataBaseInstance(requireContext()).checkListDao()
                     .getAllSubCheckLists(parentChlID) as ArrayList<SubCheckList>
                 if (parentChlID == 0 || listOfSubChl.isEmpty()) {
                     Toast.makeText(
-                        activity!!,
+                        requireContext(),
                         "You need to create parent checklist first then can do this.",
                         Toast.LENGTH_LONG
                     ).show()
@@ -132,12 +135,12 @@ class SubChlFragment(parentChlID: Int) : Fragment(), View.OnClickListener {
             R.id.btnOpenSubChlSheet -> {
                 if (parentChlID == 0) {
                     Toast.makeText(
-                        activity!!,
+                        requireContext(),
                         "You need to create parent checklist first then can do this.",
                         Toast.LENGTH_LONG
                     ).show()
                 } else {
-                    ChlBottomSheet(parentChlID).show(fragmentManager!!, "Tag")
+                    ChlBottomSheet(parentChlID , parentChlTitle.toString()).show(parentFragmentManager, "Tag")
                 }
             }
         }

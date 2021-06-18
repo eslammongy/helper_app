@@ -1,5 +1,6 @@
 package com.eslammongy.helper.database.entities
 
+import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -11,7 +12,7 @@ data class ContactEntities(
     val contact_Email: String,
     val contact_Address: String,
     val contact_Color: String,
-    val contact_Image: ByteArray?=null
+    val contact_Image: Bitmap?=null
 ){
     constructor() : this("", "", "", "", "",  null)
 

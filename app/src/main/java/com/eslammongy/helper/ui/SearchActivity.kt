@@ -26,6 +26,7 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
     private var listMyChl = ArrayList<CheckListEntity>()
     private var chlAdapter: CheckListAdapter? = null
     private var searchID:Int = 0
+    private var arrowKey:Int = 0
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,12 +38,15 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
 
             "Task" ->{
                 binding.testSearchKey.text = "Search In Task DateBase"
+                arrowKey = 1
             }
             "CheckList" ->{
                 binding.testSearchKey.text = "Search In CheckList DateBase"
+                arrowKey = 2
             }
             "Contact" ->{
                 binding.testSearchKey.text = "Search In Contact DateBase"
+                arrowKey = 3
             }
         }
         binding.searchViewListener.isSubmitButtonEnabled = true
@@ -52,6 +56,7 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
     fun backToHomeActivity(view: View) {
 
         val intent = Intent(this , HomeActivity::class.java)
+        intent.putExtra("ArrowKey", arrowKey)
         startActivity(intent)
         finish()
     }
@@ -104,4 +109,5 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
         }
 
     }
+
 }

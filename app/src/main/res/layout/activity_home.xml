@@ -45,10 +45,10 @@
             android:padding="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_iconfinder_add"
-            android:tint="@color/White"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/title_ActiveFragment" />
+            app:layout_constraintTop_toTopOf="@+id/title_ActiveFragment"
+            app:tint="@color/White" />
 
         <ImageButton
             android:id="@+id/btn_Search"
@@ -60,10 +60,10 @@
             android:padding="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_iconfinder_search"
-            android:tint="@color/White"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/title_ActiveFragment" />
+            app:layout_constraintTop_toTopOf="@+id/title_ActiveFragment"
+            app:tint="@color/White" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -78,19 +78,19 @@
 
     </FrameLayout>
 
-    <com.etebarian.meowbottomnavigation.MeowBottomNavigation
+    <com.ismaeldivita.chipnavigation.ChipNavigationBar
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:mbn_backgroundBottomColor="@color/colorDark"
-        app:mbn_countBackgroundColor="#ff6f00"
-        app:mbn_countTextColor="#ffffff"
-        app:mbn_defaultIconColor="@android:color/darker_gray"
-        app:mbn_rippleColor="#2f424242"
-        app:mbn_selectedIconColor="@color/ColorOrangeNote"
-        app:mbn_shadowColor="#1f212121" />
+        app:cnb_menuResource="@menu/bottom_bar_item"
+        android:background="@drawable/custom_dark_shape"
+        app:cnb_unselectedColor="@color/ColorDefaultNote"
+        app:cnb_radius="10dp"
+        app:cnb_orientationMode="horizontal"
+        android:layout_margin="10dp"
+        android:elevation="10dp"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"

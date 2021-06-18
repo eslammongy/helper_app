@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.converter.Converter
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.TaskLayoutViewBinding
+import com.eslammongy.helper.helperfun.GlideApp
 import com.eslammongy.helper.ui.AddNewTaskActivity
+
 
 class TaskAdapter(var context: Context, var listOFTasks: List<TaskEntities>) :
     RecyclerView.Adapter<TaskAdapter.TaskViewModel>() {
@@ -35,8 +37,10 @@ class TaskAdapter(var context: Context, var listOFTasks: List<TaskEntities>) :
         holder.binding.taskLayoutDate.text = taskModel.taskDate
         holder.binding.circularCardView.chipBackgroundColor =
             ColorStateList.valueOf(Integer.parseInt(taskModel.taskColor))
-        val imageConverter = Converter()
-        holder.binding.taskLayoutImage.setImageBitmap(imageConverter.toBitMap(taskModel.taskImage!!))
+       val imageConverter = Converter()
+        val taskImage = imageConverter.fromBitMap(taskModel.taskImage!!)
+        val friendImage = imageConverter.fromBitMap(taskModel.taskFriendImage!!)
+        GlideApp.with(context).asBitmap().load(taskImage).into(holder.binding.taskLayoutImage).clearOnDetach()
         holder.binding.root.setOnClickListener {
 
             val taskIntent = Intent(context , AddNewTaskActivity::class.java)
@@ -47,9 +51,9 @@ class TaskAdapter(var context: Context, var listOFTasks: List<TaskEntities>) :
             taskIntent.putExtra("Time", taskModel.taskTime)
             taskIntent.putExtra("Link", taskModel.taskLink)
             taskIntent.putExtra("Color", taskModel.taskColor)
-            taskIntent.putExtra("ImagePath", taskModel.taskImage)
+            taskIntent.putExtra("ImagePath", taskImage)
             taskIntent.putExtra("FriendName", taskModel.taskFriendName)
-            taskIntent.putExtra("TaskImagePath", taskModel.taskFriendImage)
+            taskIntent.putExtra("TaskImagePath", friendImage)
             context.startActivity(taskIntent)
             (context as Activity).finish()
 

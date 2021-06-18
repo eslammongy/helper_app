@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.eslammongy.helper.R
 import com.eslammongy.helper.database.HelperDataBase
@@ -44,17 +43,13 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int) : Fragment() ,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        startAnimation = AnimationUtils.loadAnimation(activity!!, R.anim.starting_animation)
-        endAnimation = AnimationUtils.loadAnimation(activity!!, R.anim.ending_animation)
+        startAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.starting_animation)
+        endAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.ending_animation)
         binding.deleteDialogLayout.startAnimation(startAnimation)
         setDeleteDialogText(selectedDialog)
         binding.btnExitDeleteDialog.setOnClickListener(this)
         binding.btnSetDeleteDialog.setOnClickListener(this)
-        Toast.makeText(
-            activity,
-            "Error required filed is empty.. $itemDeletedID!",
-            Toast.LENGTH_SHORT
-        ).show()
+       // Toast.makeText(activity, "Error required filed is empty.. $itemDeletedID!", Toast.LENGTH_SHORT).show()
 
 
     }
@@ -81,21 +76,22 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int) : Fragment() ,
         checkListEntity.checkListId = itemID
         when(dialogID){
             1 ->{
-                HelperDataBase.getDataBaseInstance(activity!!).taskDao().deleteSelectedTask(taskEntities)
-                val intent = Intent(activity!! , HomeActivity::class.java)
+                HelperDataBase.getDataBaseInstance(requireContext()).taskDao().deleteSelectedTask(taskEntities)
+                val intent = Intent(requireContext(), HomeActivity::class.java)
                 startActivity(intent)
-                activity!!.finish()
+                requireActivity().finish()
             }
             2 ->{
-                HelperDataBase.getDataBaseInstance(activity!!).contactDao().deleteSelectedContact(contactEntities)
-                val intent = Intent(activity!! , HomeActivity::class.java)
+                HelperDataBase.getDataBaseInstance(requireContext()).contactDao().deleteSelectedContact(contactEntities)
+                val intent = Intent(requireContext(), HomeActivity::class.java)
                 startActivity(intent)
-                activity!!.finish()
+                requireActivity().finish()
             }
             3 ->{
-                HelperDataBase.getDataBaseInstance(activity!!).checkListDao().deleteSelectedCheckList(checkListEntity)
+                HelperDataBase.getDataBaseInstance(requireContext()).checkListDao().deleteSelectedCheckList(checkListEntity)
                 binding.parentView.visibility = View.GONE
                 binding.parentView.startAnimation(endAnimation)
+
             }
         }
 

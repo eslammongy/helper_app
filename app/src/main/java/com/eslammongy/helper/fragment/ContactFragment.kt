@@ -76,12 +76,12 @@ class ContactFragment : Fragment() {
     }
 
     private fun displayRecyclerView() {
-        listOfMyContacts = HelperDataBase.getDataBaseInstance(activity!!).contactDao().getAllContacts() as ArrayList<ContactEntities>
+        listOfMyContacts = HelperDataBase.getDataBaseInstance(requireContext()).contactDao().getAllContacts() as ArrayList<ContactEntities>
 
         if (listOfMyContacts.isEmpty()){
             binding.emptyImageView.visibility = View.VISIBLE
         }else{
-            contactAdapter = ContactAdapter(activity!! , listOfMyContacts)
+            contactAdapter = ContactAdapter(requireContext() , listOfMyContacts)
             binding.contactRecyclerView.setHasFixedSize(true)
             binding.contactRecyclerView.layoutManager = StaggeredGridLayoutManager(2 , StaggeredGridLayoutManager.VERTICAL)
             binding.contactRecyclerView.adapter = contactAdapter!!

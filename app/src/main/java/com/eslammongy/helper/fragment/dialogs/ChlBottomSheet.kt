@@ -9,25 +9,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import com.eslammongy.helper.R
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.SubCheckList
 import com.eslammongy.helper.databinding.FragmentChlBottomSheetBinding
+import com.eslammongy.helper.services.AlarmService
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ChlBottomSheet(parentChlID:Int) : BottomSheetDialogFragment(),View.OnClickListener {
+class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialogFragment(),View.OnClickListener {
 
     private var _binding: FragmentChlBottomSheetBinding? = null
     private val binding get() = _binding!!
     private var parentChlID: Int = 0
     private var isComplete:Boolean = false
     private var subChlColor: Int? = null
-
+    private var parentChlTitle:String? = null
+    private lateinit var alarmService: AlarmService
 
     init {
         this.parentChlID = parentChlID
+        this.parentChlTitle = parentChlTitle
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,9 +39,10 @@ class ChlBottomSheet(parentChlID:Int) : BottomSheetDialogFragment(),View.OnClick
     ): View {
         _binding = FragmentChlBottomSheetBinding.inflate(inflater , container , false)
 
+        alarmService = AlarmService(requireContext())
         binding.saveSubChl.setOnClickListener(this)
         binding.subChlTime.setOnClickListener(this)
-        subChlColor = resources.getColor(R.color.ColorDefaultNote)
+        subChlColor = ResourcesCompat.getColor(resources, R.color.ColorDefaultNote, requireActivity().theme)
         binding.chlPaletteColor.setOnColorSelectedListener { clr ->
             subChlColor = clr
 
@@ -49,7 +54,7 @@ class ChlBottomSheet(parentChlID:Int) : BottomSheetDialogFragment(),View.OnClick
     override fun onStart() {
         super.onStart()
         val sheetContainer = requireView().parent as? ViewGroup ?: return
-        val height = (resources.displayMetrics.heightPixels * 0.40).toInt()
+        val height = (resources.displayMetrics.heightPixels * 0.45).toInt()
         sheetContainer.layoutParams.height = height
         sheetContainer.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
     }
@@ -58,27 +63,34 @@ class ChlBottomSheet(parentChlID:Int) : BottomSheetDialogFragment(),View.OnClick
 
         when(v!!.id){
             R.id.saveSubChl ->{saveNewSubChl()}
-            R.id.subChlTime ->{openSubChlTimeDialog()}
+            R.id.subChlTime ->{ setAlarm { alarmService.setExactAlarm(it , "CheckList","You Have A New Task In Your ToDo List Called $parentChlTitle .. Let's Go To Do It." , 2) }}
 
         }
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun openSubChlTimeDialog() {
-        val calender = Calendar.getInstance()
-        val isSystem24Hour = android.text.format.DateFormat.is24HourFormat(activity!!)
-        val timePicker = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-            calender.set(Calendar.HOUR_OF_DAY, hourOfDay)
-            calender.set(Calendar.MINUTE, minute)
-            val timeFormatted = SimpleDateFormat("hh:mm a").format(calender.time)
-            binding.subChlTime.text = timeFormatted.toString()
-        }
-        TimePickerDialog(
-            activity!!, timePicker, calender.get(Calendar.HOUR_OF_DAY),
-            calender.get(Calendar.MINUTE), isSystem24Hour
-        ).show()
-    }
+    private fun setAlarm(callback: (Long) -> Unit) {
+        Calendar.getInstance().apply {
+            this.set(Calendar.SECOND, 0)
+            this.set(Calendar.MILLISECOND, 0)
 
+            TimePickerDialog(
+                requireContext(),
+                0,
+                { _, hour, minute ->
+                    this.set(Calendar.HOUR_OF_DAY, hour)
+                    this.set(Calendar.MINUTE, minute)
+                    callback(this.timeInMillis)
+                    binding.subChlTime.text = SimpleDateFormat("hh:mm a").format(this.time)
+
+                },
+                this.get(Calendar.HOUR_OF_DAY),
+                this.get(Calendar.MINUTE),
+                false
+            ).show()
+
+        }
+    }
     private fun saveNewSubChl(){
 
         val title = binding.subChlTitle.text.toString()
@@ -87,12 +99,12 @@ class ChlBottomSheet(parentChlID:Int) : BottomSheetDialogFragment(),View.OnClick
 
         if (title.isEmpty() || time.isEmpty()){
             Toast.makeText(
-                activity!!,
+                requireContext(),
                 "Error required filed is empty !",
                 Toast.LENGTH_SHORT
             ).show()
         }else{
-            HelperDataBase.getDataBaseInstance(activity!!).checkListDao().saveNewSubCheckList(subCheckList)
+            HelperDataBase.getDataBaseInstance(requireContext()).checkListDao().saveNewSubCheckList(subCheckList)
             dismiss()
         }
 
