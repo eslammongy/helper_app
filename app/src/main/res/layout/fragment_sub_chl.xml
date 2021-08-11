@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:id="@+id/updateRecyclerView"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.module.sublist.SubChlFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/btnRefreshRecyclerView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/point_active_background"
+            android:contentDescription="@string/todo"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_round_refresh_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/White" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/subChlRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnRefreshRecyclerView"
+            app:reverseLayout="false" />
+
+        <ImageView
+            android:id="@+id/emptyImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/todo"
+            android:padding="20dp"
+            android:layout_margin="25dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_happy_music"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+           />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

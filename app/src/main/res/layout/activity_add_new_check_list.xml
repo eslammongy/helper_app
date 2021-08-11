@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.module.checklist.AddNewCheckList">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topBar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/custom_dark_shape"
+            android:padding="8dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/dateTime"
+            app:layout_constraintTop_toBottomOf="@id/guideline15">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/checkListTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/custom_dark_shape"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
+                android:hint="@string/title"
+                android:inputType="text"
+                android:maxLength="12"
+                android:textColor="@color/White"
+                android:textColorHint="@color/ColorDefaultNote"
+                android:textSize="25sp"
+                app:layout_constraintEnd_toStartOf="@+id/btn_AddNewChl"
+                app:layout_constraintStart_toEndOf="@+id/btn_arrowToHome" />
+
+            <ImageButton
+                android:id="@+id/btn_AddNewChl"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/custom_one_shape_button"
+                android:contentDescription="@string/todo"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_iconfinder_ic_done"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/checkListTitle"
+                app:tint="@color/White" />
+
+            <ImageButton
+                android:id="@+id/btn_arrowToHome"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/custom_one_shape_button"
+                android:contentDescription="@string/todo"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_iconfinder_left_arrow_back_previous_navigation"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/checkListTitle"
+                app:tint="@color/White" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/dateTime"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/custom_dark_shape"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/topBar"
+            tools:layout_editor_absoluteX="10dp">
+
+            <ImageButton
+                android:id="@+id/setChlCalender"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:background="@color/colorDark"
+                android:contentDescription="@string/todo"
+                android:padding="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_calendar" />
+
+
+<!--            <com.google.android.material.textview.MaterialTextView-->
+<!--                android:id="@+id/tv_ShowChlTime"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginStart="6dp"-->
+<!--                android:gravity="center"-->
+<!--                android:hint="@string/time"-->
+<!--                android:inputType="time"-->
+<!--                android:maxLines="1"-->
+<!--                android:padding="5dp"-->
+<!--                android:textColor="@color/White"-->
+<!--                android:textColorHint="@color/ColorDefaultNote"-->
+<!--                android:textSize="17sp"-->
+<!--                tools:targetApi="m" />-->
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_ShowChlDate"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
+                android:hint="@string/date"
+                android:inputType="date"
+                android:maxLines="1"
+                android:padding="6dp"
+                android:textColor="@color/White"
+                android:textColorHint="@color/ColorDefaultNote"
+                android:textSize="17sp"
+                tools:targetApi="m" />
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:alpha="0.7"
+                android:background="@color/ColorOrangeNote" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btn_ChlColorPicker"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="10dp"
+                app:cardBackgroundColor="@color/ColorPurpleNote"
+                app:cardCornerRadius="40dp">
+
+                <ImageView
+                    android:id="@+id/hideColorPalette"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/todo"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_round_cancel_24"
+                    android:visibility="gone" />
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <com.thebluealliance.spectrum.SpectrumPalette
+            android:id="@+id/chl_paletteColor"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dateTime"
+            app:spectrum_colors="@array/demo_color" />
+
+        <LinearLayout
+            android:id="@+id/bottomLinear"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="@id/guideline16">
+
+            <ImageButton
+                android:id="@+id/btnOpenSubChlSheet"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/custom_one_shape_button"
+                android:contentDescription="@string/todo"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_iconfinder_ic_playlist_add"
+                app:layout_constraintBottom_toTopOf="@+id/guideline16"
+                app:layout_constraintStart_toStartOf="parent"
+                app:tint="@color/White" />
+
+            <ImageButton
+                android:id="@+id/btnDeleteChl"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/delete_button_shape"
+                android:contentDescription="@string/todo"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:layout_marginStart="60dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_iconfinder_delete"
+                app:layout_constraintBottom_toTopOf="@+id/guideline16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:tint="@color/White" />
+        </LinearLayout>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/subChlFragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+           android:layout_margin="10dp"
+            app:layout_constraintBottom_toTopOf="@id/bottomLinear"
+            app:layout_constraintTop_toBottomOf="@id/chl_paletteColor" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.02" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.98" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

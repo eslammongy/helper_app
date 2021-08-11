@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.module.search.SearchScreen">
+
+    <SearchView
+        android:id="@+id/searchViewListener"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/custom_dark_shape"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search"
+        android:searchIcon="@drawable/ic_iconfinder_search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_BackToHomeMT"
+        app:layout_constraintTop_toTopOf="@id/guideline9"
+        tools:targetApi="lollipop" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/testSearchKey"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="20dp"-->
+<!--        android:fontFamily="@font/roboto_regular"-->
+<!--        android:gravity="center"-->
+<!--        android:textColor="@color/White"-->
+<!--        android:textSize="25sp"-->
+<!--        android:text="@string/searching"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/search_RecyclerView" />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_RecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintTop_toBottomOf="@id/searchViewListener"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="10dp"
+        tools:layout_editor_absoluteX="10dp"/>
+
+    <ImageButton
+        android:id="@+id/btn_BackToHomeMT"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/custom_dark_shape"
+        android:contentDescription="@string/todo"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_iconfinder_left_arrow_back_previous_navigation"
+        app:layout_constraintEnd_toStartOf="@+id/searchViewListener"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline9"
+        app:tint="@color/White" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.01" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

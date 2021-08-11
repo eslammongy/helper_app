@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/Animation.Design.BottomSheetDialog"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    tools:context=".ui.module.task_friends.TaskBottomSheet">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:behavior_hideable="true"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/bottom_sheet_shape"
+        >
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:hint="@string/add_more"
+            android:inputType="time"
+            android:maxLines="1"
+            android:padding="5dp"
+            android:textColor="@color/White"
+            android:textColorHint="@color/White"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.thebluealliance.spectrum.SpectrumPalette
+            android:id="@+id/chl_paletteColor"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:spectrum_colors="@array/demo_color" />
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/enter_LinkText"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:autofillHints="@string/title"
+            android:hint="@string/title"
+            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:textColorHint="@color/ColorDefaultNote"
+            android:textColor="@color/Gray"
+            android:background="@drawable/custom_edit_text_shape"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chl_paletteColor" />
+
+        <LinearLayout
+            android:id="@+id/sheet_Linear"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:background="@drawable/custom_dark_shape"
+            android:orientation="horizontal"
+            android:padding="6dp"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/taskFiendRecycler"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/enter_LinkText">
+
+            <ImageButton
+                android:id="@+id/setTaskCalender"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/colorDark"
+                android:src="@drawable/ic_calendar"
+                android:scaleType="centerCrop"
+                android:padding="6dp"
+                android:contentDescription="@string/todo"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_SheetTime"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:hint="@string/time"
+                android:inputType="time"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:textColor="@color/White"
+                android:textColorHint="@color/ColorDefaultNote"
+                android:textSize="17sp"
+                tools:targetApi="m" />
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:alpha="0.7"
+                android:background="@color/ColorOrangeNote" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_SheetDate"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/date"
+                android:inputType="date"
+                android:maxLines="1"
+                android:padding="6dp"
+                android:textColor="@color/White"
+                android:textColorHint="@color/ColorDefaultNote"
+                android:textSize="17sp"
+                tools:targetApi="m" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/saveTaskInfo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/todo"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_round_send_24"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/chl_paletteColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/taskFiendRecycler"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="false"
+            android:background="@color/colorPrimaryDark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sheet_Linear" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

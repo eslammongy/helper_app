@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.module.contact.AddNewContact">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
+
+    <ImageButton
+        android:id="@+id/btn_BackToHome"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorPrimaryDark"
+        android:contentDescription="@string/todo"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_iconfinder_left_arrow_back_previous_navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/White" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/contact_ProfilePhoto"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="20dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/work_on_time_image"
+        app:civ_border_color="@color/Gray"
+        app:civ_border_width="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/Change_ProfilePhoto"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/camera_custom_shape"
+        android:contentDescription="@string/todo"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_iconfinder_icon_camera"
+        app:layout_constraintBottom_toBottomOf="@id/contact_ProfilePhoto"
+        app:layout_constraintEnd_toEndOf="@id/contact_ProfilePhoto"
+        app:tint="@color/colorDark" />
+
+    <TextView
+        android:id="@+id/contact_TopName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto_light"
+        android:gravity="center"
+        android:hint="@string/top_name"
+        android:padding="6dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/ColorDefaultNote"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contact_ProfilePhoto" />
+
+
+    <LinearLayout
+        android:id="@+id/SecondLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/guideline13"
+        app:layout_constraintTop_toBottomOf="@id/firstLayout">
+
+
+        <com.thebluealliance.spectrum.SpectrumPalette
+            android:id="@+id/chl_paletteColor"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:spectrum_colors="@array/demo_color" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/contact_InputName"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/custom_edit_text_shape"
+            android:drawableStart="@drawable/ic_iconfinder_user_plus"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/ColorOrangeNote"
+            android:hint="@string/enter_name"
+            android:inputType="textPersonName"
+            android:maxLength="15"
+            android:textSize="20sp"
+            android:paddingStart="10dp"
+            android:textColor="@color/White"
+            android:textColorHint="@color/ColorDefaultNote"
+            tools:targetApi="m"
+            tools:ignore="RtlSymmetry" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/contact_InputPhone"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/custom_edit_text_shape"
+            android:drawableStart="@drawable/ic_round_phone_24"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/ColorOrangeNote"
+            android:hint="@string/enter_phone"
+            android:textSize="17sp"
+            android:inputType="phone"
+            android:paddingStart="10dp"
+            android:textColor="@color/White"
+            android:textColorHint="@color/ColorDefaultNote"
+            tools:targetApi="m"
+            tools:ignore="RtlSymmetry" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/contact_InputEmail"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/custom_edit_text_shape"
+            android:drawableStart="@drawable/ic_iconfinder_icons_email"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/ColorOrangeNote"
+            android:hint="@string/email"
+            android:textSize="17sp"
+            android:inputType="textEmailAddress"
+            android:maxLength="25"
+            android:paddingStart="10dp"
+            android:textColor="@color/White"
+            android:textColorHint="@color/ColorDefaultNote"
+            tools:targetApi="m"
+            tools:ignore="RtlSymmetry" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/contact_InputAddress"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:textSize="17sp"
+            android:background="@drawable/custom_edit_text_shape"
+            android:drawableStart="@drawable/ic_round_home_24"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/ColorOrangeNote"
+            android:hint="@string/address"
+            android:inputType="textPostalAddress"
+            android:maxLength="25"
+            android:paddingStart="10dp"
+            android:textColor="@color/White"
+            android:textColorHint="@color/ColorDefaultNote"
+            tools:ignore="RtlSymmetry"
+            tools:targetApi="m" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_SaveNewContact"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/custom_one_shape_button"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/save"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/SecondLayout" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/firstLayout"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contact_TopName">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btn_OpenColorPicker"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            app:cardBackgroundColor="@color/purple_700"
+            app:cardCornerRadius="40dp" />
+
+        <ImageButton
+            android:id="@+id/btn_ShowTwF"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/custom_one_shape_button"
+            android:contentDescription="@string/todo"
+            android:padding="8dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_calendar"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btn_OpenEmailForm"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/custom_one_shape_button"
+            android:contentDescription="@string/todo"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_iconfinder_icons_email"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btn_CallMyContact"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/custom_one_shape_button"
+            android:contentDescription="@string/todo"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_iconfinder_phone_call"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btn_DeleteCurrentContact"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/custom_one_shape_button"
+            android:contentDescription="@string/todo"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_iconfinder_delete"
+            android:visibility="gone"
+            app:tint="@color/ColorRedNote" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.module.task.AddNewTask">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_task_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/base_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            android:padding="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/custom_dark_shape"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btn_BackToHomeMT"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:background="@color/colorDark"
+                    android:contentDescription="@string/todo"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_iconfinder_left_arrow_back_previous_navigation"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/White" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ti_TaskTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/custom_dark_shape"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center_vertical"
+                    android:hint="@string/title"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:layout_marginStart="50dp"
+                    android:paddingStart="15dp"
+                    android:textColor="@color/White"
+                    android:textColorHint="@color/ColorDefaultNote"
+                    android:textSize="20sp"
+                    tools:ignore="RtlSymmetry" />
+
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ti_Task_Content"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/custom_dark_shape"
+                android:fontFamily="@font/roboto_light"
+                android:gravity="top"
+                android:hint="@string/description"
+                android:padding="6dp"
+                android:textColor="@color/White"
+                android:textColorHint="@color/ColorDefaultNote"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/custom_dark_shape"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageButton
+                    android:id="@+id/setChlCalender"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/colorDark"
+                    android:src="@drawable/ic_calendar"
+                    android:scaleType="centerCrop"
+                    android:padding="8dp"
+                    android:contentDescription="@string/todo"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_ShowTaskTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:hint="@string/time"
+                    android:inputType="time"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:textColor="@color/White"
+                    android:textColorHint="@color/ColorDefaultNote"
+                    android:textSize="17sp" />
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:alpha="0.7"
+                    android:background="@color/ColorOrangeNote" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_ShowTaskDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:hint="@string/date"
+                    android:inputType="date"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:padding="6dp"
+                    android:textColor="@color/White"
+                    android:textColorHint="@color/ColorDefaultNote"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/custom_dark_shape"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_ShowTaskLink"
+                    android:layout_width="140dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/link"
+                    android:inputType="time"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:textColor="@color/White"
+                    android:textColorHint="@color/ColorDefaultNote"
+                    android:textSize="17sp" />
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:alpha="0.7"
+                    android:background="@color/ColorOrangeNote" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_ShowTaskFriend"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center_vertical"
+                    android:hint="@string/friend_name"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:padding="6dp"
+                    android:textColor="@color/White"
+                    android:textColorHint="@color/ColorDefaultNote"
+                    android:textSize="15sp" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/task_FriendImage"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="8dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/manage_your_task_image" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/task_ImageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/custom_dark_shape"
+            android:contentDescription="@string/todo"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/work_on_time_image"
+            app:layout_constraintBottom_toTopOf="@+id/bottomButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/base_layout"
+            />
+
+        <View
+            android:id="@+id/bottom_view"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background="@color/ColorGreenNote"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/bottomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="10dp"
+            >
+
+            <ImageButton
+                android:id="@+id/btn_OpenBottomSheet"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:background="@drawable/custom_one_shape_button"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_iconfinder_add"
+                android:contentDescription="@string/todo"
+                app:tint="@color/White" />
+
+            <ImageButton
+                android:id="@+id/btnOpenMyGallery"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/custom_one_shape_button"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_iconfinder_icons_pic"
+                android:contentDescription="@string/todo"
+                app:tint="@color/White" />
+
+            <ImageButton
+                android:id="@+id/btn_DeleteTask"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/delete_button_shape"
+                android:contentDescription="@string/todo"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_iconfinder_delete"
+                android:visibility="gone"
+                app:tint="@color/White" />
+
+            <ImageButton
+                android:id="@+id/btn_SaveTask"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/custom_one_shape_button"
+                android:contentDescription="@string/todo"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_iconfinder_ic_done"
+                app:tint="@color/White" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.87" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.01" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="330dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.20" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

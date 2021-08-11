@@ -1,0 +1,35 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Helper" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/colorDark</item>
+        <item name="colorOnPrimary">@color/purple_500</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/ColorGreenNote</item>
+        <item name="colorSecondaryVariant">@color/ColorRedNote</item>
+        <item name="colorOnSecondary">@color/purple_200</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
+      </style>
+
+
+    <style name="RoundedSquare">
+        <item name="cornerSize">10%</item>
+    </style>
+
+    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_in_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_in_out_right</item>
+    </style>
+
+    <style name="AnimationDialog">
+        <item name="android:windowEnterAnimation">@anim/starting_animation</item>
+        <item name="android:windowExitAnimation">@anim/ending_animation</item>
+    </style>
+
+</resources>
