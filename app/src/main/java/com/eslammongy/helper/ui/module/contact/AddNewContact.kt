@@ -14,7 +14,7 @@ import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.ui.module.home.HomeScreen
 import com.eslammongy.helper.databinding.ActivityAddNewContactBinding
-import com.eslammongy.helper.helpers.*
+import com.eslammongy.helper.utilis.*
 import com.eslammongy.helper.ui.dailogs.CustomDeleteDialog
 import com.eslammongy.helper.ui.module.task_friends.TaskWithFriendAndSendEmail
 import id.zelory.compressor.Compressor

@@ -1,6 +1,5 @@
 package com.eslammongy.helper.ui.module.contact
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +11,9 @@ import com.eslammongy.helper.R
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.FragmentContactsBinding
-import com.eslammongy.helper.helpers.startNewActivity
-import com.eslammongy.helper.helpers.startSearchActivity
+import com.eslammongy.helper.utilis.startNewActivity
+import com.eslammongy.helper.utilis.startSearchActivity
 import com.eslammongy.helper.ui.baseui.BaseFragment
-import com.eslammongy.helper.ui.module.checklist.AddNewCheckList
-import com.eslammongy.helper.ui.module.search.SearchScreen
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

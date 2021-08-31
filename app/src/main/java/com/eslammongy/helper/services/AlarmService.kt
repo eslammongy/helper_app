@@ -11,9 +11,9 @@ class AlarmService(private val context: Context) {
     private val alarmManager: AlarmManager? =
         context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
 
-    fun setExactAlarm(timeMillis: Long , message:String ,  notifiedFrom:Int , todoID:Int) {
+    fun setExactAlarm(timeMillis: Long , message:String ,  notifiedFrom:Int , elementID:Int) {
 
-        setAlarm(timeMillis , getPendingIntent(getIntent(message , notifiedFrom , todoID).apply {
+        setAlarm(timeMillis , getPendingIntent(getIntent(message , notifiedFrom , elementID).apply {
             action = Constants.ACTION_SET_EXACT_ALARM
             putExtra(Constants.EXTRA_EXACT_ALARM_TIME , timeMillis)
         }))
@@ -42,10 +42,10 @@ class AlarmService(private val context: Context) {
         }
     }
 
-    private fun getIntent(message:String , notifiedFrom:Int , todoID:Int): Intent = Intent(context, AlarmReceiver::class.java).apply {
+    private fun getIntent(message:String , notifiedFrom:Int , elementID:Int): Intent = Intent(context, AlarmReceiver::class.java).apply {
         putExtra("NotifyMessage" , message)
         putExtra("NotifiedFrom" , notifiedFrom)
-        putExtra("ToDoID" , todoID)
+        putExtra("ElementNotifiedID" , elementID)
     }
 
     private fun getPendingIntent(intent: Intent): PendingIntent =

@@ -16,7 +16,8 @@ import com.eslammongy.helper.ui.module.task_friends.TaskBottomSheet
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.ActivityAddNewTaskBinding
-import com.eslammongy.helper.helpers.*
+import com.eslammongy.helper.services.AlarmService
+import com.eslammongy.helper.utilis.*
 import com.eslammongy.helper.ui.dailogs.CustomDeleteDialog
 import com.eslammongy.helper.ui.dailogs.CustomWebView
 import id.zelory.compressor.Compressor
@@ -32,7 +33,9 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener , CoroutineScope  ,
     private var taskID: Int = 0
     private var notifyTask:Int = 0
     private var friendID: Int = 0
+    private var taskAlarm:Long = 0L
     private var imageFilePath:String = "ImagePath"
+    private lateinit var alarmService: AlarmService
     private val userPermission by lazy { UserPermission(this) }
     private lateinit var cropActivityResultLauncher: ActivityResultLauncher<Any?>
 
@@ -41,8 +44,9 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener , CoroutineScope  ,
         binding = ActivityAddNewTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
          job = Job()
+        alarmService = AlarmService(this)
         taskID = intent.getIntExtra("ID" , 0)
-        notifyTask = intent.getIntExtra("NotifiedTaskID" , 0)
+        notifyTask = intent.getIntExtra("TaskNotifiedID" , 0)
         binding.btnBackToHomeMT.setOnClickListener(this)
         binding.btnOpenBottomSheet.setOnClickListener(this)
         binding.btnDeleteTask.setOnClickListener(this)
@@ -55,10 +59,10 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener , CoroutineScope  ,
             if (taskID != 0){
                 displayDateFromAdapter()
 
-            }else{
+            }else if (notifyTask != 0){
                 displayNotifiedTask()
             }
-           /// setToastMessage("Notified Task ID $notifyTask")
+          setToastMessage("Notified Task ID $notifyTask")
         }
     }
 
@@ -160,12 +164,12 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener , CoroutineScope  ,
                 if (title.isEmpty() || desc.isEmpty() || time.isEmpty() || date.isEmpty()) {
                     showingSnackBar(binding.root , "Error required filed is empty." , "#FF5722")
                 } else {
-
                     launch {
                         withContext(Dispatchers.IO) {
                             HelperDataBase.getDataBaseInstance(this@AddNewTask).taskDao()
                                 .saveNewTask(taskEntities)
                         }
+                        alarmService.setExactAlarm(taskAlarm ,"You Have A New Task  Called ${taskEntities.taskTitle} With Your Friend .. Let's Go To Do It." , 1 , taskEntities.taskId)
                     }
                     setToastMessage("Task Saved")
                     this.startNewActivity(HomeScreen::class.java , 1)
@@ -182,6 +186,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener , CoroutineScope  ,
                             HelperDataBase.getDataBaseInstance(this@AddNewTask).taskDao().updateCurrentTask(taskEntities)
 
                         }
+                        alarmService.setExactAlarm(taskAlarm ,"You Have A New Task  Called ${taskEntities.taskTitle} With Your Friend .. Let's Go To Do It." , 1 , taskEntities.taskId)
                     }
                     this.startNewActivity(HomeScreen::class.java , 1)
                     setToastMessage("Task Updated")
@@ -196,11 +201,12 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener , CoroutineScope  ,
                 this.startNewActivity(HomeScreen::class.java , 1)
             }
             R.id.btn_OpenBottomSheet ->{
+                setToastMessage("Notified Task ID $taskID")
                 val color = (binding.bottomView.background as ColorDrawable).color
                 TaskBottomSheet(
                     color,
                     binding.tvShowTaskTime.text.toString(),
-                    binding.tvShowTaskDate.text.toString(), binding.tiTaskTitle.text.toString(), binding.tvShowTaskLink.text.toString(), friendID,taskID
+                    binding.tvShowTaskDate.text.toString(), binding.tiTaskTitle.text.toString(), binding.tvShowTaskLink.text.toString(), friendID , taskID
                 ).show(supportFragmentManager, "TAG")
             }
             R.id.btn_DeleteTask ->{
@@ -238,10 +244,11 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener , CoroutineScope  ,
         this.startNewActivity(HomeScreen::class.java , 1)
     }
 
-    override fun setTaskInfo(color: String, lintText: String, time: String, date: String, friendID: Int
+    override fun setTaskInfo(color: String, lintText: String, time: String, date: String, friendID: Int,taskAlarm:Long
     ) {
         launch {
             taskColor = color.toInt()
+            this@AddNewTask.taskAlarm = taskAlarm
             binding.bottomView.setBackgroundColor(taskColor)
             binding.tvShowTaskTime.text = time
             binding.tvShowTaskDate.text = date

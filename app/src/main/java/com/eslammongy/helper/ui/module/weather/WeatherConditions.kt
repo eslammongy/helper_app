@@ -4,8 +4,8 @@ import android.app.Activity
 import android.view.View
 import android.widget.ImageView
 import com.eslammongy.helper.R
-import com.eslammongy.helper.helpers.GlideApp
-import com.eslammongy.helper.helpers.showingSnackBar
+import com.eslammongy.helper.utilis.GlideApp
+import com.eslammongy.helper.utilis.showingSnackBar
 import java.util.*
 
      fun Activity.getWeatherDescriptionIconByID(weatherID: Any , imageView: ImageView) {

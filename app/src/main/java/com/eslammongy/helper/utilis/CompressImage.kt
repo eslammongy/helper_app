@@ -1,4 +1,4 @@
-package com.eslammongy.helper.helpers
+package com.eslammongy.helper.utilis
 
 import android.graphics.Bitmap
 import android.util.Log

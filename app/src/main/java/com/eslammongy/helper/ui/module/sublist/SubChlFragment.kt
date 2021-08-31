@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +21,7 @@ class SubChlFragment(parentChlID: Int , parentChlTitle:String ) : BaseFragment()
     private var _binding: FragmentSubChlBinding? = null
     private val binding get() = _binding!!
     private  var listOfSubChl = ArrayList<SubCheckList>()
-    private val subChlAdapter by lazy { SubChlAdapter(requireContext()) }
+    private lateinit var subChlAdapter:SubChlAdapter
     private var parentChlID: Int = 0
     private var parentChlTitle:String? = null
 
@@ -66,7 +67,7 @@ class SubChlFragment(parentChlID: Int , parentChlTitle:String ) : BaseFragment()
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
                     val position: Int = viewHolder.adapterPosition
-                    val listChl: SubCheckList = listOfSubChl[position]
+                    val listChl: SubCheckList = subChlAdapter.differ.currentList[position]
                     launch {
                         HelperDataBase.getDataBaseInstance(activity!!).checkListDao()
                             .deleteSelectedSubCheckList(listChl)
@@ -74,6 +75,7 @@ class SubChlFragment(parentChlID: Int , parentChlTitle:String ) : BaseFragment()
                     val deletedItem =
                         "Are you sure you want to delete this " + listChl.subChl_Title + "or undo deleted it .."
                     listOfSubChl.removeAt(viewHolder.adapterPosition)
+
                     subChlAdapter.notifyDataSetChanged()
                     Snackbar.make(binding.subChlRecyclerView, deletedItem, Snackbar.LENGTH_LONG)
                         .setAction(
@@ -100,15 +102,16 @@ class SubChlFragment(parentChlID: Int , parentChlTitle:String ) : BaseFragment()
     }
 
     private suspend fun displaySubCheckList(parentChlID:Int) {
+        subChlAdapter = SubChlAdapter(requireActivity())
         binding.subChlRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.subChlRecyclerView.setHasFixedSize(true)
         listOfSubChl = HelperDataBase.getDataBaseInstance(requireContext()).checkListDao().getAllSubCheckLists(parentChlID) as ArrayList<SubCheckList>
         if (listOfSubChl.isEmpty()){
             binding.emptyImageView.visibility = View.VISIBLE
-        } else {
+        }else {
             binding.emptyImageView.visibility = View.GONE
             binding.subChlRecyclerView.adapter = subChlAdapter
-            subChlAdapter.setDate(listOfSubChl)
+            subChlAdapter.differ.submitList(listOfSubChl)
        }
     }
 
@@ -116,5 +119,27 @@ class SubChlFragment(parentChlID: Int , parentChlTitle:String ) : BaseFragment()
         super.onDestroy()
         _binding = null
     }
+
+    override fun onStop() {
+        super.onStop()
+        launch {
+            displaySubCheckList(parentChlID)
+        }
+        Toast.makeText(requireContext(), "onStop", Toast.LENGTH_SHORT).show()
+    }
+    override fun onResume() {
+        super.onResume()
+        Toast.makeText(requireContext(), "onResume", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        launch {
+            displaySubCheckList(parentChlID)
+        }
+        Toast.makeText(requireContext(), "onPause", Toast.LENGTH_SHORT).show()
+    }
+
+
 
 }

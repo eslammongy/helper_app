@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.FriendsLayoutViewBinding
-import com.eslammongy.helper.helpers.GlideApp
+import com.eslammongy.helper.utilis.GlideApp
 
 class FriendsAdapter(
     var context: Context,

@@ -12,7 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.databinding.FragmentWeatherBinding
-import com.eslammongy.helper.helpers.*
+import com.eslammongy.helper.utilis.*
 import com.eslammongy.helper.ui.baseui.BaseFragment
 import com.eslammongy.helper.ui.module.weather.model.MyListDaily
 import com.eslammongy.helper.ui.module.weather.model.WeatherResponse

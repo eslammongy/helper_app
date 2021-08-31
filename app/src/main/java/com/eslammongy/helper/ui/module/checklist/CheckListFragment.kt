@@ -1,6 +1,5 @@
 package com.eslammongy.helper.ui.module.checklist
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.R
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.CheckListEntity
-import com.eslammongy.helper.ui.module.search.SearchScreen
 import com.eslammongy.helper.databinding.FragmentCheckListBinding
-import com.eslammongy.helper.helpers.startNewActivity
-import com.eslammongy.helper.helpers.startSearchActivity
+import com.eslammongy.helper.utilis.startNewActivity
+import com.eslammongy.helper.utilis.startSearchActivity
 import com.eslammongy.helper.ui.baseui.BaseFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch

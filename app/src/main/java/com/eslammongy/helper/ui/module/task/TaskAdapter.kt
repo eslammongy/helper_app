@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.TaskLayoutViewBinding
-import com.eslammongy.helper.helpers.GlideApp
+import com.eslammongy.helper.utilis.GlideApp
 
 
 class TaskAdapter(var context: Context, var listOFTasks: List<TaskEntities>) :

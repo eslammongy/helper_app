@@ -16,6 +16,7 @@ import com.eslammongy.helper.R
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.FragmentTaskBottomSheetBinding
+import com.eslammongy.helper.utilis.setToastMessage
 import com.eslammongy.helper.services.AlarmService
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
@@ -43,10 +44,11 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
     private var link: String? = null
     private var friendID:Int = 0
     private var taskID:Int = 0
+    private var taskAlarm:Long = 0L
     private lateinit var sheetListener: BottomSheetInterface
     private var listMyFriends = ArrayList<ContactEntities>()
     private var friendAdapter: FriendsAdapter? = null
-     private lateinit var alarmService: AlarmService
+
 
     init {
         this.taskColor = taskColor
@@ -71,7 +73,7 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
             binding.tvSheetTime.text = timeTask
             binding.tvSheetDate.text = dateTask
         }
-        alarmService = AlarmService(requireContext())
+
         binding.saveTaskInfo.setOnClickListener(this)
         binding.setTaskCalender.setOnClickListener(this)
         binding.chlPaletteColor.setOnColorSelectedListener { clr ->
@@ -90,7 +92,7 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun setAlarm(callback:(Long) -> Unit) {
+    private fun setAlarm() {
         Calendar.getInstance().apply {
             this.set(Calendar.SECOND, 0)
             this.set(Calendar.MILLISECOND, 0)
@@ -107,7 +109,7 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
                         { _, hour, minute ->
                             this.set(Calendar.HOUR_OF_DAY, hour)
                             this.set(Calendar.MINUTE, minute)
-                            callback(this.timeInMillis)
+                            taskAlarm = this.timeInMillis
                             val timeFormatted = SimpleDateFormat("hh:mm a").format(this.time)
                             timeTask = timeFormatted.toString()
                             binding.tvSheetTime.text = timeTask
@@ -137,7 +139,7 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
             val time = binding.tvSheetTime.text.toString()
             val date = binding.tvSheetDate.text.toString()
             sheetListener.setTaskInfo(
-                selectedColor.toString(), link, time, date , friendID)
+                selectedColor.toString(), link, time, date , friendID , taskAlarm)
             dismiss()
         } else {
             binding.enterLinkText.error = "Url is not valid!!"
@@ -178,7 +180,8 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
                 getTaskInfoFromBottomSheet()
             }
             R.id.setTaskCalender -> {
-                setAlarm { alarmService.setExactAlarm(it ,"You Have A New Task  Called $titleTask With Your Friend .. Let's Go To Do It." , 1 , taskID) }
+                setAlarm()
+                requireActivity().setToastMessage("Notified Task ID $taskID")
             }
         }
     }
@@ -196,7 +199,7 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
     }
 
     interface BottomSheetInterface {
-        fun setTaskInfo(color: String, lintText: String, time: String, date: String, friendID: Int )
+        fun setTaskInfo(color: String, lintText: String, time: String, date: String, friendID: Int ,taskAlarm:Long)
     }
 
     override fun onDestroy() {

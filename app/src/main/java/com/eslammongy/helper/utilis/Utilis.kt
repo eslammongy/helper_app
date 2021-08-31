@@ -1,14 +1,17 @@
-package com.eslammongy.helper.helpers
+package com.eslammongy.helper.utilis
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Looper
 import android.view.Gravity
 import android.view.View
+import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.eslammongy.helper.R
 import com.eslammongy.helper.ui.module.search.SearchScreen
@@ -19,6 +22,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.muddzdev.styleabletoast.StyleableToast
+import java.util.*
 
 
 const val apiKey = "ca4f047ebf37d1d9d7dfebb4100bd981"
@@ -47,7 +51,7 @@ fun showingSnackBar( view: View ,message:String , color: String){
     layoutParams.gravity = Gravity.TOP
     snackBar.duration = 10000
     snackBar.setTextColor(Color.WHITE)
-    snackBar.setActionTextColor(R.color.purple_700)
+    snackBar.setActionTextColor(R.color.colorDark)
     snackBar.view.setBackgroundColor(Color.parseColor(color))
     snackBar.view.layoutParams = layoutParams
     snackBar.view.layoutParams.height = 200
@@ -88,10 +92,6 @@ fun Activity.saveUserLatLang(latitude:String, longitude:String){
 
 }
 
-  var latitude: String = ""
-  var longitude: String = ""
-
-
 @SuppressLint("MissingPermission")
 fun Activity.getCurrentLocation(callback: (Array<String>) -> Unit) {
 
@@ -118,6 +118,34 @@ fun Activity.getCurrentLocation(callback: (Array<String>) -> Unit) {
 
         }
             , Looper.getMainLooper())
+
+}
+
+ fun Activity.getGreetingMessage(){
+
+    val calender = Calendar.getInstance()
+    val handEmo = "\uD83D\uDC4B"
+    when (calender.get(Calendar.HOUR_OF_DAY)) {
+
+        in 0..11 -> setToastMessage("Good Morning  $handEmo")
+        in 12..15 -> setToastMessage("Good Afternoon $handEmo")
+        in 16..20 -> setToastMessage("Good Evening $handEmo")
+        in 21..23 -> setToastMessage("Good Night $handEmo")
+        else -> Toast.makeText(this , "Hello" , Toast.LENGTH_LONG).show()
+    }
+
+}
+
+fun notifyMessage():String{
+    val calender = Calendar.getInstance()
+   return when (calender.get(Calendar.HOUR_OF_DAY)) {
+
+        in 0..11 -> "Good Morning"
+        in 12..15 ->"Good Afternoon"
+        in 16..20 ->"Good Evening"
+        in 21..23 -> "Good Night"
+        else -> "Hello"
+    }
 
 }
 

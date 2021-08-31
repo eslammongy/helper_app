@@ -10,7 +10,7 @@ import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.ActivitySearchScreenBinding
-import com.eslammongy.helper.helpers.startNewActivity
+import com.eslammongy.helper.utilis.startNewActivity
 import com.eslammongy.helper.ui.module.checklist.CheckListAdapter
 import com.eslammongy.helper.ui.module.contact.ContactAdapter
 import com.eslammongy.helper.ui.module.home.HomeScreen

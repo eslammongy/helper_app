@@ -3,6 +3,7 @@ package com.eslammongy.helper.ui.module.sublist
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.HelperDataBase
@@ -11,7 +12,19 @@ import com.eslammongy.helper.databinding.SubChecklistLayoutBinding
 
 class SubChlAdapter(var context: Context) : RecyclerView.Adapter<SubChlAdapter.SubChlViewHolder>() {
 
-    private var oldSubChList = ArrayList<SubCheckList>()
+    private val diffUtilCallback = object : DiffUtil.ItemCallback<SubCheckList>(){
+        override fun areItemsTheSame(oldItem: SubCheckList, newItem: SubCheckList): Boolean {
+            return oldItem.subCheckLId == newItem.subCheckLId
+        }
+
+        override fun areContentsTheSame(oldItem: SubCheckList, newItem: SubCheckList): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
+    val differ = AsyncListDiffer(this, diffUtilCallback)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubChlViewHolder {
         return SubChlViewHolder(
             SubChecklistLayoutBinding.inflate(
@@ -22,7 +35,7 @@ class SubChlAdapter(var context: Context) : RecyclerView.Adapter<SubChlAdapter.S
 
     override fun onBindViewHolder(holder: SubChlViewHolder, position: Int) {
 
-        val subChlWithParentChl = oldSubChList[position]
+        val subChlWithParentChl = differ.currentList[position]
         holder.binding.materialCheckBox.isChecked = subChlWithParentChl.subChl_Completed
         if (!subChlWithParentChl.subChl_Completed) holder.binding.root.alpha = 1.0F else holder.binding.root.alpha = 0.3F
         holder.binding.chlLayoutTitle.text = subChlWithParentChl.subChl_Title
@@ -41,15 +54,9 @@ class SubChlAdapter(var context: Context) : RecyclerView.Adapter<SubChlAdapter.S
     }
 
     override fun getItemCount(): Int {
-        return oldSubChList.size
+        return differ.currentList.size
     }
 
-    fun setDate(newSubChlList: ArrayList<SubCheckList>) {
-        val diffUtil = DiffUtils(oldSubChList, newSubChlList)
-        val diffResults = DiffUtil.calculateDiff(diffUtil)
-        oldSubChList = newSubChlList
-        diffResults.dispatchUpdatesTo(this)
-    }
     class SubChlViewHolder(val binding: SubChecklistLayoutBinding) :
         RecyclerView.ViewHolder(binding.root)
 

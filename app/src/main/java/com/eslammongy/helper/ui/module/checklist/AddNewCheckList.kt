@@ -11,8 +11,8 @@ import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.ui.module.home.HomeScreen
 import com.eslammongy.helper.databinding.ActivityAddNewCheckListBinding
-import com.eslammongy.helper.helpers.showingSnackBar
-import com.eslammongy.helper.helpers.startNewActivity
+import com.eslammongy.helper.utilis.showingSnackBar
+import com.eslammongy.helper.utilis.startNewActivity
 import com.eslammongy.helper.ui.dailogs.CustomDeleteDialog
 import com.eslammongy.helper.ui.module.sublist.ChlBottomSheet
 import com.eslammongy.helper.ui.module.sublist.SubChlFragment

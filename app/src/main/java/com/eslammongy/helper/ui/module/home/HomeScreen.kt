@@ -6,11 +6,12 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.eslammongy.helper.R
 import com.eslammongy.helper.databinding.ActivityHomeScreenBinding
-import com.eslammongy.helper.helpers.setToastMessage
+import com.eslammongy.helper.utilis.setToastMessage
 import com.eslammongy.helper.ui.module.checklist.CheckListFragment
 import com.eslammongy.helper.ui.module.contact.ContactsFragment
 import com.eslammongy.helper.ui.module.task.TasksFragment
 import com.eslammongy.helper.ui.module.weather.WeatherFragment
+import com.eslammongy.helper.utilis.getGreetingMessage
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -90,21 +91,6 @@ class HomeScreen : AppCompatActivity(), CoroutineScope {
             fragmentTransition.replace(R.id.fragment_holder, fragment)
                 .disallowAddToBackStack()
                 .commit()
-        }
-
-    }
-
-    private fun getGreetingMessage(){
-
-        val calender = Calendar.getInstance()
-        val handEmo = "\uD83D\uDC4B"
-        when (calender.get(Calendar.HOUR_OF_DAY)) {
-
-            in 0..11 -> setToastMessage("Good Morning  $handEmo")
-            in 12..15 -> setToastMessage("Good Afternoon $handEmo")
-            in 16..20 -> setToastMessage("Good Evening $handEmo")
-            in 21..23 -> setToastMessage("Good Night $handEmo")
-            else -> Toast.makeText(this , "Hello" , Toast.LENGTH_LONG).show()
         }
 
     }

@@ -1,5 +1,6 @@
 package com.eslammongy.helper.ui.module.sublist
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -7,14 +8,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.eslammongy.helper.R
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.SubCheckList
 import com.eslammongy.helper.databinding.FragmentChlBottomSheetBinding
-import com.eslammongy.helper.helpers.setToastMessage
-import com.eslammongy.helper.helpers.showingSnackBar
+import com.eslammongy.helper.utilis.setToastMessage
 import com.eslammongy.helper.services.AlarmService
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +35,7 @@ class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialo
     private var isComplete:Boolean = false
     private var subChlColor: Int? = null
     private var parentChlTitle:String? = null
+    private var chlAlarm:Long = 0L
     private lateinit var alarmService: AlarmService
 
     init {
@@ -67,31 +67,47 @@ class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialo
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.saveSubChl ->{saveNewSubChl()}
-            R.id.setSubChlCalender ->{ setAlarm { alarmService.setExactAlarm(it , "You Have A New Task In Your ToDo List Called $parentChlTitle .. Let's Go To Do It." , 2 , parentChlID) }}
+            R.id.setSubChlCalender ->setAlarm ()
 
         }
     }
     @SuppressLint("SimpleDateFormat")
-    private fun setAlarm(callback: (Long) -> Unit) {
+    private fun setAlarm() {
         Calendar.getInstance().apply {
             this.set(Calendar.SECOND, 0)
             this.set(Calendar.MILLISECOND, 0)
-
-            TimePickerDialog(
+            DatePickerDialog(
                 requireContext(),
                 0,
-                { _, hour, minute ->
-                    this.set(Calendar.HOUR_OF_DAY, hour)
-                    this.set(Calendar.MINUTE, minute)
-                    callback(this.timeInMillis)
-                    binding.subChlTime.text = SimpleDateFormat("hh:mm a").format(this.time)
+                { _, year, month, day ->
+                    this.set(Calendar.YEAR, year)
+                    this.set(Calendar.MONTH, month)
+                    this.set(Calendar.DAY_OF_MONTH, day)
+                    TimePickerDialog(
+                        requireContext(),
+                        0,
+                        { _, hour, minute ->
+                            this.set(Calendar.HOUR_OF_DAY, hour)
+                            this.set(Calendar.MINUTE, minute)
+                            chlAlarm = this.timeInMillis
+                            val timeFormatted = SimpleDateFormat("hh:mm a").format(this.time)
+                            binding.subChlTime.text = timeFormatted.toString()
+                        },
+                        this.get(Calendar.HOUR_OF_DAY),
+                        this.get(Calendar.MINUTE),
+                        false
+                    ).show()
+
+//                    val dateFormatted =
+//                        DateFormat.getDateInstance(DateFormat.MEDIUM).format(this.time)
+//                    dateTask = dateFormatted.toString()
+//                    binding.tvSheetDate.text = dateTask
 
                 },
-                this.get(Calendar.HOUR_OF_DAY),
-                this.get(Calendar.MINUTE),
-                false
+                this.get(Calendar.YEAR),
+                this.get(Calendar.MONTH),
+                this.get(Calendar.DAY_OF_MONTH)
             ).show()
-
         }
     }
     private fun saveNewSubChl(){
@@ -105,6 +121,7 @@ class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialo
         }else{
             launch {
                 HelperDataBase.getDataBaseInstance(requireContext()).checkListDao().saveNewSubCheckList(subCheckList)
+                alarmService.setExactAlarm(chlAlarm , "You Have A New Task In Your ToDo List Called $parentChlTitle .. Let's Go To Do It." , 2 , parentChlID)
                 dismiss()
             }
         }
