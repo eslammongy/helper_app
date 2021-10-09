@@ -13,11 +13,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eslammongy.helper.R
+import com.eslammongy.helper.adapters.FriendsAdapter
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.FragmentTaskBottomSheetBinding
-import com.eslammongy.helper.utilis.setToastMessage
-import com.eslammongy.helper.services.AlarmService
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -181,7 +180,7 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
             }
             R.id.setTaskCalender -> {
                 setAlarm()
-                requireActivity().setToastMessage("Notified Task ID $taskID")
+               // requireActivity().setToastMessage("Notified Task ID $taskID")
             }
         }
     }

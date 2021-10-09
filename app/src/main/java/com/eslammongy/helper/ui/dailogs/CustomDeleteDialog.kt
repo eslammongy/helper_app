@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.eslammongy.helper.R
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.CheckListEntity
@@ -17,6 +18,7 @@ import com.eslammongy.helper.databinding.FragmentCustomDeleteDailogBinding
 import com.eslammongy.helper.utilis.startNewActivity
 import com.eslammongy.helper.ui.baseui.BaseDialogFragment
 import com.eslammongy.helper.ui.module.home.HomeScreen
+import com.eslammongy.helper.viewModels.TaskViewModel
 import kotlinx.coroutines.launch
 
 class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int)  : BaseDialogFragment() , View.OnClickListener{
@@ -28,6 +30,7 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int)  : BaseDialogF
     private var contactEntities = ContactEntities()
     private var taskEntities = TaskEntities()
     private var checkListEntity = CheckListEntity()
+    private lateinit var taskViewModel: TaskViewModel
 
     init {
         this.itemDeletedID = itemDeletedID
@@ -40,7 +43,7 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int)  : BaseDialogF
     ): View{
         _binding = FragmentCustomDeleteDailogBinding.inflate(inflater, container, false)
         dialog!!.window!!.setWindowAnimations(R.style.AnimationDialog)
-
+        taskViewModel = ViewModelProvider(this , ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(TaskViewModel::class.java)
         binding.btnExitDeleteDialog.setOnClickListener(this)
         binding.btnSetDeleteDialog.setOnClickListener(this)
         setDeleteDialogText(selectedDialog)
@@ -70,9 +73,8 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int)  : BaseDialogF
         checkListEntity.checkListId = itemID
         when(dialogID){
             1 ->{
-             launch {
-                 HelperDataBase.getDataBaseInstance(requireContext()).taskDao().deleteSelectedTask(taskEntities)
-             }
+
+                taskViewModel.deleteSelectedTask(taskEntities)
                 requireActivity().startNewActivity(HomeScreen::class.java , 1)
             }
             2 ->{

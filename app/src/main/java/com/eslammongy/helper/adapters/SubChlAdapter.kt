@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.sublist
+package com.eslammongy.helper.adapters
 
 import android.content.Context
 import android.view.LayoutInflater

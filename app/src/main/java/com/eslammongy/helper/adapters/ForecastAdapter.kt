@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.weather
+package com.eslammongy.helper.adapters
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -6,7 +6,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.databinding.WeatherLayoutBinding
-import com.eslammongy.helper.ui.module.weather.model.MyListDaily
+import com.eslammongy.helper.ui.module.weather.getWeatherDescriptionIconByID
+import com.eslammongy.helper.model.MyListDaily
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt

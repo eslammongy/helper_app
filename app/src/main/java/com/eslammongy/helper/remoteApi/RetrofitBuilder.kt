@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.weather.remoteApi
+package com.eslammongy.helper.remoteApi
 
 import com.eslammongy.helper.BuildConfig
 import okhttp3.OkHttpClient

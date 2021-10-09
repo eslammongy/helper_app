@@ -5,6 +5,7 @@ import android.app.TimePickerDialog
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,13 +77,6 @@ class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialo
         Calendar.getInstance().apply {
             this.set(Calendar.SECOND, 0)
             this.set(Calendar.MILLISECOND, 0)
-            DatePickerDialog(
-                requireContext(),
-                0,
-                { _, year, month, day ->
-                    this.set(Calendar.YEAR, year)
-                    this.set(Calendar.MONTH, month)
-                    this.set(Calendar.DAY_OF_MONTH, day)
                     TimePickerDialog(
                         requireContext(),
                         0,
@@ -98,16 +92,6 @@ class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialo
                         false
                     ).show()
 
-//                    val dateFormatted =
-//                        DateFormat.getDateInstance(DateFormat.MEDIUM).format(this.time)
-//                    dateTask = dateFormatted.toString()
-//                    binding.tvSheetDate.text = dateTask
-
-                },
-                this.get(Calendar.YEAR),
-                this.get(Calendar.MONTH),
-                this.get(Calendar.DAY_OF_MONTH)
-            ).show()
         }
     }
     private fun saveNewSubChl(){
@@ -117,11 +101,11 @@ class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialo
        val subCheckList = SubCheckList(title , time , subChlColor.toString() , isComplete , parentChlID)
 
         if (title.isEmpty() || time.isEmpty()){
-            requireActivity().setToastMessage("Error required filed is empty.")
+            requireActivity().setToastMessage("Error required filed is empty." , Color.RED)
         }else{
             launch {
                 HelperDataBase.getDataBaseInstance(requireContext()).checkListDao().saveNewSubCheckList(subCheckList)
-                alarmService.setExactAlarm(chlAlarm , "You Have A New Task In Your ToDo List Called $parentChlTitle .. Let's Go To Do It." , 2 , parentChlID)
+                alarmService.setExactAlarm(chlAlarm , "You Have A New Task Called ${subCheckList.subChl_Title} In Your CheckList Called $parentChlTitle .. Let's Go To Do It." , 2 , parentChlID)
                 dismiss()
             }
         }

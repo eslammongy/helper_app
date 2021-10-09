@@ -17,7 +17,7 @@ import com.eslammongy.helper.R
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.FragmentTaskWithFriendAndSendEmailBinding
-import com.eslammongy.helper.ui.module.task.TaskAdapter
+import com.eslammongy.helper.adapters.TaskAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -87,7 +87,7 @@ class TaskWithFriendAndSendEmail (contactName: String, contactEmail: String , fr
             binding.emptyListText.text = "${resources.getString(R.string.you_didn_t_have_any_task)} $contactName"
             binding.twfRecyclerView.visibility = View.GONE
         } else {
-            twfAdapter = TaskAdapter(requireContext(), listMyTasksWFriend)
+            twfAdapter = TaskAdapter(requireContext())
             binding.twfRecyclerView.setHasFixedSize(true)
             binding.twfRecyclerView.layoutManager = LinearLayoutManager(context)
             binding.twfRecyclerView.adapter = twfAdapter

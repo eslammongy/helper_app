@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.task_friends
+package com.eslammongy.helper.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -17,7 +17,7 @@ class FriendsAdapter(
     RecyclerView.Adapter<FriendsAdapter.FriendsViewModel>() {
 
     private var checkedPosition:Int = -1
-    private var onItemClickListener:OnItemClickerListener? = null
+    private var onItemClickListener: OnItemClickerListener? = null
     init {
         this.onItemClickListener = onItemClickListener
     }

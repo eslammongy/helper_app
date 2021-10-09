@@ -5,12 +5,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Looper
 import android.view.Gravity
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.eslammongy.helper.R
@@ -71,13 +70,16 @@ fun showingSnackBar( view: View ,message:String , color: String){
     startActivity(intent)
 }
 
- fun Activity.setToastMessage(message:String){
+ fun Activity.setToastMessage(message:String , color:Int){
      StyleableToast.Builder(this)
          .text(message)
          .textColor(Color.WHITE)
          .textBold()
+         .gravity(Gravity.TOP)
          .cornerRadius(15)
-         .backgroundColor(Color.BLUE)
+         .backgroundColor(color)
+         .textBold()
+         .length(Toast.LENGTH_LONG)
          .show()
 }
 
@@ -127,10 +129,10 @@ fun Activity.getCurrentLocation(callback: (Array<String>) -> Unit) {
     val handEmo = "\uD83D\uDC4B"
     when (calender.get(Calendar.HOUR_OF_DAY)) {
 
-        in 0..11 -> setToastMessage("Good Morning  $handEmo")
-        in 12..15 -> setToastMessage("Good Afternoon $handEmo")
-        in 16..20 -> setToastMessage("Good Evening $handEmo")
-        in 21..23 -> setToastMessage("Good Night $handEmo")
+        in 0..11 -> setToastMessage("Good Morning  $handEmo", Color.parseColor("#1AC231"))
+        in 12..15 -> setToastMessage("Good Afternoon $handEmo", Color.parseColor("#1AC231"))
+        in 16..20 -> setToastMessage("Good Evening $handEmo", Color.parseColor("#1AC231"))
+        in 21..23 -> setToastMessage("Good Night $handEmo", Color.parseColor("#1AC231"))
         else -> Toast.makeText(this , "Hello" , Toast.LENGTH_LONG).show()
     }
 
@@ -146,8 +148,14 @@ fun notifyMessage():String{
         in 21..23 -> "Good Night"
         else -> "Hello"
     }
-
 }
 
+ fun View.showKeyboard() {
+    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+}
 
-
+ fun View.hideKeyboard() {
+    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(windowToken, 0)
+}

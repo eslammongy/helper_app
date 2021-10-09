@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.weather.model
+package com.eslammongy.helper.model
 
 import com.google.gson.annotations.SerializedName
 

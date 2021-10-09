@@ -4,26 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.R
-import com.eslammongy.helper.database.HelperDataBase
+import com.eslammongy.helper.adapters.CheckListAdapter
 import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.databinding.FragmentCheckListBinding
 import com.eslammongy.helper.utilis.startNewActivity
 import com.eslammongy.helper.utilis.startSearchActivity
-import com.eslammongy.helper.ui.baseui.BaseFragment
+import com.eslammongy.helper.viewModels.ChListViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
-class CheckListFragment : BaseFragment(), View.OnClickListener {
+class CheckListFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentCheckListBinding? = null
     private val binding get() = _binding!!
-    private val checkListAdapter by lazy {  CheckListAdapter(requireContext())}
-    private var listOfCheckList = ArrayList<CheckListEntity>()
+    private lateinit var checkListAdapter:CheckListAdapter
+    private lateinit var chListViewModel: ChListViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,13 +36,16 @@ class CheckListFragment : BaseFragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         binding.btnAddNewChl.setOnClickListener(this)
         binding.btnSearchChl.setOnClickListener(this)
-        launch {
-            displayRecyclerView()
-        }
 
+        chListViewModel = ViewModelProvider(this , ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
+            .get(ChListViewModel::class.java)
+        displayRecyclerView()
         val itemTouchHelperCallback =
             object :
-                ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+                ItemTouchHelper.SimpleCallback(
+                    ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
+                    ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                ) {
                 override fun onMove(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
@@ -51,7 +54,7 @@ class CheckListFragment : BaseFragment(), View.OnClickListener {
 
                     val startPosition = viewHolder.adapterPosition
                     val endPosition = target.adapterPosition
-                    Collections.swap(listOfCheckList, startPosition, endPosition)
+                    Collections.swap(checkListAdapter.differ.currentList, startPosition, endPosition)
                     binding.chlRecyclerView.adapter!!.notifyItemMoved(startPosition, endPosition)
 
                     return true
@@ -60,22 +63,18 @@ class CheckListFragment : BaseFragment(), View.OnClickListener {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
                     val position: Int = viewHolder.adapterPosition
-                    val listChl:CheckListEntity = listOfCheckList[position]
-                    launch {
-                        HelperDataBase.getDataBaseInstance(requireActivity()).checkListDao().deleteSelectedCheckList(listChl)
-                    }
+                    val listChl: CheckListEntity = checkListAdapter.differ.currentList[position]
+
                     val deletedItem =
                         "Are You Sure You Want To Delete This " + listChl.checkList_Title + "OR Undo Deleted .."
-                    listOfCheckList.removeAt(viewHolder.adapterPosition)
+                    //checkListAdapter.differ.currentList.removeAt(viewHolder.adapterPosition)
+                    chListViewModel.deleteCurrentChLIst(listChl)
                     checkListAdapter.notifyDataSetChanged()
                     Snackbar.make(binding.chlRecyclerView, deletedItem, Snackbar.LENGTH_LONG)
                         .setAction(
                             "Undo"
                         ) {
-                            listOfCheckList.add(position, listChl)
-                            launch {
-                                HelperDataBase.getDataBaseInstance(requireActivity()).checkListDao().saveNewCheckList(listChl)
-                            }
+                            chListViewModel.saveNewChLIst(listChl)
                             checkListAdapter.notifyItemInserted(position)
 
                         }.show()
@@ -86,18 +85,22 @@ class CheckListFragment : BaseFragment(), View.OnClickListener {
         itemTouchHelper.attachToRecyclerView(binding.chlRecyclerView)
     }
 
-    private suspend fun displayRecyclerView(){
-        listOfCheckList = HelperDataBase.getDataBaseInstance(requireActivity()).checkListDao().getAllCheckLists() as ArrayList<CheckListEntity>
-        if (listOfCheckList.isNullOrEmpty()){
-            binding.emptyImageView.visibility = View.VISIBLE
-        }else{
-            binding.emptyImageView.visibility = View.GONE
+    private fun displayRecyclerView() {
+        checkListAdapter = CheckListAdapter(requireContext())
+        binding.chlRecyclerView.apply {
+            binding.chlRecyclerView.layoutManager = LinearLayoutManager(context)
             binding.chlRecyclerView.setHasFixedSize(true)
-            binding.chlRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
-            binding.chlRecyclerView.adapter = checkListAdapter
-            checkListAdapter.setData(listOfCheckList)
-
+            adapter = checkListAdapter
         }
+        chListViewModel.allCheckLists.observe(viewLifecycleOwner , {
+            if (it.isEmpty()){
+                binding.emptyImageView.visibility = View.VISIBLE
+                checkListAdapter.differ.submitList(it)
+            }else{
+                binding.emptyImageView.visibility = View.GONE
+                checkListAdapter.differ.submitList(it)
+            }
+        })
 
     }
 
@@ -109,9 +112,9 @@ class CheckListFragment : BaseFragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.btn_AddNewChl -> {
-               requireActivity().startNewActivity(AddNewCheckList::class.java , 2)
+                requireActivity().startNewActivity(AddNewCheckList::class.java, 2)
             }
-            R.id.btn_SearchChl ->{
+            R.id.btn_SearchChl -> {
                 requireActivity().startSearchActivity(2)
             }
         }

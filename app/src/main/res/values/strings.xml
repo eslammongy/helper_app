@@ -47,4 +47,5 @@
     <string name="message">message</string>
     <string name="add_sub_checklist">Add Sub CheckList</string>
     <string name="searching">Searching</string>
+    <string name="search_in_tasks">search in tasks</string>
 </resources>

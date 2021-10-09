@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.contact
+package com.eslammongy.helper.adapters
 
 import android.app.Activity
 import android.content.Context
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.ContactLayoutViewBinding
+import com.eslammongy.helper.ui.module.contact.AddNewContact
 import com.eslammongy.helper.utilis.GlideApp
 
 class ContactAdapter(var context: Context, var listOFContacts: List<ContactEntities>) :

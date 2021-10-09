@@ -1,34 +1,33 @@
 package com.eslammongy.helper.ui.module.search
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.eslammongy.helper.adapters.CheckListAdapter
+import com.eslammongy.helper.adapters.ContactAdapter
+import com.eslammongy.helper.adapters.TaskAdapter
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.ActivitySearchScreenBinding
-import com.eslammongy.helper.utilis.startNewActivity
-import com.eslammongy.helper.ui.module.checklist.CheckListAdapter
-import com.eslammongy.helper.ui.module.contact.ContactAdapter
 import com.eslammongy.helper.ui.module.home.HomeScreen
-import com.eslammongy.helper.ui.module.task.TaskAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import com.eslammongy.helper.utilis.setToastMessage
+import com.eslammongy.helper.utilis.startNewActivity
+import com.eslammongy.helper.viewModels.TaskViewModel
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
-class SearchScreen : AppCompatActivity(), CoroutineScope,
-   SearchView.OnQueryTextListener {
+class SearchScreen : AppCompatActivity(), SearchView.OnQueryTextListener {
     private lateinit var binding: ActivitySearchScreenBinding
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-    private lateinit var job: Job
-    private var listMyTasks = ArrayList<TaskEntities>()
-    private var taskAdapter = TaskAdapter(this, listMyTasks)
+    private lateinit var taskViewModel: TaskViewModel
+    private val taskAdapter by lazy { TaskAdapter(this) }
     private var listMyContact = ArrayList<ContactEntities>()
     private var contactAdapter = ContactAdapter(this, listMyContact)
     private var listMyChl = ArrayList<CheckListEntity>()
@@ -40,57 +39,58 @@ class SearchScreen : AppCompatActivity(), CoroutineScope,
         binding = ActivitySearchScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        job = Job()
+        taskViewModel = ViewModelProvider(this , ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+            .get(TaskViewModel::class.java)
         searchID = intent.getIntExtra("SearchID", 0)
+        setSearchBarHint(searchID)
         binding.btnBackToHomeMT.setOnClickListener {
             startNewActivity(HomeScreen::class.java , searchID)
         }
+
+        binding.searchRecyclerView.setHasFixedSize(true)
+        binding.searchRecyclerView.layoutManager = LinearLayoutManager(this)
+
         binding.searchViewListener.setOnQueryTextListener(this)
         binding.searchViewListener.isSubmitButtonEnabled = true
-
 
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        if (query != null) {
-            launch {
-                getSelectedTask(query, searchID)
-            }
-        }
         return true
     }
-
     override fun onQueryTextChange(newText: String?): Boolean {
         if (newText != null) {
-            launch {
-                getSelectedTask(newText, searchID)
+            when(searchID){
+                1 ->{
+                    getSelectedTask(newText)
+                }
             }
         }
         return true
     }
 
-    private suspend fun getSelectedTask(query:String, searchId:Int){
-        val searchQuery =  "%$query%"
-        binding.searchRecyclerView.setHasFixedSize(true)
-        binding.searchRecyclerView.layoutManager = LinearLayoutManager(this)
-        when(searchId){
-
-            1->{
-                listMyTasks = HelperDataBase.getDataBaseInstance(this).taskDao().searchInTaskDataBase(searchQuery) as ArrayList<TaskEntities>
-                taskAdapter = TaskAdapter(this , listMyTasks)
-                binding.searchRecyclerView.adapter = taskAdapter
+    private fun setSearchBarHint(searchID:Int){
+        when(searchID){
+            1 ->{
+                binding.searchViewListener.queryHint = "search in your tasks.."
             }
-            2->{
-                listMyChl = HelperDataBase.getDataBaseInstance(this).checkListDao().searchInCheckListDataBase(searchQuery) as ArrayList<CheckListEntity>
-                binding.searchRecyclerView.adapter = chlAdapter
-                chlAdapter.setData(listMyChl)
+            2 ->{
+                binding.searchViewListener.queryHint = "search in your check lists.."
             }
-            3->{
-                listMyContact = HelperDataBase.getDataBaseInstance(this).contactDao().searchInContactDataBase(searchQuery) as ArrayList<ContactEntities>
-                contactAdapter = ContactAdapter(this , listMyContact)
-                binding.searchRecyclerView.adapter = contactAdapter
+            3 ->{
+                binding.searchViewListener.queryHint = "search in your contacts.."
             }
         }
+    }
+
+    private fun getSelectedTask(query:String){
+        val searchQuery =  "%$query%"
+        binding.searchRecyclerView.adapter = taskAdapter
+        taskViewModel.searchInTaskDatabase(searchQuery).observe(this , {taskList->
+            taskList.let {
+                taskAdapter.differ.submitList(it)
+            }
+        })
 
     }
 
@@ -99,8 +99,4 @@ class SearchScreen : AppCompatActivity(), CoroutineScope,
         startNewActivity(HomeScreen::class.java, searchID)
     }
 
-    override fun onDestroy() {
-        job.cancel()
-        super.onDestroy()
-    }
 }

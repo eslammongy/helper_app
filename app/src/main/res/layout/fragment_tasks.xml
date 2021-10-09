@@ -36,6 +36,21 @@
                 app:layout_constraintStart_toEndOf="@+id/btn_Search"
                 app:layout_constraintTop_toTopOf="parent" />
 
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:id="@+id/taskSearchView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:hint="@string/search_in_tasks"-->
+<!--                android:gravity="center"-->
+<!--                android:drawablePadding="10dp"-->
+<!--                android:paddingEnd="10dp"-->
+<!--                android:visibility="visible"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:textColorHint="#A3A3A3"-->
+<!--                android:layout_marginHorizontal="10dp"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                android:background="@drawable/custom_dark_shape"-->
+<!--                />-->
 
             <ImageButton
                 android:id="@+id/btn_AddNewElement"
@@ -49,7 +64,7 @@
                 android:src="@drawable/ic_iconfinder_add"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/title_ActiveFragment"
+                app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/White" />
 
             <ImageButton
@@ -64,7 +79,7 @@
                 android:src="@drawable/ic_iconfinder_search"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/title_ActiveFragment"
+                app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/White" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -84,18 +99,19 @@
 
         <ImageView
             android:id="@+id/emptyImageView"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_gravity="center"
             android:layout_margin="20dp"
             android:contentDescription="@string/todo"
             android:padding="20dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_welcome_cates"
+            android:src="@drawable/ic_empty_box"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tasks_RecyclerView"
-            tools:layout_editor_absoluteX="20dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tasks_RecyclerView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

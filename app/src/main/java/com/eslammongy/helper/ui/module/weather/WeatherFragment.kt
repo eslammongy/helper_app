@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +12,13 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.eslammongy.helper.adapters.ForecastAdapter
 import com.eslammongy.helper.databinding.FragmentWeatherBinding
 import com.eslammongy.helper.utilis.*
 import com.eslammongy.helper.ui.baseui.BaseFragment
-import com.eslammongy.helper.ui.module.weather.model.MyListDaily
-import com.eslammongy.helper.ui.module.weather.model.WeatherResponse
-import com.eslammongy.helper.ui.module.weather.remoteApi.RetrofitBuilder
+import com.eslammongy.helper.model.MyListDaily
+import com.eslammongy.helper.model.WeatherResponse
+import com.eslammongy.helper.remoteApi.RetrofitBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -35,7 +37,7 @@ class WeatherFragment : BaseFragment() {
     private  var latitude: String = ""
     private  var longitude: String = ""
     var listOfDailyForecast = ArrayList<MyListDaily>()
-    private lateinit var forecastAdapter:ForecastAdapter
+    private lateinit var forecastAdapter: ForecastAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +47,7 @@ class WeatherFragment : BaseFragment() {
         return binding.root
     }
 
+    @SuppressLint("NewApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(binding.root, savedInstanceState)
 
@@ -57,11 +60,10 @@ class WeatherFragment : BaseFragment() {
         }
         if (userLocation.checkUserLocationPermission(Manifest.permission.ACCESS_FINE_LOCATION)){
             launch {
-                withContext(Dispatchers.IO){
+
                     getCurrentWeatherDate(latitude , longitude)
                     getWeatherDaily(latitude , longitude)
 
-                }
             }
         }else{
             permReqLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
@@ -73,7 +75,7 @@ class WeatherFragment : BaseFragment() {
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             val granted = permissions.entries.all { it.value == true }
             if (granted) {
-                requireActivity().setToastMessage("location permission granted")
+                requireActivity().setToastMessage("location permission granted" , Color.GREEN)
                 disableView()
                     requireActivity().getCurrentLocation {
                         enableView("Success")
@@ -87,7 +89,7 @@ class WeatherFragment : BaseFragment() {
 
             }else{
                 enableView("Error")
-                requireActivity().setToastMessage("location permission refused")
+                requireActivity().setToastMessage("location permission refused" , Color.RED)
             }
         }
 
@@ -169,13 +171,11 @@ class WeatherFragment : BaseFragment() {
                         }
                         displayDailyRecyclerView()
                     }else{
-                        enableView("Error")
                  connectingError(requireView() , response.code())
                 }
             }
             override fun onFailure(call: Call<MyListDaily>?, t: Throwable?) {
-              enableView("Error")
-                showingSnackBar(binding.root , "Your Session has expired." , "#DD2C00")
+                //showingSnackBar(binding.root , "Your Session has expired." , "#DD2C00")
             }
         })
 

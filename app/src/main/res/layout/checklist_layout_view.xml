@@ -5,11 +5,13 @@
     app:cardBackgroundColor="@color/colorDark"
     app:cardCornerRadius="10dp"
     android:layout_margin="12dp"
+
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/parentView">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/chl_circularCardView"

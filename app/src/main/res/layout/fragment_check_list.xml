@@ -84,18 +84,19 @@
 
         <ImageView
             android:id="@+id/emptyImageView"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_gravity="center"
             android:layout_margin="20dp"
             android:contentDescription="@string/todo"
             android:padding="20dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_welcome_cates"
+            android:src="@drawable/ic_empty_box"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tasks_RecyclerView"
-            tools:layout_editor_absoluteX="20dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/chlRecyclerView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

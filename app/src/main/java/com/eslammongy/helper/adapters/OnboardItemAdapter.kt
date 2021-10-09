@@ -1,10 +1,11 @@
-package com.eslammongy.helper.ui.module.onboardingSetup
+package com.eslammongy.helper.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.databinding.OnboardingItemContinarBinding
+import com.eslammongy.helper.ui.module.onboardingSetup.OnBoardingItem
 
 class OnboardItemAdapter(private var context:Context, private val listOnBoardingItem: ArrayList<OnBoardingItem>) :
     RecyclerView.Adapter<OnboardItemAdapter.OnboardViewHolder>() {

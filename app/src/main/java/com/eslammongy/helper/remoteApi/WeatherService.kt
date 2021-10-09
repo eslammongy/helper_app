@@ -1,7 +1,7 @@
-package com.eslammongy.helper.ui.module.weather.remoteApi
+package com.eslammongy.helper.remoteApi
 
-import com.eslammongy.helper.ui.module.weather.model.MyListDaily
-import com.eslammongy.helper.ui.module.weather.model.WeatherResponse
+import com.eslammongy.helper.model.MyListDaily
+import com.eslammongy.helper.model.WeatherResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

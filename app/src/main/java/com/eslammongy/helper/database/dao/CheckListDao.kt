@@ -9,7 +9,7 @@ import com.eslammongy.helper.database.entities.SubCheckList
 interface CheckListDao {
 
     @Query("SELECT * FROM CheckList_Table ORDER BY checkListId DESC")
-    suspend fun getAllCheckLists():List<CheckListEntity>
+    fun getAllCheckLists():LiveData<List<CheckListEntity>>
 
     @Query("SELECT * FROM SubChl_Table WHERE parentChListId = :chlID")
     suspend fun getAllSubCheckLists(chlID:Int):List<SubCheckList>

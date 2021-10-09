@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.eslammongy.helper.adapters.SubChlAdapter
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.SubCheckList
 import com.eslammongy.helper.databinding.FragmentSubChlBinding
@@ -21,7 +21,7 @@ class SubChlFragment(parentChlID: Int , parentChlTitle:String ) : BaseFragment()
     private var _binding: FragmentSubChlBinding? = null
     private val binding get() = _binding!!
     private  var listOfSubChl = ArrayList<SubCheckList>()
-    private lateinit var subChlAdapter:SubChlAdapter
+    private lateinit var subChlAdapter: SubChlAdapter
     private var parentChlID: Int = 0
     private var parentChlTitle:String? = null
 
@@ -120,26 +120,11 @@ class SubChlFragment(parentChlID: Int , parentChlTitle:String ) : BaseFragment()
         _binding = null
     }
 
-    override fun onStop() {
-        super.onStop()
-        launch {
-            displaySubCheckList(parentChlID)
-        }
-        Toast.makeText(requireContext(), "onStop", Toast.LENGTH_SHORT).show()
-    }
     override fun onResume() {
         super.onResume()
-        Toast.makeText(requireContext(), "onResume", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onPause() {
-        super.onPause()
         launch {
             displaySubCheckList(parentChlID)
         }
-        Toast.makeText(requireContext(), "onPause", Toast.LENGTH_SHORT).show()
     }
-
-
 
 }

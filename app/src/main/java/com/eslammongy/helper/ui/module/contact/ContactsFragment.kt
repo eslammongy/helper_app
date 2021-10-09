@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.eslammongy.helper.R
+import com.eslammongy.helper.adapters.ContactAdapter
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.FragmentContactsBinding
@@ -23,7 +24,7 @@ class ContactsFragment : BaseFragment() , View.OnClickListener {
     private var _binding: FragmentContactsBinding? = null
     private val binding get() = _binding!!
     private var listOfMyContacts = ArrayList<ContactEntities>()
-    private var contactAdapter:ContactAdapter? = null
+    private var contactAdapter: ContactAdapter? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

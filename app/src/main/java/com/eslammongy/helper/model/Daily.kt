@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.weather.model
+package com.eslammongy.helper.model
 data class Daily(
         val clouds: Int,
         val dew_point: Double,

@@ -2,6 +2,7 @@ package com.eslammongy.helper.ui.module.contact
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -89,7 +90,7 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener , CoroutineScope
                     GlideApp.with(this@AddNewContact).load(compressedProfileImage!!.path).into(binding.contactProfilePhoto)
                 }
             }else{
-               setToastMessage("Selected Noun")
+               setToastMessage("Selected Noun" , Color.YELLOW)
             }
         }
     }
@@ -111,7 +112,7 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener , CoroutineScope
                             .saveNewContact(contactEntities)
                     }
                     this.startNewActivity(HomeScreen::class.java , 3)
-                    setToastMessage("Contact Updated")
+                    setToastMessage("Contact Updated" , Color.GREEN)
                 }
             }
             intent.getIntExtra("ID", 0) -> {
@@ -125,7 +126,7 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener , CoroutineScope
                             .updateCurrentContact(contactEntities)
                     }
                     this.startNewActivity(HomeScreen::class.java , 3)
-                    setToastMessage("Contact Updated")
+                    setToastMessage("Contact Updated" , Color.GREEN)
                 }
             }
 
@@ -137,16 +138,16 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener , CoroutineScope
                 it.value == true
             }
             if (granted) {
-                setToastMessage("gallery permission granted")
+                setToastMessage("gallery permission granted" , Color.GREEN)
                 cropActivityResultLauncher.launch("image/*")
             }else{
-                setToastMessage("gallery permission refused")
+                setToastMessage("gallery permission refused" , Color.RED)
             }
         }
 
     private fun openEmailAndTaskFragment(displayOption:String , id:Int){
         if (contactID == 0){
-            setToastMessage("there is no friend here !!")
+            setToastMessage("there is no friend here !!" , Color.YELLOW)
         }else{
             val twfFragment = TaskWithFriendAndSendEmail(binding.contactInputName.text.toString() , displayOption , id)
             twfFragment.show(supportFragmentManager , "Tag")
@@ -169,7 +170,7 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener , CoroutineScope
             }
             R.id.btn_ShowTwF -> {
                 openEmailAndTaskFragment("ShowingTaskList" , contactID)
-                setToastMessage("$contactID")
+                //setToastMessage("$contactID")
             }
             R.id.btn_OpenColorPicker -> {
                 if (showing) {
