@@ -4,27 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.eslammongy.helper.R
 import com.eslammongy.helper.adapters.ContactAdapter
-import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.FragmentContactsBinding
 import com.eslammongy.helper.utilis.startNewActivity
 import com.eslammongy.helper.utilis.startSearchActivity
-import com.eslammongy.helper.ui.baseui.BaseFragment
+import com.eslammongy.helper.viewModels.ContactViewMode
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class ContactsFragment : BaseFragment() , View.OnClickListener {
+class ContactsFragment:Fragment() , View.OnClickListener {
     private var _binding: FragmentContactsBinding? = null
     private val binding get() = _binding!!
-    private var listOfMyContacts = ArrayList<ContactEntities>()
-    private var contactAdapter: ContactAdapter? = null
+
+    private lateinit var contactViewMode: ContactViewMode
+    private lateinit var contactAdapter: ContactAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,20 +35,11 @@ class ContactsFragment : BaseFragment() , View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         binding.btnAddNewContact.setOnClickListener(this)
         binding.btnSearchContact.setOnClickListener(this)
-        launch {
-            withContext(Dispatchers.IO){
-                listOfMyContacts =  HelperDataBase.getDataBaseInstance(requireActivity()).contactDao().getAllContacts() as ArrayList<ContactEntities>
-            }
-            if (listOfMyContacts.isEmpty()) {
-                binding.emptyImageView.visibility = View.VISIBLE
-            } else {
-                binding.contactRecyclerView.setHasFixedSize(true)
-                binding.contactRecyclerView.layoutManager = StaggeredGridLayoutManager(2 , StaggeredGridLayoutManager.VERTICAL)
-                contactAdapter = ContactAdapter(requireContext(), listOfMyContacts)
-                binding.contactRecyclerView.adapter = contactAdapter
-            }
-        }
 
+        contactViewMode = ViewModelProvider(this , ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
+            .get(ContactViewMode::class.java)
+
+        displayTasksRecyclerView()
         var deletedItem: String?
         val itemTouchHelperCallback =
             object :
@@ -66,28 +56,18 @@ class ContactsFragment : BaseFragment() , View.OnClickListener {
 
                 }
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
                     val position: Int = viewHolder.adapterPosition
-                    val listContact: ContactEntities = listOfMyContacts[position]
-                    launch {
-                        context?.let {
-                            HelperDataBase.getDataBaseInstance(context!!).contactDao().deleteSelectedContact(listContact)
-                        }
-                    }
+                    val listContact: ContactEntities = contactAdapter.differ.currentList[position]
                     deletedItem =
                         "Are You Sure You Want To Delete This " + listContact.contact_Name + "OR Undo Deleted .."
-                    listOfMyContacts.removeAt(viewHolder.adapterPosition)
-                    contactAdapter!!.notifyDataSetChanged()
+                    contactViewMode.deleteCurrentContact(listContact)
+                    contactAdapter.notifyDataSetChanged()
                     Snackbar.make(binding.contactRecyclerView, deletedItem!!, Snackbar.LENGTH_LONG)
                         .setAction(
                             "Undo"
                         ) {
-
-                            listOfMyContacts.add(position, listContact)
-                            launch {
-                                HelperDataBase.getDataBaseInstance(requireContext()).contactDao().saveNewContact(listContact)
-                            }
-                            contactAdapter!!.notifyItemInserted(position)
+                             contactViewMode.saveNewContact(listContact)
+                            contactAdapter.notifyItemInserted(position)
 
                         }.show()
                 }
@@ -95,6 +75,25 @@ class ContactsFragment : BaseFragment() , View.OnClickListener {
 
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(binding.contactRecyclerView)
+    }
+
+    private fun displayTasksRecyclerView(){
+       contactAdapter = ContactAdapter(requireContext())
+        binding.contactRecyclerView.apply {
+            binding.contactRecyclerView.layoutManager = LinearLayoutManager(context)
+            binding.contactRecyclerView.setHasFixedSize(true)
+            adapter = contactAdapter
+        }
+        contactViewMode.getAllContacts.observe(viewLifecycleOwner , {
+            if (it.isEmpty()){
+                binding.emptyImageView.visibility = View.VISIBLE
+                contactAdapter.differ.submitList(it)
+            }else{
+                binding.emptyImageView.visibility = View.GONE
+                contactAdapter.differ.submitList(it)
+            }
+        })
+
     }
 
     override fun onClick(v: View?) {

@@ -17,7 +17,6 @@ import com.eslammongy.helper.utilis.startNewActivity
 import com.eslammongy.helper.utilis.startSearchActivity
 import com.eslammongy.helper.viewModels.ChListViewModel
 import com.google.android.material.snackbar.Snackbar
-import java.util.*
 
 class CheckListFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentCheckListBinding? = null
@@ -36,7 +35,6 @@ class CheckListFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         binding.btnAddNewChl.setOnClickListener(this)
         binding.btnSearchChl.setOnClickListener(this)
-
         chListViewModel = ViewModelProvider(this , ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
             .get(ChListViewModel::class.java)
         displayRecyclerView()
@@ -54,7 +52,7 @@ class CheckListFragment : Fragment(), View.OnClickListener {
 
                     val startPosition = viewHolder.adapterPosition
                     val endPosition = target.adapterPosition
-                    Collections.swap(checkListAdapter.differ.currentList, startPosition, endPosition)
+                   // Collections.swap(checkListAdapter.differ.currentList, startPosition, endPosition)
                     binding.chlRecyclerView.adapter!!.notifyItemMoved(startPosition, endPosition)
 
                     return true

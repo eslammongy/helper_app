@@ -138,7 +138,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="@color/ColorPurpleNote"
                 app:cardCornerRadius="40dp">
@@ -185,6 +185,7 @@
                 android:background="@drawable/custom_one_shape_button"
                 android:contentDescription="@string/todo"
                 android:padding="10dp"
+                android:visibility="gone"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_iconfinder_ic_playlist_add"
                 app:layout_constraintBottom_toTopOf="@+id/guideline16"

@@ -10,12 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.ViewModelProvider
 import com.eslammongy.helper.R
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.SubCheckList
 import com.eslammongy.helper.databinding.FragmentChlBottomSheetBinding
 import com.eslammongy.helper.utilis.setToastMessage
 import com.eslammongy.helper.services.AlarmService
+import com.eslammongy.helper.viewModels.ChListViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,13 +27,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.CoroutineContext
 
-class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialogFragment(),View.OnClickListener  , CoroutineScope{
+class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialogFragment(),View.OnClickListener {
 
     private var _binding: FragmentChlBottomSheetBinding? = null
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-    private lateinit var job: Job
     private val binding get() = _binding!!
+    private lateinit var chListViewModel: ChListViewModel
+
     private var parentChlID: Int = 0
     private var isComplete:Boolean = false
     private var subChlColor: Int? = null
@@ -48,7 +49,9 @@ class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialo
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentChlBottomSheetBinding.inflate(inflater , container , false)
-        job = Job()
+
+        chListViewModel = ViewModelProvider(this , ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
+            .get(ChListViewModel::class.java)
         alarmService = AlarmService(requireContext())
         binding.saveSubChl.setOnClickListener(this)
         binding.setSubChlCalender.setOnClickListener(this)
@@ -101,18 +104,15 @@ class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialo
        val subCheckList = SubCheckList(title , time , subChlColor.toString() , isComplete , parentChlID)
 
         if (title.isEmpty() || time.isEmpty()){
-            requireActivity().setToastMessage("Error required filed is empty." , Color.RED)
+            requireActivity().setToastMessage("Please make sure all fields are filled" , Color.RED)
         }else{
-            launch {
-                HelperDataBase.getDataBaseInstance(requireContext()).checkListDao().saveNewSubCheckList(subCheckList)
-                alarmService.setExactAlarm(chlAlarm , "You Have A New Task Called ${subCheckList.subChl_Title} In Your CheckList Called $parentChlTitle .. Let's Go To Do It." , 2 , parentChlID)
-                dismiss()
-            }
+            chListViewModel.saveNewSubChList(subCheckList)
+            alarmService.setExactAlarm(chlAlarm , "You Have A New Task Called ${subCheckList.subChl_Title} In Your CheckList Called $parentChlTitle .. Let's Go To Do It." , 2 , parentChlID)
+            dismiss()
         }
     }
 
     override fun onDestroy() {
-        job.cancel()
         super.onDestroy()
         _binding = null
     }

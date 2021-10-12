@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toFile
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.eslammongy.helper.R
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.database.entities.TaskEntities
@@ -43,7 +44,10 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
         binding = ActivityAddNewTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        taskViewModel = ViewModelProvider(this , ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(TaskViewModel::class.java)
+        taskViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        ).get(TaskViewModel::class.java)
         alarmService = AlarmService(this)
         taskID = intent.getIntExtra("ID", 0)
         notifyTask = intent.getIntExtra("TaskNotifiedID", 0)
@@ -72,17 +76,20 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
 
         } else if (notifyTask != 0) {
             var taskEntities: TaskEntities
-            runBlocking { taskEntities = taskViewModel.getSingleTask(notifyTask) }
-            displayTaskInfo(
-                taskEntities.taskTitle,
-                taskEntities.taskDesc,
-                taskEntities.taskDesc,
-                taskEntities.taskTime,
-                taskEntities.taskLink,
-                taskEntities.taskImage,
-                taskEntities.taskColor.toInt(),
-                taskEntities.taskFriendID
-            )
+            taskViewModel.viewModelScope.launch {
+                taskEntities = taskViewModel.getSingleTask(notifyTask)
+                displayTaskInfo(
+                    taskEntities.taskTitle,
+                    taskEntities.taskDesc,
+                    taskEntities.taskDesc,
+                    taskEntities.taskTime,
+                    taskEntities.taskLink,
+                    taskEntities.taskImage,
+                    taskEntities.taskColor.toInt(),
+                    taskEntities.taskFriendID
+                )
+            }
+
         }
         setToastMessage("Notified Task ID $notifyTask", Color.parseColor("#1AC231"))
 
@@ -175,7 +182,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
 
             0 -> {
                 if (title.isEmpty() || desc.isEmpty() || time.isEmpty() || date.isEmpty()) {
-                    setToastMessage("Please make sure all fields are filled", Color.GREEN)
+                    setToastMessage("Please make sure all fields are filled", Color.RED)
                 } else {
                     taskViewModel.saveNewTask(taskEntities)
                     alarmService.setExactAlarm(

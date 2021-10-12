@@ -10,16 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.eslammongy.helper.R
-import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.FragmentCustomDeleteDailogBinding
-import com.eslammongy.helper.utilis.startNewActivity
 import com.eslammongy.helper.ui.baseui.BaseDialogFragment
 import com.eslammongy.helper.ui.module.home.HomeScreen
+import com.eslammongy.helper.utilis.startNewActivity
+import com.eslammongy.helper.viewModels.ChListViewModel
+import com.eslammongy.helper.viewModels.ContactViewMode
 import com.eslammongy.helper.viewModels.TaskViewModel
-import kotlinx.coroutines.launch
 
 class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int)  : BaseDialogFragment() , View.OnClickListener{
 
@@ -31,6 +31,8 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int)  : BaseDialogF
     private var taskEntities = TaskEntities()
     private var checkListEntity = CheckListEntity()
     private lateinit var taskViewModel: TaskViewModel
+    private lateinit var chListViewModel: ChListViewModel
+    private lateinit var contactViewMode: ContactViewMode
 
     init {
         this.itemDeletedID = itemDeletedID
@@ -43,7 +45,15 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int)  : BaseDialogF
     ): View{
         _binding = FragmentCustomDeleteDailogBinding.inflate(inflater, container, false)
         dialog!!.window!!.setWindowAnimations(R.style.AnimationDialog)
-        taskViewModel = ViewModelProvider(this , ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(TaskViewModel::class.java)
+        taskViewModel = ViewModelProvider(this , ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
+            .get(TaskViewModel::class.java)
+
+        chListViewModel = ViewModelProvider(this , ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
+            .get(ChListViewModel::class.java)
+
+        contactViewMode = ViewModelProvider(
+            this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
+            .get(ContactViewMode::class.java)
         binding.btnExitDeleteDialog.setOnClickListener(this)
         binding.btnSetDeleteDialog.setOnClickListener(this)
         setDeleteDialogText(selectedDialog)
@@ -73,20 +83,15 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int)  : BaseDialogF
         checkListEntity.checkListId = itemID
         when(dialogID){
             1 ->{
-
                 taskViewModel.deleteSelectedTask(taskEntities)
                 requireActivity().startNewActivity(HomeScreen::class.java , 1)
             }
             2 ->{
-                launch {
-                    HelperDataBase.getDataBaseInstance(requireContext()).checkListDao().deleteSelectedCheckList(checkListEntity)
-                }
+                chListViewModel.deleteCurrentChLIst(checkListEntity)
                 requireActivity().startNewActivity(HomeScreen::class.java , 2)
             }
             3 ->{
-                launch {
-                    HelperDataBase.getDataBaseInstance(requireContext()).contactDao().deleteSelectedContact(contactEntities)
-                }
+                contactViewMode.deleteCurrentContact(contactEntities)
                 requireActivity().startNewActivity(HomeScreen::class.java , 3)
 
             }

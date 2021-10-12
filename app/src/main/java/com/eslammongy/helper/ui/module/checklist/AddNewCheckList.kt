@@ -67,6 +67,7 @@ class AddNewCheckList : AppCompatActivity(), View.OnClickListener {
             binding.btnChlColorPicker.setCardBackgroundColor(chlColor!!)
             binding.chlPaletteColor.setSelectedColor(chlColor!!)
             binding.btnDeleteChl.visibility = View.VISIBLE
+            binding.btnOpenSubChlSheet.visibility = View.VISIBLE
     }
 
     @SuppressLint("SimpleDateFormat")

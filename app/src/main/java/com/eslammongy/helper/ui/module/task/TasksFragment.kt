@@ -3,7 +3,6 @@ package com.eslammongy.helper.ui.module.task
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.SearchEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -16,9 +15,6 @@ import com.eslammongy.helper.adapters.TaskAdapter
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.FragmentTasksBinding
 import com.eslammongy.helper.ui.baseui.BaseFragment
-import com.eslammongy.helper.ui.module.search.SearchScreen
-import com.eslammongy.helper.utilis.hideKeyboard
-import com.eslammongy.helper.utilis.showKeyboard
 import com.eslammongy.helper.utilis.startNewActivity
 import com.eslammongy.helper.utilis.startSearchActivity
 import com.eslammongy.helper.viewModels.TaskViewModel

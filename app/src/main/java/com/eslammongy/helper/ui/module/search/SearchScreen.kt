@@ -1,37 +1,31 @@
 package com.eslammongy.helper.ui.module.search
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
-import android.view.View
-import android.widget.SearchView
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eslammongy.helper.adapters.CheckListAdapter
 import com.eslammongy.helper.adapters.ContactAdapter
 import com.eslammongy.helper.adapters.TaskAdapter
-import com.eslammongy.helper.database.HelperDataBase
-import com.eslammongy.helper.database.entities.CheckListEntity
-import com.eslammongy.helper.database.entities.ContactEntities
-import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.ActivitySearchScreenBinding
 import com.eslammongy.helper.ui.module.home.HomeScreen
-import com.eslammongy.helper.utilis.setToastMessage
 import com.eslammongy.helper.utilis.startNewActivity
+import com.eslammongy.helper.viewModels.ChListViewModel
+import com.eslammongy.helper.viewModels.ContactViewMode
 import com.eslammongy.helper.viewModels.TaskViewModel
-import kotlinx.coroutines.launch
 
-class SearchScreen : AppCompatActivity(), SearchView.OnQueryTextListener {
+class SearchScreen : AppCompatActivity(){
+
     private lateinit var binding: ActivitySearchScreenBinding
     private lateinit var taskViewModel: TaskViewModel
+    private lateinit var chListViewModel: ChListViewModel
+    private lateinit var contactViewMode: ContactViewMode
     private val taskAdapter by lazy { TaskAdapter(this) }
-    private var listMyContact = ArrayList<ContactEntities>()
-    private var contactAdapter = ContactAdapter(this, listMyContact)
-    private var listMyChl = ArrayList<CheckListEntity>()
-    private var chlAdapter = CheckListAdapter(this)
+    private val contactAdapter by lazy {ContactAdapter (this)}
+    private val chlAdapter by lazy { CheckListAdapter(this) }
     private var searchID: Int = 0
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +35,13 @@ class SearchScreen : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         taskViewModel = ViewModelProvider(this , ViewModelProvider.AndroidViewModelFactory.getInstance(application))
             .get(TaskViewModel::class.java)
+
+        chListViewModel = ViewModelProvider(this , ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+            .get(ChListViewModel::class.java)
+
+        contactViewMode = ViewModelProvider(
+            this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+            .get(ContactViewMode::class.java)
         searchID = intent.getIntExtra("SearchID", 0)
         setSearchBarHint(searchID)
         binding.btnBackToHomeMT.setOnClickListener {
@@ -50,35 +51,42 @@ class SearchScreen : AppCompatActivity(), SearchView.OnQueryTextListener {
         binding.searchRecyclerView.setHasFixedSize(true)
         binding.searchRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        binding.searchViewListener.setOnQueryTextListener(this)
-        binding.searchViewListener.isSubmitButtonEnabled = true
+       binding.searchViewListener.addTextChangedListener(object :TextWatcher{
+           override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
-    }
+           }
+           override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
 
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        return true
-    }
-    override fun onQueryTextChange(newText: String?): Boolean {
-        if (newText != null) {
-            when(searchID){
-                1 ->{
-                    getSelectedTask(newText)
-                }
-            }
-        }
-        return true
+           }
+           override fun afterTextChanged(text: Editable?) {
+               val newText = text.toString()
+               when(searchID){
+                   1 ->{
+                       getSelectedTask(newText)
+                   }
+                   2 ->{
+                       getSelectedChList(newText)
+                   }
+                   3->{
+                       getSelectedContact(newText)
+                   }
+               }
+           }
+       })
+
+
     }
 
     private fun setSearchBarHint(searchID:Int){
         when(searchID){
             1 ->{
-                binding.searchViewListener.queryHint = "search in your tasks.."
+                binding.searchViewListener.hint = "search in your tasks.."
             }
             2 ->{
-                binding.searchViewListener.queryHint = "search in your check lists.."
+                binding.searchViewListener.hint = "search in your check lists.."
             }
             3 ->{
-                binding.searchViewListener.queryHint = "search in your contacts.."
+                binding.searchViewListener.hint = "search in your contacts.."
             }
         }
     }
@@ -89,6 +97,28 @@ class SearchScreen : AppCompatActivity(), SearchView.OnQueryTextListener {
         taskViewModel.searchInTaskDatabase(searchQuery).observe(this , {taskList->
             taskList.let {
                 taskAdapter.differ.submitList(it)
+            }
+        })
+
+    }
+
+    private fun getSelectedChList(query:String){
+        val searchQuery =  "%$query%"
+        binding.searchRecyclerView.adapter = chlAdapter
+        chListViewModel.searchInChListDatabase(searchQuery).observe(this , {chList->
+            chList.let {
+                chlAdapter.differ.submitList(it)
+            }
+        })
+
+    }
+
+    private fun getSelectedContact(query: String) {
+        val searchQuery =  "%$query%"
+        binding.searchRecyclerView.adapter = contactAdapter
+        contactViewMode.searchInContactDataBase(searchQuery).observe(this , { list->
+            list.let {
+                contactAdapter.differ.submitList(it)
             }
         })
 

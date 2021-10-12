@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.FriendsLayoutViewBinding
@@ -11,7 +13,6 @@ import com.eslammongy.helper.utilis.GlideApp
 
 class FriendsAdapter(
     var context: Context,
-    var listOFFriends: List<ContactEntities>,
     onItemClickListener: OnItemClickerListener
 ) :
     RecyclerView.Adapter<FriendsAdapter.FriendsViewModel>() {
@@ -21,6 +22,16 @@ class FriendsAdapter(
     init {
         this.onItemClickListener = onItemClickListener
     }
+    private val diffUtilCallback = object : DiffUtil.ItemCallback<ContactEntities>(){
+        override fun areItemsTheSame(oldItem: ContactEntities, newItem: ContactEntities): Boolean {
+            return oldItem.contact_Name == newItem.contact_Name
+        }
+
+        override fun areContentsTheSame(oldItem: ContactEntities, newItem: ContactEntities): Boolean {
+            return oldItem == newItem
+        }
+    }
+    val differ = AsyncListDiffer(this, diffUtilCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendsViewModel {
 
@@ -33,12 +44,12 @@ class FriendsAdapter(
     }
 
     override fun onBindViewHolder(holder: FriendsViewModel, position: Int) {
-        val friends = listOFFriends[position]
+        val friends = differ.currentList[position]
         holder.binding.friendName.text = friends.contact_Name
         GlideApp.with(context).asBitmap().load(friends.contact_Image).into(holder.binding.friendImage).clearOnDetach()
         holder.binding.root.setOnClickListener {
             checkedPosition = position
-            onItemClickListener!!.onClicked(listOFFriends[position], position)
+            onItemClickListener!!.onClicked(differ.currentList[position], position)
             onItemClickListener!!.onItemClickListener(position , holder.itemView)
         }
         if (checkedPosition == position){
@@ -52,7 +63,7 @@ class FriendsAdapter(
     }
 
     override fun getItemCount(): Int {
-        return listOFFriends.size
+        return differ.currentList.size
     }
 
     class FriendsViewModel(val binding: FriendsLayoutViewBinding) : RecyclerView.ViewHolder(binding.root)

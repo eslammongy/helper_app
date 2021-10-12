@@ -9,8 +9,8 @@ import android.net.Uri
 import android.os.Looper
 import android.view.Gravity
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.eslammongy.helper.R
 import com.eslammongy.helper.ui.module.search.SearchScreen
@@ -148,14 +148,4 @@ fun notifyMessage():String{
         in 21..23 -> "Good Night"
         else -> "Hello"
     }
-}
-
- fun View.showKeyboard() {
-    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-}
-
- fun View.hideKeyboard() {
-    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.hideSoftInputFromWindow(windowToken, 0)
 }

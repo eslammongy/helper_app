@@ -3,11 +3,14 @@ package com.eslammongy.helper.viewModels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.CheckListEntity
+import com.eslammongy.helper.database.entities.SubCheckList
 import com.eslammongy.helper.repository.CheckListRepo
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class ChListViewModel(application: Application):AndroidViewModel(application) {
@@ -32,4 +35,23 @@ class ChListViewModel(application: Application):AndroidViewModel(application) {
     fun deleteCurrentChLIst(chListEntity:CheckListEntity) = viewModelScope.launch (Dispatchers.IO){
         checkListRepo.deleteCurrentChList(chListEntity)
     }
+
+    fun searchInChListDatabase(searchQuery: String): LiveData<List<CheckListEntity>> {
+        return checkListRepo.searchInChListDatabase(searchQuery).asLiveData()
+    }
+
+    // sub Check List Repo
+
+    fun saveNewSubChList(subCheckList: SubCheckList) = viewModelScope.launch(Dispatchers.IO){
+        checkListRepo.saveNewSubCheckList(subCheckList)
+    }
+
+    fun deleteCurrentSubChList(subCheckList: SubCheckList)= viewModelScope.launch(Dispatchers.IO){
+        checkListRepo.deleteCurrentSubChList(subCheckList)
+    }
+
+    fun getAllSubChList(parentChLID:Int): LiveData<List<SubCheckList>> {
+        return checkListRepo.getAllSubChList(parentChLID)
+    }
+
 }

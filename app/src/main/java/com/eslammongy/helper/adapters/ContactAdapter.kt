@@ -6,14 +6,28 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.entities.ContactEntities
+import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.ContactLayoutViewBinding
 import com.eslammongy.helper.ui.module.contact.AddNewContact
 import com.eslammongy.helper.utilis.GlideApp
 
-class ContactAdapter(var context: Context, var listOFContacts: List<ContactEntities>) :
+class ContactAdapter(var context: Context) :
     RecyclerView.Adapter<ContactAdapter.ContactViewModel>(){
+
+    private val diffUtilCallback = object : DiffUtil.ItemCallback<ContactEntities>(){
+        override fun areItemsTheSame(oldItem: ContactEntities, newItem: ContactEntities): Boolean {
+            return oldItem.contact_Name == newItem.contact_Name
+        }
+
+        override fun areContentsTheSame(oldItem: ContactEntities, newItem: ContactEntities): Boolean {
+            return oldItem == newItem
+        }
+    }
+    val differ = AsyncListDiffer(this, diffUtilCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewModel {
 
@@ -26,7 +40,7 @@ class ContactAdapter(var context: Context, var listOFContacts: List<ContactEntit
 
     }
     override fun onBindViewHolder(holder: ContactViewModel, position: Int) {
-        val contactEntities = listOFContacts[position]
+        val contactEntities = differ.currentList[position]
         holder.binding.contactLayoutName.text = contactEntities.contact_Name
         holder.binding.contactLayoutName.chipBackgroundColor =
             ColorStateList.valueOf(Integer.parseInt(contactEntities.contact_Color))
@@ -50,7 +64,7 @@ class ContactAdapter(var context: Context, var listOFContacts: List<ContactEntit
     }
 
     override fun getItemCount(): Int {
-        return listOFContacts.size
+        return differ.currentList.size
     }
     class ContactViewModel(val binding: ContactLayoutViewBinding) : RecyclerView.ViewHolder(binding.root)
 

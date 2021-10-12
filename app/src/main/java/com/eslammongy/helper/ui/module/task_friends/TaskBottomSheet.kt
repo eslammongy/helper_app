@@ -11,43 +11,43 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eslammongy.helper.R
 import com.eslammongy.helper.adapters.FriendsAdapter
-import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.databinding.FragmentTaskBottomSheetBinding
+import com.eslammongy.helper.viewModels.ContactViewMode
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
-import kotlin.coroutines.CoroutineContext
 
-class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: String, link: String, friendID:Int , taskID:Int ) :
-    BottomSheetDialogFragment(), View.OnClickListener ,CoroutineScope, FriendsAdapter.OnItemClickerListener {
+class TaskBottomSheet(
+    taskColor: Int?,
+    time: String,
+    date: String,
+    titleTask: String,
+    link: String,
+    friendID: Int,
+    taskID: Int
+) :
+    BottomSheetDialogFragment(), View.OnClickListener, FriendsAdapter.OnItemClickerListener {
 
     private var _binding: FragmentTaskBottomSheetBinding? = null
     private val binding get() = _binding!!
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-    private lateinit var job: Job
     private var taskColor: Int? = null
     private var timeTask: String? = null
     private var dateTask: String? = null
     private var titleTask: String? = null
     private var link: String? = null
-    private var friendID:Int = 0
-    private var taskID:Int = 0
-    private var taskAlarm:Long = 0L
+    private var friendID: Int = 0
+    private var taskID: Int = 0
+    private var taskAlarm: Long = 0L
     private lateinit var sheetListener: BottomSheetInterface
-    private var listMyFriends = ArrayList<ContactEntities>()
-    private var friendAdapter: FriendsAdapter? = null
-
+    private lateinit var friendAdapter: FriendsAdapter
+    private lateinit var contactViewMode: ContactViewMode
 
     init {
         this.taskColor = taskColor
@@ -64,14 +64,18 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTaskBottomSheetBinding.inflate(inflater, container, false)
-        job = Job()
-        launch {
-            binding.enterLinkText.setText(link)
-            binding.chlPaletteColor.setSelectedColor(taskColor!!)
-            displayFriendsRecyclerView()
-            binding.tvSheetTime.text = timeTask
-            binding.tvSheetDate.text = dateTask
-        }
+
+        contactViewMode = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+        )
+            .get(ContactViewMode::class.java)
+        friendAdapter = FriendsAdapter(requireContext(), this)
+        binding.enterLinkText.setText(link)
+        binding.chlPaletteColor.setSelectedColor(taskColor!!)
+        displayFriendsRecyclerView()
+        binding.tvSheetTime.text = timeTask
+        binding.tvSheetDate.text = dateTask
 
         binding.saveTaskInfo.setOnClickListener(this)
         binding.setTaskCalender.setOnClickListener(this)
@@ -81,13 +85,15 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
         return binding.root
     }
 
-    private suspend fun displayFriendsRecyclerView(){
-
-        listMyFriends = HelperDataBase.getDataBaseInstance(requireContext()).contactDao().getAllContacts() as ArrayList<ContactEntities>
-        friendAdapter = FriendsAdapter(requireContext() , listMyFriends , this)
+    private fun displayFriendsRecyclerView() {
         binding.taskFiendRecycler.setHasFixedSize(true)
         binding.taskFiendRecycler.layoutManager = LinearLayoutManager(context)
         binding.taskFiendRecycler.adapter = friendAdapter
+        contactViewMode.getAllContacts.observe(viewLifecycleOwner, {
+            it.let { list ->
+                friendAdapter.differ.submitList(list)
+            }
+        })
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -131,14 +137,15 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
         }
     }
 
-    private fun getTaskInfoFromBottomSheet(){
+    private fun getTaskInfoFromBottomSheet() {
         if (checkValidateUrl() || binding.enterLinkText.text!!.isEmpty()) {
             val selectedColor = this.taskColor
             val link = binding.enterLinkText.text.toString()
             val time = binding.tvSheetTime.text.toString()
             val date = binding.tvSheetDate.text.toString()
             sheetListener.setTaskInfo(
-                selectedColor.toString(), link, time, date , friendID , taskAlarm)
+                selectedColor.toString(), link, time, date, friendID, taskAlarm
+            )
             dismiss()
         } else {
             binding.enterLinkText.error = "Url is not valid!!"
@@ -149,7 +156,8 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
             ).show()
         }
     }
-    private fun checkValidateUrl():Boolean{
+
+    private fun checkValidateUrl(): Boolean {
         val linkSample = ("((http|https)://)(www.)?"
                 + "[a-zA-Z0-9@:%._\\+~#?&//=]"
                 + "{2,256}\\.[a-z]"
@@ -174,13 +182,13 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
     }
 
     override fun onClick(v: View?) {
-        when(v!!.id){
+        when (v!!.id) {
             R.id.saveTaskInfo -> {
                 getTaskInfoFromBottomSheet()
             }
             R.id.setTaskCalender -> {
                 setAlarm()
-               // requireActivity().setToastMessage("Notified Task ID $taskID")
+                // requireActivity().setToastMessage("Notified Task ID $taskID")
             }
         }
     }
@@ -198,11 +206,18 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
     }
 
     interface BottomSheetInterface {
-        fun setTaskInfo(color: String, lintText: String, time: String, date: String, friendID: Int ,taskAlarm:Long)
+        fun setTaskInfo(
+            color: String,
+            lintText: String,
+            time: String,
+            date: String,
+            friendID: Int,
+            taskAlarm: Long
+        )
     }
 
     override fun onDestroy() {
-        job.cancel()
+
         super.onDestroy()
         _binding = null
     }
@@ -212,7 +227,7 @@ class TaskBottomSheet(taskColor: Int?, time: String, date: String, titleTask: St
     }
 
     override fun onItemClickListener(position: Int, view: View?) {
-        friendAdapter!!.notifyDataSetChanged()
+        friendAdapter.notifyDataSetChanged()
     }
 
 }

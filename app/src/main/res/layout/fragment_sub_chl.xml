@@ -13,27 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/btnRefreshRecyclerView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/point_active_background"
-            android:contentDescription="@string/todo"
-            android:padding="10dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_round_refresh_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/White" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/subChlRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnRefreshRecyclerView"
+            app:layout_constraintTop_toTopOf="parent"
             app:reverseLayout="false" />
 
         <ImageView

@@ -12,54 +12,50 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eslammongy.helper.R
-import com.eslammongy.helper.database.HelperDataBase
-import com.eslammongy.helper.database.entities.TaskEntities
-import com.eslammongy.helper.databinding.FragmentTaskWithFriendAndSendEmailBinding
 import com.eslammongy.helper.adapters.TaskAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
+import com.eslammongy.helper.databinding.FragmentTaskWithFriendAndSendEmailBinding
+import com.eslammongy.helper.viewModels.ContactViewMode
 
-class TaskWithFriendAndSendEmail (contactName: String, contactEmail: String , friendID:Int):DialogFragment() , CoroutineScope {
+class TaskWithFriendAndSendEmail(contactName: String, contactEmail: String, friendID: Int) :
+    DialogFragment() {
     private var _binding: FragmentTaskWithFriendAndSendEmailBinding? = null
     private val binding get() = _binding!!
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-    private lateinit var job: Job
-    private var listMyTasksWFriend = ArrayList<TaskEntities>()
-    private var twfAdapter: TaskAdapter? = null
+    private lateinit var twfAdapter: TaskAdapter
     private var contactName: String? = null
     private var contactEmail: String? = null
-    private var friendID:Int = 0
+    private var friendID: Int = 0
+    private lateinit var contactViewMode: ContactViewMode
+
     init {
         this.contactName = contactName
         this.contactEmail = contactEmail
         this.friendID = friendID
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTaskWithFriendAndSendEmailBinding.inflate(inflater, container, false)
         dialog!!.window!!.setWindowAnimations(R.style.AnimationDialog)
-        job = Job()
+
+        contactViewMode = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+        ).get(ContactViewMode::class.java)
+
         binding.tvShowFriendName.text = contactName
-        launch {
-        }
         if (contactEmail == "ShowingTaskList") {
-            launch {
-                displayTaskWithSelectedFriend()
-            }
+            displayTaskWithSelectedFriend()
         } else {
             showSendingEmailForm()
         }
 
         binding.btnExitTWF.setOnClickListener {
-           dialog!!.dismiss()
+            dialog!!.dismiss()
         }
         binding.btnSendEmail.setOnClickListener {
             sendingEmailMessage()
@@ -79,19 +75,25 @@ class TaskWithFriendAndSendEmail (contactName: String, contactEmail: String , fr
     }
 
     @SuppressLint("SetTextI18n")
-    private suspend fun displayTaskWithSelectedFriend() {
-        listMyTasksWFriend = HelperDataBase.getDataBaseInstance(requireContext()).contactDao().getTaskWithFriend(friendID) as ArrayList<TaskEntities>
-        if (listMyTasksWFriend.isEmpty()) {
-            binding.emptyListText.visibility = View.VISIBLE
-            binding.emptyImageView.visibility = View.VISIBLE
-            binding.emptyListText.text = "${resources.getString(R.string.you_didn_t_have_any_task)} $contactName"
-            binding.twfRecyclerView.visibility = View.GONE
-        } else {
-            twfAdapter = TaskAdapter(requireContext())
-            binding.twfRecyclerView.setHasFixedSize(true)
-            binding.twfRecyclerView.layoutManager = LinearLayoutManager(context)
-            binding.twfRecyclerView.adapter = twfAdapter
-        }
+    private fun displayTaskWithSelectedFriend() {
+        twfAdapter = TaskAdapter(requireContext())
+        binding.twfRecyclerView.setHasFixedSize(true)
+        binding.twfRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.twfRecyclerView.adapter = twfAdapter
+      contactViewMode.getTasksWithFriend(friendID).observe(viewLifecycleOwner , {
+          it.let { list ->
+              if (list.isEmpty()) {
+                  binding.emptyListText.visibility = View.VISIBLE
+                  binding.emptyImageView.visibility = View.VISIBLE
+                  binding.emptyListText.text =
+                      "${resources.getString(R.string.you_didn_t_have_any_task)} $contactName"
+                  binding.twfRecyclerView.visibility = View.GONE
+              } else {
+                 twfAdapter.differ.submitList(list)
+              }
+          }
+      })
+
     }
 
     private fun showSendingEmailForm() {
@@ -126,13 +128,14 @@ class TaskWithFriendAndSendEmail (contactName: String, contactEmail: String , fr
             }
         } else {
 
-            Toast.makeText(requireContext(), "Required App Is Not Installed", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Required App Is Not Installed", Toast.LENGTH_LONG)
+                .show()
         }
 
     }
 
     override fun onDestroy() {
-        job.cancel()
+        _binding = null
         super.onDestroy()
     }
 

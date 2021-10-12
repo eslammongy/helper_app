@@ -14,7 +14,7 @@ class SubChlAdapter(var context: Context) : RecyclerView.Adapter<SubChlAdapter.S
 
     private val diffUtilCallback = object : DiffUtil.ItemCallback<SubCheckList>(){
         override fun areItemsTheSame(oldItem: SubCheckList, newItem: SubCheckList): Boolean {
-            return oldItem.subCheckLId == newItem.subCheckLId
+            return oldItem.subChl_Title == newItem.subChl_Title
         }
 
         override fun areContentsTheSame(oldItem: SubCheckList, newItem: SubCheckList): Boolean {
@@ -36,20 +36,36 @@ class SubChlAdapter(var context: Context) : RecyclerView.Adapter<SubChlAdapter.S
     override fun onBindViewHolder(holder: SubChlViewHolder, position: Int) {
 
         val subChlWithParentChl = differ.currentList[position]
-        holder.binding.materialCheckBox.isChecked = subChlWithParentChl.subChl_Completed
-        if (!subChlWithParentChl.subChl_Completed) holder.binding.root.alpha = 1.0F else holder.binding.root.alpha = 0.3F
         holder.binding.chlLayoutTitle.text = subChlWithParentChl.subChl_Title
         holder.binding.chlLayoutTime.text = subChlWithParentChl.subChl_Time
         holder.binding.chlCircularCardView.setCardBackgroundColor(Integer.parseInt(subChlWithParentChl.subChl_Color))
+        holder.binding.materialCheckBox.isChecked = subChlWithParentChl.subChl_Completed
+
+        if (subChlWithParentChl.subChl_Completed) holder.binding.parentView.alpha = 0.3F else holder.binding.parentView.alpha = 1.0F
+
         holder.binding.materialCheckBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked){
-                holder.binding.root.alpha = 0.3F
+                holder.binding.parentView.alpha = 0.3F
                 HelperDataBase.getDataBaseInstance(context).checkListDao().getSubChlCompleteStatus(subChlWithParentChl.subCheckLId , isChecked)
             }else{
-                holder.binding.root.alpha = 1.0F
+                holder.binding.parentView.alpha = 1.0F
                 HelperDataBase.getDataBaseInstance(context).checkListDao().getSubChlCompleteStatus(subChlWithParentChl.subCheckLId , isChecked)
             }
         }
+
+    }
+
+    fun moveItem(from: Int, to: Int) {
+
+        val list = differ.currentList.toMutableList()
+        val fromLocation = list[from]
+        list.removeAt(from)
+        if (to < from) {
+            list.add(to + 1 , fromLocation)
+        } else {
+            list.add(to - 1, fromLocation)
+        }
+        differ.submitList(list)
 
     }
 

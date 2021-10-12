@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.database.entities.SubCheckList
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CheckListDao {
@@ -12,7 +13,7 @@ interface CheckListDao {
     fun getAllCheckLists():LiveData<List<CheckListEntity>>
 
     @Query("SELECT * FROM SubChl_Table WHERE parentChListId = :chlID")
-    suspend fun getAllSubCheckLists(chlID:Int):List<SubCheckList>
+    fun getAllSubCheckLists(chlID:Int):LiveData<List<SubCheckList>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveNewCheckList(checkListEntity: CheckListEntity)
@@ -36,5 +37,5 @@ interface CheckListDao {
     suspend fun deleteSelectedSubCheckList(subCheckList: SubCheckList)
 
     @Query("SELECT * FROM checklist_table WHERE checkList_Title LIKE :searchQuery")
-    suspend fun searchInCheckListDataBase(searchQuery: String): List<CheckListEntity>
+     fun searchInCheckListDataBase(searchQuery: String): Flow<List<CheckListEntity>>
 }

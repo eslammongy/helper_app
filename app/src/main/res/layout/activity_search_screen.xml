@@ -8,7 +8,7 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".ui.module.search.SearchScreen">
 
-    <SearchView
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/searchViewListener"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -16,7 +16,10 @@
         android:layout_marginStart="10dp"
         android:background="@drawable/custom_dark_shape"
         android:iconifiedByDefault="false"
-        android:queryHint="Search"
+        android:hint="@string/search"
+        android:padding="15dp"
+        android:textColorHint="@color/ColorLightBlack"
+        android:textColor="@color/white"
         android:searchIcon="@drawable/ic_iconfinder_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_BackToHomeMT"
