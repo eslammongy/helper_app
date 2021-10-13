@@ -72,6 +72,7 @@ class SubChlFragment(parentChlID: Int , parentChlTitle:String ) : BaseFragment()
 
                     val position: Int = viewHolder.adapterPosition
                     val listChl: SubCheckList = subChlAdapter.differ.currentList[position]
+                    val listSize = subChlAdapter.differ.currentList.size
                     val deletedItem =
                         "Are you sure you want to delete this " + listChl.subChl_Title + "or undo deleted it .."
 
@@ -82,7 +83,7 @@ class SubChlFragment(parentChlID: Int , parentChlTitle:String ) : BaseFragment()
                             "Undo"
                         ) {
                             chListViewModel.saveNewSubChList(listChl)
-                            subChlAdapter.notifyItemInserted(position)
+                            subChlAdapter.notifyItemRangeInserted(listSize , subChlAdapter.differ.currentList.size-1)
                         }.show()
                 }
             }

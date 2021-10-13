@@ -52,7 +52,6 @@ class CheckListFragment : Fragment(), View.OnClickListener {
 
                     val startPosition = viewHolder.adapterPosition
                     val endPosition = target.adapterPosition
-                   // Collections.swap(checkListAdapter.differ.currentList, startPosition, endPosition)
                     binding.chlRecyclerView.adapter!!.notifyItemMoved(startPosition, endPosition)
 
                     return true
@@ -62,7 +61,7 @@ class CheckListFragment : Fragment(), View.OnClickListener {
 
                     val position: Int = viewHolder.adapterPosition
                     val listChl: CheckListEntity = checkListAdapter.differ.currentList[position]
-
+                    val listSize = checkListAdapter.differ.currentList.size
                     val deletedItem =
                         "Are You Sure You Want To Delete This " + listChl.checkList_Title + "OR Undo Deleted .."
                     //checkListAdapter.differ.currentList.removeAt(viewHolder.adapterPosition)
@@ -73,7 +72,7 @@ class CheckListFragment : Fragment(), View.OnClickListener {
                             "Undo"
                         ) {
                             chListViewModel.saveNewChLIst(listChl)
-                            checkListAdapter.notifyItemInserted(position)
+                            checkListAdapter.notifyItemRangeInserted(listSize , checkListAdapter.differ.currentList.size-1)
 
                         }.show()
                 }

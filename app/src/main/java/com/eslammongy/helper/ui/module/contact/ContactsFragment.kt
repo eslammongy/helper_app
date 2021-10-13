@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.eslammongy.helper.R
 import com.eslammongy.helper.adapters.ContactAdapter
 import com.eslammongy.helper.database.entities.ContactEntities
@@ -58,6 +59,7 @@ class ContactsFragment:Fragment() , View.OnClickListener {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val position: Int = viewHolder.adapterPosition
                     val listContact: ContactEntities = contactAdapter.differ.currentList[position]
+                    val listSize = contactAdapter.differ.currentList.size
                     deletedItem =
                         "Are You Sure You Want To Delete This " + listContact.contact_Name + "OR Undo Deleted .."
                     contactViewMode.deleteCurrentContact(listContact)
@@ -67,7 +69,7 @@ class ContactsFragment:Fragment() , View.OnClickListener {
                             "Undo"
                         ) {
                              contactViewMode.saveNewContact(listContact)
-                            contactAdapter.notifyItemInserted(position)
+                            contactAdapter.notifyItemRangeInserted(listSize , contactAdapter.differ.currentList.size-1)
 
                         }.show()
                 }
@@ -80,7 +82,7 @@ class ContactsFragment:Fragment() , View.OnClickListener {
     private fun displayTasksRecyclerView(){
        contactAdapter = ContactAdapter(requireContext())
         binding.contactRecyclerView.apply {
-            binding.contactRecyclerView.layoutManager = LinearLayoutManager(context)
+            binding.contactRecyclerView.layoutManager =  StaggeredGridLayoutManager(2 , StaggeredGridLayoutManager.VERTICAL)
             binding.contactRecyclerView.setHasFixedSize(true)
             adapter = contactAdapter
         }

@@ -5,12 +5,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Looper
 import android.view.Gravity
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.eslammongy.helper.R
 import com.eslammongy.helper.ui.module.search.SearchScreen
@@ -42,21 +43,28 @@ fun  Activity.startSearchActivity(SearchID:Int){
     }
 }
 
-@SuppressLint("ResourceAsColor")
-fun showingSnackBar( view: View ,message:String , color: String){
+@SuppressLint("ResourceAsColor", "InflateParams")
+fun Activity.showingSnackBar(view: View, message: String, color: String){
 
-    val snackBar = Snackbar.make( view , message , Snackbar.LENGTH_SHORT)
+    val snackBar = Snackbar.make(view, message , Snackbar.LENGTH_SHORT)
     val layoutParams = CoordinatorLayout.LayoutParams(snackBar.view.layoutParams)
-    layoutParams.gravity = Gravity.TOP
-    snackBar.duration = 10000
-    snackBar.setTextColor(Color.WHITE)
-    snackBar.setActionTextColor(R.color.colorDark)
     snackBar.view.setBackgroundColor(Color.parseColor(color))
+    val textView = snackBar.view.findViewById(R.id.snackbar_text) as TextView
+    val textAction = snackBar.view.findViewById(R.id.snackbar_action) as TextView
+    textAction.typeface = Typeface.DEFAULT_BOLD
+    textAction.setTextColor(R.color.colorDark)
+    textAction.textSize = 17f
+    textView.text = message
+    textView.setTextColor(Color.WHITE)
+    textView.textSize = 18f
+    layoutParams.gravity = Gravity.TOP
+    layoutParams.setMargins(5 , 0 , 5 , 0)
+    layoutParams.width = CoordinatorLayout.LayoutParams.MATCH_PARENT
+    layoutParams.height = 250
+    snackBar.duration = 3000
     snackBar.view.layoutParams = layoutParams
-    snackBar.view.layoutParams.height = 200
-    snackBar.view.setPadding(0, 10, 0, 0)
     snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
-    snackBar.setAction("Cancel"){
+    snackBar.setAction("Undo"){
         snackBar.dismiss()
     }
 
@@ -79,7 +87,7 @@ fun showingSnackBar( view: View ,message:String , color: String){
          .cornerRadius(15)
          .backgroundColor(color)
          .textBold()
-         .length(Toast.LENGTH_LONG)
+         .length(2000)
          .show()
 }
 

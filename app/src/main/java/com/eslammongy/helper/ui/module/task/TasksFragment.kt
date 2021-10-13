@@ -61,6 +61,7 @@ class TasksFragment : BaseFragment() , View.OnClickListener {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val position: Int = viewHolder.adapterPosition
                     val listTasks: TaskEntities = taskAdapter.differ.currentList[position]
+                    val listSize = taskAdapter.differ.currentList.size
                     deletedItem =
                         "Are You Sure You Want To Delete This OR Undo Deleted .."
                     taskViewModel.deleteSelectedTask(listTasks)
@@ -70,7 +71,7 @@ class TasksFragment : BaseFragment() , View.OnClickListener {
                             "Undo"
                         ) {
                             taskViewModel.saveNewTask(listTasks)
-                            taskAdapter.notifyItemInserted(position)
+                            taskAdapter.notifyItemRangeInserted(listSize , taskAdapter.differ.currentList.size-1)
                         }.show()
                 }
             }

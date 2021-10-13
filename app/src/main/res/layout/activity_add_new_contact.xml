@@ -215,6 +215,7 @@
             android:background="@drawable/custom_one_shape_button"
             android:contentDescription="@string/todo"
             android:padding="8dp"
+            android:visibility="gone"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_calendar"
             app:tint="@color/white" />
@@ -228,6 +229,7 @@
             android:background="@drawable/custom_one_shape_button"
             android:contentDescription="@string/todo"
             android:padding="10dp"
+            android:visibility="gone"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_iconfinder_icons_email"
             app:tint="@color/white" />
@@ -241,6 +243,7 @@
             android:background="@drawable/custom_one_shape_button"
             android:contentDescription="@string/todo"
             android:padding="10dp"
+            android:visibility="gone"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_iconfinder_phone_call"
             app:tint="@color/white" />

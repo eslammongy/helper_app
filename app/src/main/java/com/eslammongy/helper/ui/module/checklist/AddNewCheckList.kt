@@ -5,7 +5,6 @@ import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
@@ -40,7 +39,6 @@ class AddNewCheckList : AppCompatActivity(), View.OnClickListener {
         ).get(ChListViewModel::class.java)
         checkLId = intent.getIntExtra("chlID", 0)
         isComplete = intent.getBooleanExtra("chlComplete", false)
-        Toast.makeText(this, "$isComplete", Toast.LENGTH_SHORT).show()
         chlColor = ResourcesCompat.getColor(resources, R.color.ColorDefaultNote, theme)
         if (checkLId != 0){
             displayInfoFromAdapter()
@@ -122,25 +120,30 @@ class AddNewCheckList : AppCompatActivity(), View.OnClickListener {
         when (id) {
             0 -> {
                 if (title.isEmpty() || date.isEmpty()) {
-                    setToastMessage("Error required filed is empty.", Color.RED)
+                    this.showingSnackBar(
+                        binding.root,
+                        "Please make sure all fields are filled",
+                        "#F98404"
+                    )
                 } else {
                     chListViewModel.saveNewChLIst(checkListEntities)
-                    setToastMessage("CheckList Saved.", Color.parseColor("#15AA2B"))
+                    setToastMessage("CheckList Saved.",  Color.parseColor("#6ECB63"))
                     this.startNewActivity(HomeScreen::class.java, 2)
 
                 }
             }
             intent.getIntExtra("chlID", 0) -> {
                 if (title == intent.getStringExtra("chlTitle") && date == intent.getStringExtra("chlDate")) {
-                    setToastMessage(
+                    this.showingSnackBar(
+                        binding.root,
                         "Please make sure you've updated anything.",
-                        Color.parseColor("#FC6C00")
+                        "#F98404"
                     )
                 } else {
                     checkListEntities.checkListId = checkLId
                     checkListEntities.checkList_Completed = isComplete
                     chListViewModel.updateCurrentChList(checkListEntities)
-                    setToastMessage("CheckList Updated ${checkListEntities.checkList_Completed}.", Color.parseColor("#15AA2B"))
+                    setToastMessage("CheckList Updated", Color.parseColor("#6ECB63"))
                     this.startNewActivity(HomeScreen::class.java, 2)
 
                 }
@@ -170,22 +173,9 @@ class AddNewCheckList : AppCompatActivity(), View.OnClickListener {
                 saveNewCheckList()
             }
             R.id.btnOpenSubChlSheet -> {
-                if (checkLId == 0) {
-                    showingSnackBar(
-                        binding.root,
-                        "first you need to include parent check list",
-                        "#FF5722"
-                    )
-                    setToastMessage(
-                        "Please make sure you include the parent checklist first.",
-                        Color.parseColor("#FC6C00")
-                    )
-                } else {
                     ChlBottomSheet(checkLId, binding.checkListTitle.text.toString()).show(
                         supportFragmentManager,
-                        "Tag"
-                    )
-                }
+                        "Tag")
             }
             R.id.btnDeleteChl -> {
                 CustomDeleteDialog(checkLId, 2).show(supportFragmentManager, "TAG")

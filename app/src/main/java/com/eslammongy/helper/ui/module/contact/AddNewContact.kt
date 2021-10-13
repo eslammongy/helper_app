@@ -79,6 +79,9 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener {
                 .into(binding.contactProfilePhoto).clearOnDetach()
             binding.btnSaveNewContact.text = "Update"
             binding.btnDeleteCurrentContact.visibility = View.VISIBLE
+            binding.btnCallMyContact.visibility = View.VISIBLE
+            binding.btnOpenEmailForm.visibility = View.VISIBLE
+            binding.btnShowTwF.visibility = View.VISIBLE
 
         }
 
@@ -96,7 +99,7 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener {
                             .into(binding.contactProfilePhoto)
                     }
                 } else {
-                    setToastMessage("Selected Noun", Color.YELLOW)
+                    setToastMessage("Selected Noun" , Color.parseColor("#CB0003"))
                 }
             }
     }
@@ -118,11 +121,15 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener {
         when (contactID) {
             0 -> {
                 if (contactName.isEmpty() || contactPhone.isEmpty() || contactEmail.isEmpty() || contactAddress.isEmpty()) {
-                    setToastMessage("Please make sure all fields are filled", Color.RED)
+                    this.showingSnackBar(
+                        binding.root,
+                        "Please make sure all fields are filled",
+                        "#F98404"
+                    )
                 } else {
                     contactViewMode.saveNewContact(contactEntities)
                     this.startNewActivity(HomeScreen::class.java, 3)
-                    setToastMessage("Contact Updated", Color.GREEN)
+                    setToastMessage("Contact Saved", Color.parseColor("#6ECB63"))
                 }
             }
             intent.getIntExtra("ID", 0) -> {
@@ -131,15 +138,16 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener {
                         "Phone"
                     )
                 ) {
-                    setToastMessage(
+                    this.showingSnackBar(
+                        binding.root,
                         "Please make sure you've updated anything.",
-                        Color.parseColor("#FC6C00")
+                        "#F98404"
                     )
                 } else {
                     contactEntities.contactId = contactID
                     contactViewMode.updateCurrentContact(contactEntities)
                     this.startNewActivity(HomeScreen::class.java, 3)
-                    setToastMessage("Contact Info Updated", Color.parseColor("#1AC231"))
+                    setToastMessage("Contact Info Updated", Color.parseColor("#6ECB63"))
                 }
             }
 
@@ -152,25 +160,13 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener {
                 it.value == true
             }
             if (granted) {
-                setToastMessage("gallery permission granted", Color.GREEN)
+                setToastMessage("Gallery Permission Granted", Color.parseColor("#6ECB63"))
                 cropActivityResultLauncher.launch("image/*")
             } else {
-                setToastMessage("gallery permission refused", Color.RED)
+                setToastMessage("Gallery Permission Refused" , Color.parseColor("#CB0003"))
             }
         }
 
-    private fun openEmailAndTaskFragment(displayOption: String, id: Int) {
-        if (contactID == 0) {
-            setToastMessage("there is no friend here !!", Color.YELLOW)
-        } else {
-            val twfFragment = TaskWithFriendAndSendEmail(
-                binding.contactInputName.text.toString(),
-                displayOption,
-                id
-            )
-            twfFragment.show(supportFragmentManager, "Tag")
-        }
-    }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
@@ -184,11 +180,12 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener {
                 this.makePhoneCall(binding.contactInputPhone.text.toString())
             }
             R.id.btn_OpenEmailForm -> {
-                openEmailAndTaskFragment(binding.contactInputEmail.text.toString(), 0)
+                val twfFragment = TaskWithFriendAndSendEmail(binding.contactInputName.text.toString(), binding.contactInputEmail.text.toString(), 0)
+                twfFragment.show(supportFragmentManager, "Tag")
             }
             R.id.btn_ShowTwF -> {
-                openEmailAndTaskFragment("ShowingTaskList", contactID)
-                //setToastMessage("$contactID")
+                val twfFragment = TaskWithFriendAndSendEmail(binding.contactInputName.text.toString(), "ShowingTaskList", contactID)
+                twfFragment.show(supportFragmentManager, "Tag")
             }
             R.id.btn_OpenColorPicker -> {
                 if (showing) {

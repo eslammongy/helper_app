@@ -4,7 +4,6 @@ import android.Manifest
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -91,7 +90,6 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
             }
 
         }
-        setToastMessage("Notified Task ID $notifyTask", Color.parseColor("#1AC231"))
 
     }
 
@@ -107,8 +105,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                             .into(binding.taskImageView).clearOnDetach()
                     }
                 } else {
-                    Toast.makeText(applicationContext, "Selected Noun", Toast.LENGTH_LONG)
-                        .show()
+                    setToastMessage("Selected Noun" , Color.parseColor("#CB0003"))
                 }
             }
     }
@@ -119,10 +116,10 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                 it.value == true
             }
             if (granted) {
-                setToastMessage("gallery permission granted", Color.parseColor("#1AC231"))
+                setToastMessage("Gallery Permission Granted", Color.parseColor("#6ECB63"))
                 cropActivityResultLauncher.launch("image/*")
             } else {
-                setToastMessage("gallery permission refused", Color.RED)
+                setToastMessage("Gallery Permission Refused" , Color.parseColor("#CB0003"))
             }
         }
 
@@ -182,7 +179,11 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
 
             0 -> {
                 if (title.isEmpty() || desc.isEmpty() || time.isEmpty() || date.isEmpty()) {
-                    setToastMessage("Please make sure all fields are filled", Color.RED)
+                    this.showingSnackBar(
+                        binding.root,
+                        "Please make sure all fields are filled",
+                        "#F98404"
+                    )
                 } else {
                     taskViewModel.saveNewTask(taskEntities)
                     alarmService.setExactAlarm(
@@ -191,7 +192,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                         1,
                         taskEntities.taskId
                     )
-                    setToastMessage("Task Saved", Color.parseColor("#1AC231"))
+                    setToastMessage("Task Saved", Color.parseColor("#6ECB63"))
                     this.startNewActivity(HomeScreen::class.java, 1)
                 }
             }
@@ -200,9 +201,11 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                         "Time"
                     )
                 ) {
-                    setToastMessage(
+
+                    this.showingSnackBar(
+                        binding.root,
                         "Please make sure you've updated anything.",
-                        Color.parseColor("#FC6C00")
+                        "#F98404"
                     )
                 } else {
                     taskEntities.taskId = taskID
@@ -214,7 +217,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                         taskEntities.taskId
                     )
                     this.startNewActivity(HomeScreen::class.java, 1)
-                    setToastMessage("Task Updated", Color.parseColor("#1AC231"))
+                    setToastMessage("Task Updated",  Color.parseColor("#6ECB63"))
                 }
             }
 
@@ -250,7 +253,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
             }
             R.id.tv_ShowTaskLink -> {
                 if (binding.tvShowTaskLink.text.isNullOrEmpty()) {
-                    setToastMessage("There is no link included at this task", Color.RED)
+                    setToastMessage("There is no link included at this task", Color.parseColor("#F98404"))
                 } else {
                     CustomWebView(binding.tvShowTaskLink.text.toString()).show(
                         supportFragmentManager,

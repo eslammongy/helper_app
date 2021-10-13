@@ -139,12 +139,16 @@ class WeatherFragment : BaseFragment() {
                             binding.tvMaxTemp.text = "Max $maxTemp ºC"
                         }else{
                             enableView("Error")
-                         connectingError(requireView() , response.code())
+                         requireActivity().connectingError(requireView() , response.code())
                         }
                     }
                 override fun onFailure(call: Call<WeatherResponse>?, t: Throwable?) {
                     enableView("Error")
-                    showingSnackBar(binding.root , "Your Session has expired." , "#DD2C00")
+                    requireActivity().showingSnackBar(
+                        binding.root,
+                        "Your Session has expired.",
+                        "#DD2C00"
+                    )
                 }
 
             })
@@ -171,7 +175,7 @@ class WeatherFragment : BaseFragment() {
                         }
                         displayDailyRecyclerView()
                     }else{
-                 connectingError(requireView() , response.code())
+                 requireActivity().connectingError(requireView() , response.code())
                 }
             }
             override fun onFailure(call: Call<MyListDaily>?, t: Throwable?) {
@@ -190,7 +194,7 @@ class WeatherFragment : BaseFragment() {
 
         }catch (e:IndexOutOfBoundsException){
             e.printStackTrace()
-            showingSnackBar(binding.root , "${e.message}" , "#DD2C00")
+            requireActivity().showingSnackBar(binding.root, "${e.message}", "#DD2C00")
         }
 
     }
