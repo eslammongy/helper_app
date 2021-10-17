@@ -121,7 +121,7 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener {
         when (contactID) {
             0 -> {
                 if (contactName.isEmpty() || contactPhone.isEmpty() || contactEmail.isEmpty() || contactAddress.isEmpty()) {
-                    this.showingSnackBar(
+                    showingSnackBar(
                         binding.root,
                         "Please make sure all fields are filled",
                         "#F98404"
@@ -138,7 +138,7 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener {
                         "Phone"
                     )
                 ) {
-                    this.showingSnackBar(
+                    showingSnackBar(
                         binding.root,
                         "Please make sure you've updated anything.",
                         "#F98404"

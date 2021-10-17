@@ -44,7 +44,7 @@ fun  Activity.startSearchActivity(SearchID:Int){
 }
 
 @SuppressLint("ResourceAsColor", "InflateParams")
-fun Activity.showingSnackBar(view: View, message: String, color: String){
+fun showingSnackBar(view: View, message: String, color: String){
 
     val snackBar = Snackbar.make(view, message , Snackbar.LENGTH_SHORT)
     val layoutParams = CoordinatorLayout.LayoutParams(snackBar.view.layoutParams)

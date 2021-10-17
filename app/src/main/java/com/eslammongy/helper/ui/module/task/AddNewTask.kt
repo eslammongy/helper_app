@@ -4,6 +4,7 @@ import android.Manifest
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -70,8 +71,8 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                 intent.getStringExtra("Link")!!,
                 intent.getStringExtra("TaskImage")!!,
                 intent.getStringExtra("Color")!!.toInt(),
-                intent.getIntExtra("TaskFriendID", 0)
-            )
+                intent.getIntExtra("TaskFriendID", 0))
+            friendID = intent.getIntExtra("TaskFriendID", 0)
 
         } else if (notifyTask != 0) {
             var taskEntities: TaskEntities
@@ -87,6 +88,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                     taskEntities.taskColor.toInt(),
                     taskEntities.taskFriendID
                 )
+                friendID = taskEntities.taskFriendID
             }
 
         }
@@ -105,7 +107,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                             .into(binding.taskImageView).clearOnDetach()
                     }
                 } else {
-                    setToastMessage("Selected Noun" , Color.parseColor("#CB0003"))
+                    setToastMessage("Selected Noun", Color.parseColor("#CB0003"))
                 }
             }
     }
@@ -119,36 +121,26 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                 setToastMessage("Gallery Permission Granted", Color.parseColor("#6ECB63"))
                 cropActivityResultLauncher.launch("image/*")
             } else {
-                setToastMessage("Gallery Permission Refused" , Color.parseColor("#CB0003"))
+                setToastMessage("Gallery Permission Refused", Color.parseColor("#CB0003"))
             }
         }
 
-    private fun displayTaskInfo(
-        title: String?,
-        desc: String?,
-        date: String?,
-        time: String?,
-        link: String?,
-        imagePath: String?,
-        colorOfTask: Int?,
-        friendID: Int?
-    ) {
-        runBlocking {
+    private fun displayTaskInfo(title: String?, desc: String?, date: String?,
+        time: String?, link: String?, imagePath: String?, colorOfTask: Int?, friendID: Int?) {
 
-            binding.tiTaskTitle.setText(title!!)
-            binding.tiTaskContent.setText(desc!!)
-            binding.tvShowTaskTime.text = time!!
-            binding.tvShowTaskDate.text = date!!
-            binding.tvShowTaskLink.text = link!!
-            taskColor = colorOfTask!!
-            binding.bottomView.setBackgroundColor(taskColor)
-            imageFilePath = imagePath!!
-            val contactID = friendID
-
-            GlideApp.with(this@AddNewTask).asBitmap().load(imageFilePath)
-                .into(binding.taskImageView).clearOnDetach()
-            if (friendID != 0) {
-                val contact = taskViewModel.getSingleContact(contactID!!)
+        binding.tiTaskTitle.setText(title!!)
+        binding.tiTaskContent.setText(desc!!)
+        binding.tvShowTaskTime.text = time!!
+        binding.tvShowTaskDate.text = date!!
+        binding.tvShowTaskLink.text = link!!
+        taskColor = colorOfTask!!
+        binding.bottomView.setBackgroundColor(taskColor)
+        imageFilePath = imagePath!!
+        GlideApp.with(this@AddNewTask).asBitmap().load(imageFilePath).into(binding.taskImageView)
+            .clearOnDetach()
+        if (friendID != 0) {
+            taskViewModel.viewModelScope.launch {
+                val contact = taskViewModel.getSingleContact(friendID!!)
                 GlideApp.with(this@AddNewTask).asBitmap().load(contact.contact_Image)
                     .into(binding.taskFriendImage).clearOnDetach()
                 binding.tvShowTaskFriend.text = contact.contact_Name
@@ -165,21 +157,14 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
         val date = binding.tvShowTaskDate.text.toString()
         val link = binding.tvShowTaskLink.text.toString()
 
-        val taskEntities = TaskEntities(
-            title,
-            desc,
-            time,
-            date,
-            link,
-            taskColor.toString(),
-            imageFilePath,
-            friendID
-        )
+        val taskEntities = TaskEntities(title, desc, time, date,
+            link, taskColor.toString(), imageFilePath, friendID)
+
         when (taskID) {
 
             0 -> {
                 if (title.isEmpty() || desc.isEmpty() || time.isEmpty() || date.isEmpty()) {
-                    this.showingSnackBar(
+                    showingSnackBar(
                         binding.root,
                         "Please make sure all fields are filled",
                         "#F98404"
@@ -198,11 +183,9 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
             }
             intent.getIntExtra("ID", 0) -> {
                 if (title == intent.getStringExtra("Title") && desc == intent.getStringExtra("Content") && time == intent.getStringExtra(
-                        "Time"
-                    )
-                ) {
+                        "Time")) {
 
-                    this.showingSnackBar(
+                    showingSnackBar(
                         binding.root,
                         "Please make sure you've updated anything.",
                         "#F98404"
@@ -217,7 +200,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                         taskEntities.taskId
                     )
                     this.startNewActivity(HomeScreen::class.java, 1)
-                    setToastMessage("Task Updated",  Color.parseColor("#6ECB63"))
+                    setToastMessage("Task Updated", Color.parseColor("#6ECB63"))
                 }
             }
 
@@ -253,7 +236,10 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
             }
             R.id.tv_ShowTaskLink -> {
                 if (binding.tvShowTaskLink.text.isNullOrEmpty()) {
-                    setToastMessage("There is no link included at this task", Color.parseColor("#F98404"))
+                    setToastMessage(
+                        "There is no link included at this task",
+                        Color.parseColor("#F98404")
+                    )
                 } else {
                     CustomWebView(binding.tvShowTaskLink.text.toString()).show(
                         supportFragmentManager,
@@ -284,13 +270,13 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
         binding.tvShowTaskLink.text = lintText
         if (friendID != 0) {
             var contactEntities: ContactEntities
-            runBlocking {
+            taskViewModel.viewModelScope.launch {
                 contactEntities = taskViewModel.getSingleContact(friendID)
+                this@AddNewTask.friendID = contactEntities.contactId
+                GlideApp.with(this@AddNewTask).asBitmap().load(contactEntities.contact_Image)
+                    .into(binding.taskFriendImage).clearOnDetach()
+                binding.tvShowTaskFriend.text = contactEntities.contact_Name
             }
-            this@AddNewTask.friendID = contactEntities.contactId
-            GlideApp.with(this@AddNewTask).asBitmap().load(contactEntities.contact_Image)
-                .into(binding.taskFriendImage).clearOnDetach()
-            binding.tvShowTaskFriend.text = contactEntities.contact_Name
         }
     }
 }

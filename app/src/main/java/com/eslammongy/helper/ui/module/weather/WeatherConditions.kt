@@ -83,19 +83,19 @@ import java.util.*
 
     }
 
-fun Activity.connectingError(view:View ,errorCode:Int){
+fun connectingError(view:View ,errorCode:Int){
     when(errorCode){
         in 100..199 -> {
 
-            this.showingSnackBar(view, "Your Session has expired.", "#DD2C00")
+            showingSnackBar(view, "Your Session has expired.", "#DD2C00")
         }
         in 300..399 -> {
 
-            this.showingSnackBar(view, "Redirection messages.", "#DD2C00")
+            showingSnackBar(view, "Redirection. Server error responses when connecting", "#DD2C00")
         }
         in 400..499 -> {
 
-            this.showingSnackBar(
+            showingSnackBar(
                 view,
                 "The server could not understand the request ..Bad Request",
                 "#DD2C00"
@@ -103,7 +103,7 @@ fun Activity.connectingError(view:View ,errorCode:Int){
         }
         else -> {
 
-            this.showingSnackBar(view, "Server error responses when connecting", "#DD2C00")
+            showingSnackBar(view, "Server error responses when connecting", "#DD2C00")
         }
     }
 }

@@ -10,21 +10,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.adapters.ForecastAdapter
 import com.eslammongy.helper.databinding.FragmentWeatherBinding
-import com.eslammongy.helper.utilis.*
 import com.eslammongy.helper.ui.baseui.BaseFragment
-import com.eslammongy.helper.model.MyListDaily
-import com.eslammongy.helper.model.WeatherResponse
-import com.eslammongy.helper.remoteApi.RetrofitBuilder
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.eslammongy.helper.utilis.*
+import com.eslammongy.helper.viewModels.WeatherViewModel
+import kotlinx.coroutines.cancel
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
@@ -34,38 +29,36 @@ class WeatherFragment : BaseFragment() {
     private val binding get() = _binding!!
     private val userLocation by lazy { UserPermission(requireActivity()) }
     private lateinit var sharedPreferences: SharedPreferences
-    private  var latitude: String = ""
-    private  var longitude: String = ""
-    var listOfDailyForecast = ArrayList<MyListDaily>()
+    private var latitude: String = ""
+    private var longitude: String = ""
+    private lateinit var weatherViewModel: WeatherViewModel
     private lateinit var forecastAdapter: ForecastAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentWeatherBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     @SuppressLint("NewApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(binding.root, savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
 
+        weatherViewModel = ViewModelProvider(requireActivity(),
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get(WeatherViewModel::class.java)
+
+        sharedPreferences = requireActivity().getSharedPreferences("UserLocation", Context.MODE_PRIVATE)
         disableView()
-        forecastAdapter = ForecastAdapter(listOfDailyForecast)
-        launch {
-            sharedPreferences = requireActivity().getSharedPreferences("UserLocation", Context.MODE_PRIVATE)
+        if (userLocation.checkUserLocationPermission(Manifest.permission.ACCESS_FINE_LOCATION) && CheckInternetConnection.checkNetworkConnection(requireContext())) {
+
             latitude = sharedPreferences.getString("latitude", "Noun").toString()
             longitude = sharedPreferences.getString("longitude", "Noun").toString()
-        }
-        if (userLocation.checkUserLocationPermission(Manifest.permission.ACCESS_FINE_LOCATION)){
-            launch {
 
-                    getCurrentWeatherDate(latitude , longitude)
-                    getWeatherDaily(latitude , longitude)
+            getCurrentWeatherDate(latitude, longitude)
+            getWeatherDaily(latitude, longitude)
 
-            }
-        }else{
+        } else {
             permReqLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
         }
 
@@ -75,21 +68,15 @@ class WeatherFragment : BaseFragment() {
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             val granted = permissions.entries.all { it.value == true }
             if (granted) {
-                requireActivity().setToastMessage("location permission granted" , Color.GREEN)
-                disableView()
-                    requireActivity().getCurrentLocation {
-                        enableView("Success")
-                        launch {
-                            withContext(Dispatchers.IO) {
-                                getCurrentWeatherDate(it[0] , it[1])
-                                getWeatherDaily(it[0] , it[1])
-                        }
-                    }
-                    }
+                //requireActivity().setToastMessage("Permission Granted", Color.parseColor("#6ECB63"))
+                requireActivity().getCurrentLocation {
+                    getWeatherDaily(it[0], it[1])
+                    getCurrentWeatherDate(it[0], it[1])
+                }
 
-            }else{
+            } else {
                 enableView("Error")
-                requireActivity().setToastMessage("location permission refused" , Color.RED)
+                requireActivity().setToastMessage("Permission Refused", Color.parseColor("#CB0003"))
             }
         }
 
@@ -98,108 +85,67 @@ class WeatherFragment : BaseFragment() {
         binding.parentView.alpha = 0.3F
     }
 
-    private fun enableView(error:String) {
-        if (error == "Error"){
-            binding.circularProgressBar.visibility = View.GONE
-            binding.parentView.visibility = View.GONE
+    private fun enableView(error: String) {
+        binding.circularProgressBar.visibility = View.GONE
+        binding.parentView.alpha = 1.0F
+        if (error == "Error") {
             binding.emptyImageView.visibility = View.VISIBLE
-        }else{
-            binding.parentView.visibility = View.VISIBLE
-            binding.circularProgressBar.visibility = View.GONE
-            binding.parentView.alpha = 1.0F
         }
-
     }
+
+    @SuppressLint("SetTextI18n")
     private fun getCurrentWeatherDate(lats: String, longs: String) {
 
-        RetrofitBuilder.ApiServices.getCurrentWeatherStatus(lats, longs, apiKey, "metric")
-            .enqueue(object : Callback<WeatherResponse> {
-                @SuppressLint("SetTextI18n")
-                override fun onResponse(call: Call<WeatherResponse>?, response: Response<WeatherResponse>?) {
+        weatherViewModel.getCurrentWeatherState(lats, longs, requireView())
+        weatherViewModel.currentWeatherList.observe(viewLifecycleOwner, { response ->
 
-                        if (response!!.code() in 200..299){
-                            enableView("Success")
-                            val weatherResponse = response.body()!!
-                            binding.tvCityName.text =
-                                weatherResponse.name + "${weatherResponse.sys!!.country}"
-                            val weatherStatusID = weatherResponse.weather[0].id
-                            requireActivity().getWeatherDescriptionIconByID(weatherStatusID, binding.weatherStatusImage)
-                            val weatherStatusDec = weatherResponse.weather[0].description
-                            binding.tvWeatherStatus.text = weatherStatusDec.toString()
-                            val updatedAt = response.body()!!.dt.toLong()
-                            val updatedAtText = "Updated at: " + SimpleDateFormat(
-                                "dd/MM/yyyy hh:mm a", Locale.ENGLISH
-                            ).format(Date(updatedAt * 1000))
-                            binding.tvLastUpdate.text = updatedAtText
-                            val currentTemp = response.body()!!.main!!.temp.roundToInt()
-                            binding.tvWeatherTempDegree.text = "${currentTemp}°C"
-                            val minTemp = response.body()!!.main!!.temp_min.roundToInt()
-                            binding.tvMinTemp.text = "Min $minTemp ºC"
-                            val maxTemp = response.body()!!.main!!.temp_max.roundToInt()
-                            binding.tvMaxTemp.text = "Max $maxTemp ºC"
-                        }else{
-                            enableView("Error")
-                         requireActivity().connectingError(requireView() , response.code())
-                        }
-                    }
-                override fun onFailure(call: Call<WeatherResponse>?, t: Throwable?) {
-                    enableView("Error")
-                    requireActivity().showingSnackBar(
-                        binding.root,
-                        "Your Session has expired.",
-                        "#DD2C00"
-                    )
-                }
-
-            })
+            if (response.equals(null)) {
+                enableView("Error")
+            } else {
+                enableView("Success")
+                binding.tvCityName.text = response.name + "${response.sys!!.country}"
+                val weatherStatusID = response.weather[0].id
+                requireActivity().getWeatherDescriptionIconByID(weatherStatusID, binding.weatherStatusImage)
+                val weatherStatusDec = response.weather[0].description
+                binding.tvWeatherStatus.text = weatherStatusDec.toString()
+                val updatedAt = response.dt.toLong()
+                val updatedAtText = "Updated at: " + SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.ENGLISH).format(Date(updatedAt * 1000))
+                binding.tvLastUpdate.text = updatedAtText
+                val currentTemp = response.main!!.temp.roundToInt()
+                binding.tvWeatherTempDegree.text = "${currentTemp}°C"
+                val minTemp = response.main!!.temp_min.roundToInt()
+                binding.tvMinTemp.text = "Min $minTemp ºC"
+                val maxTemp = response.main!!.temp_max.roundToInt()
+                binding.tvMaxTemp.text = "Max $maxTemp ºC"
+            }
+        })
 
     }
 
     private fun getWeatherDaily(lats: String, longs: String) {
 
-        RetrofitBuilder.ApiServices.getDailyWeatherStatus(
-            lats,
-            longs,
-            "hourly,minutely,current,alerts",
-            apiKey,
-            "metric"
-        ).enqueue(object : Callback<MyListDaily> {
-
-            override fun onResponse(call: Call<MyListDaily>?, response: Response<MyListDaily>?) {
-                val dailyResponse = response!!.body()
-
-                if (response.code() in 200..299){
-                    enableView("Success")
-                        for (item in 0..7) {
-                            listOfDailyForecast.add(dailyResponse!!)
-                        }
-                        displayDailyRecyclerView()
-                    }else{
-                 requireActivity().connectingError(requireView() , response.code())
-                }
+        val recyclerLayoutManager: RecyclerView.LayoutManager =
+            LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
+        binding.weatherRecyclerView.layoutManager = recyclerLayoutManager
+        binding.weatherRecyclerView.setHasFixedSize(true)
+        forecastAdapter = ForecastAdapter()
+        binding.weatherRecyclerView.adapter = forecastAdapter
+        weatherViewModel.getDialWeather(lats, longs)
+        weatherViewModel.dailyWeatherList.observe(viewLifecycleOwner, { list ->
+            if (list.isNullOrEmpty()) {
+                enableView("Error")
+            } else {
+                enableView("Success")
+                forecastAdapter.differ.submitList(list)
             }
-            override fun onFailure(call: Call<MyListDaily>?, t: Throwable?) {
-                //showingSnackBar(binding.root , "Your Session has expired." , "#DD2C00")
-            }
+
         })
 
     }
-    private fun displayDailyRecyclerView(){
-        try {
-            val recyclerLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-            binding.weatherRecyclerView.layoutManager = recyclerLayoutManager
-            binding.weatherRecyclerView.setHasFixedSize(true)
-            forecastAdapter = ForecastAdapter(listOfDailyForecast)
-            binding.weatherRecyclerView.adapter = forecastAdapter
 
-        }catch (e:IndexOutOfBoundsException){
-            e.printStackTrace()
-            requireActivity().showingSnackBar(binding.root, "${e.message}", "#DD2C00")
-        }
-
-    }
     override fun onDestroy() {
         super.onDestroy()
+        weatherViewModel.viewModelScope.cancel("Close")
         _binding = null
     }
 

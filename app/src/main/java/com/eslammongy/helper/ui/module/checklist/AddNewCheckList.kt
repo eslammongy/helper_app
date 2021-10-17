@@ -120,7 +120,7 @@ class AddNewCheckList : AppCompatActivity(), View.OnClickListener {
         when (id) {
             0 -> {
                 if (title.isEmpty() || date.isEmpty()) {
-                    this.showingSnackBar(
+                    showingSnackBar(
                         binding.root,
                         "Please make sure all fields are filled",
                         "#F98404"
@@ -134,7 +134,7 @@ class AddNewCheckList : AppCompatActivity(), View.OnClickListener {
             }
             intent.getIntExtra("chlID", 0) -> {
                 if (title == intent.getStringExtra("chlTitle") && date == intent.getStringExtra("chlDate")) {
-                    this.showingSnackBar(
+                    showingSnackBar(
                         binding.root,
                         "Please make sure you've updated anything.",
                         "#F98404"
