@@ -50,7 +50,7 @@ class WeatherFragment : BaseFragment() {
 
         sharedPreferences = requireActivity().getSharedPreferences("UserLocation", Context.MODE_PRIVATE)
         disableView()
-        if (userLocation.checkUserLocationPermission(Manifest.permission.ACCESS_FINE_LOCATION) && CheckInternetConnection.checkNetworkConnection(requireContext())) {
+        if (userLocation.checkUserLocationPermission(Manifest.permission.ACCESS_FINE_LOCATION) && CheckInternetConnection.checkForInternet(requireActivity())) {
 
             latitude = sharedPreferences.getString("latitude", "Noun").toString()
             longitude = sharedPreferences.getString("longitude", "Noun").toString()
@@ -68,7 +68,6 @@ class WeatherFragment : BaseFragment() {
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             val granted = permissions.entries.all { it.value == true }
             if (granted) {
-                //requireActivity().setToastMessage("Permission Granted", Color.parseColor("#6ECB63"))
                 requireActivity().getCurrentLocation {
                     getWeatherDaily(it[0], it[1])
                     getCurrentWeatherDate(it[0], it[1])

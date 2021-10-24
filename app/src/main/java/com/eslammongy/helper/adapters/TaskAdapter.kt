@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -44,13 +46,13 @@ class TaskAdapter(var context: Context) :
             ColorStateList.valueOf(Integer.parseInt(taskModel.taskColor))
         holder.binding.taskLayoutTime.text = taskModel.taskTime
         holder.binding.taskLayoutDate.text = taskModel.taskDate
+        holder.binding.mainView.strokeColor =Integer.parseInt(taskModel.taskColor)
         holder.binding.circularCardView.chipBackgroundColor =
             ColorStateList.valueOf(Integer.parseInt(taskModel.taskColor))
 
         GlideApp.with(context).asBitmap().load(taskModel.taskImage).into(holder.binding.taskLayoutImage).clearOnDetach()
 
         holder.binding.root.setOnClickListener {
-
             val taskIntent = Intent(context , AddNewTask::class.java)
             taskIntent.putExtra("ID", taskModel.taskId)
             taskIntent.putExtra("Title", taskModel.taskTitle)

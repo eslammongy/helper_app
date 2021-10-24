@@ -15,6 +15,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <View
+            android:id="@+id/parentView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.5"
+            />
+
         <LinearLayout
             android:id="@+id/base_layout"
             android:layout_width="match_parent"
@@ -70,7 +77,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ti_Task_Content"
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
+                android:layout_height="220dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="10dp"
@@ -208,10 +215,10 @@
 
         <ImageView
             android:id="@+id/task_ImageView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="25dp"
             android:background="@drawable/custom_dark_shape"
             android:contentDescription="@string/todo"
             android:padding="10dp"

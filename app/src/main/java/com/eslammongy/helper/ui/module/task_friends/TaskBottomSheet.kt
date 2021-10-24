@@ -91,6 +91,7 @@ class TaskBottomSheet(
         binding.taskFiendRecycler.adapter = friendAdapter
         contactViewMode.getAllContacts.observe(viewLifecycleOwner, {
             it.let { list ->
+
                 friendAdapter.differ.submitList(list)
             }
         })

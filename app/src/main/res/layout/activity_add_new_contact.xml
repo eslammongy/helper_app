@@ -13,13 +13,19 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
 
-    <ImageButton
+    <View
+        android:id="@+id/parentView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.5"
+        />
+
+    <ImageView
         android:id="@+id/btn_BackToHome"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
-        android:background="@color/colorPrimaryDark"
         android:contentDescription="@string/todo"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_iconfinder_left_arrow_back_previous_navigation"

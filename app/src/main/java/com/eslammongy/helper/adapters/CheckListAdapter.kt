@@ -45,6 +45,7 @@ class CheckListAdapter(var context: Context) : RecyclerView.Adapter<CheckListAda
         val chlEntity = differ.currentList[position]
         holder.binding.chlLayoutTitle.text = chlEntity.checkList_Title
         holder.binding.chlLayoutTime.text = chlEntity.checkList_Date
+        holder.binding.mainView.strokeColor =Integer.parseInt(chlEntity.checkList_Color)
         holder.binding.chlCircularCardView.setCardBackgroundColor(Integer.parseInt(chlEntity.checkList_Color))
         holder.binding.chlLayoutTitle.chipBackgroundColor =
             ColorStateList.valueOf(Integer.parseInt(chlEntity.checkList_Color))

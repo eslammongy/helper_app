@@ -23,7 +23,6 @@ class UserPermission(var activity: Activity?) {
             return CropImage.activity()
                 .setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
                 .setOutputCompressQuality(90)
-                .setMaxCropResultSize(650 , 650)
                 .getIntent(activity!!)
         }
         override fun parseResult(resultCode: Int, intent: Intent?): Uri? {

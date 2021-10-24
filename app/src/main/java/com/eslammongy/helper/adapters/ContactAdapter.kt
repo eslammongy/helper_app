@@ -45,6 +45,7 @@ class ContactAdapter(var context: Context) :
         holder.binding.contactLayoutName.chipBackgroundColor =
             ColorStateList.valueOf(Integer.parseInt(contactEntities.contact_Color))
         holder.binding.contactLayoutColor.setCardBackgroundColor(Integer.parseInt(contactEntities.contact_Color))
+        holder.binding.mainView.strokeColor =Integer.parseInt(contactEntities.contact_Color)
         GlideApp.with(context).asBitmap().load(contactEntities.contact_Image).into(holder.binding.contactLayoutImage).clearOnDetach()
         holder.binding.root.setOnClickListener {
 

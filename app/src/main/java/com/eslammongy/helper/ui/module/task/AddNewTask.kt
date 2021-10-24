@@ -4,7 +4,6 @@ import android.Manifest
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -58,9 +57,8 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
         binding.btnSaveTask.setOnClickListener(this)
         binding.tvShowTaskLink.setOnClickListener(this)
         selectAndCompressImage()
-        binding.bottomView.setBackgroundColor(
-            ResourcesCompat.getColor(resources, R.color.ColorDefaultNote, theme)
-        )
+        binding.bottomView.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.ColorDefaultNote, theme))
+
         if (taskID != 0) {
 
             displayTaskInfo(
@@ -73,6 +71,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                 intent.getStringExtra("Color")!!.toInt(),
                 intent.getIntExtra("TaskFriendID", 0))
             friendID = intent.getIntExtra("TaskFriendID", 0)
+
 
         } else if (notifyTask != 0) {
             var taskEntities: TaskEntities
@@ -134,6 +133,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
         binding.tvShowTaskDate.text = date!!
         binding.tvShowTaskLink.text = link!!
         taskColor = colorOfTask!!
+        binding.parentView.setBackgroundColor(taskColor)
         binding.bottomView.setBackgroundColor(taskColor)
         imageFilePath = imagePath!!
         GlideApp.with(this@AddNewTask).asBitmap().load(imageFilePath).into(binding.taskImageView)
@@ -263,6 +263,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
     ) {
 
         taskColor = color.toInt()
+        binding.parentView.setBackgroundColor(taskColor)
         this@AddNewTask.taskAlarm = taskAlarm
         binding.bottomView.setBackgroundColor(taskColor)
         binding.tvShowTaskTime.text = time

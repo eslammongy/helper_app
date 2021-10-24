@@ -60,6 +60,7 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener {
         binding.chlPaletteColor.setOnColorSelectedListener { clr ->
             contactColor = clr
             binding.btnOpenColorPicker.setCardBackgroundColor(contactColor!!)
+            binding.parentView.setBackgroundColor(contactColor!!)
         }
     }
 
@@ -74,6 +75,7 @@ class AddNewContact : AppCompatActivity(), View.OnClickListener {
             contactColor = Integer.parseInt(intent.getStringExtra("Color")!!)
             binding.btnOpenColorPicker.setCardBackgroundColor(contactColor!!)
             binding.chlPaletteColor.setSelectedColor(contactColor!!)
+            binding.parentView.setBackgroundColor(contactColor!!)
             profileImagePath = intent.getStringExtra("ImagePath")!!
             GlideApp.with(this@AddNewContact).asBitmap().load(profileImagePath)
                 .into(binding.contactProfilePhoto).clearOnDetach()

@@ -75,7 +75,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                     call: Call<MyListDaily>,
                     response: Response<MyListDaily>) {
                     val listDaily = arrayListOf<MyListDaily>()
-                    for (item in 0..7) {
+                    for (item in 0..6) {
                         listDaily.add(response.body()!!)
                     }
                     dailyWeatherList.postValue(listDaily)

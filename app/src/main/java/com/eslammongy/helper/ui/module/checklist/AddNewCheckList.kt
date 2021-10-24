@@ -42,6 +42,7 @@ class AddNewCheckList : AppCompatActivity(), View.OnClickListener {
         chlColor = ResourcesCompat.getColor(resources, R.color.ColorDefaultNote, theme)
         if (checkLId != 0){
             displayInfoFromAdapter()
+            binding.parentView.setBackgroundColor(chlColor!!)
         }
         replaceFragment(checkLId)
         binding.chlPaletteColor.setOnColorSelectedListener { clr ->
