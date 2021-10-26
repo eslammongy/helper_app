@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.databinding.OnboardingItemContinarBinding
-import com.eslammongy.helper.ui.module.onboardingSetup.OnBoardingItem
+import com.eslammongy.helper.ui.onboardingSetup.OnBoardingItem
 
 class OnboardItemAdapter(private var context:Context, private val listOnBoardingItem: ArrayList<OnBoardingItem>) :
     RecyclerView.Adapter<OnboardItemAdapter.OnboardViewHolder>() {

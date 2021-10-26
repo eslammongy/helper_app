@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.sublist
+package com.eslammongy.helper.ui.sublist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +14,6 @@ import com.eslammongy.helper.databinding.FragmentSubChlBinding
 import com.eslammongy.helper.ui.baseui.BaseFragment
 import com.eslammongy.helper.viewModels.ChListViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
 import java.util.*
 
 class SubChlFragment(parentChlID: Int , parentChlTitle:String ) : BaseFragment() {

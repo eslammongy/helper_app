@@ -4,16 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.TaskLayoutViewBinding
-import com.eslammongy.helper.ui.module.task.AddNewTask
+import com.eslammongy.helper.ui.task.AddNewTask
 import com.eslammongy.helper.utilis.GlideApp
 
 

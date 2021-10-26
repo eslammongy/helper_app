@@ -14,7 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.eslammongy.helper.R
-import com.eslammongy.helper.ui.module.search.SearchScreen
+import com.eslammongy.helper.ui.search.SearchScreen
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult

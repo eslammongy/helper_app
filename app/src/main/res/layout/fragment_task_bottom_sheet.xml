@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     style="@style/Animation.Design.BottomSheetDialog"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    tools:context=".ui.module.task_friends.TaskBottomSheet">
+    tools:context=".ui.task_friends.TaskBottomSheet">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

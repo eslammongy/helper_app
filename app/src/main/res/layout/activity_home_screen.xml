@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    tools:context=".ui.module.home.HomeScreen">
+    tools:context=".ui.home.HomeScreen">
 
     <FrameLayout
         android:id="@+id/fragment_holder"

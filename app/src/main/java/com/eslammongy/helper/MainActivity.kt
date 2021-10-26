@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import com.eslammongy.helper.ui.module.home.HomeScreen
-import com.eslammongy.helper.ui.module.onboardingSetup.OnBoardingScreen
+import com.eslammongy.helper.ui.home.HomeScreen
+import com.eslammongy.helper.ui.onboardingSetup.OnBoardingScreen
 import com.eslammongy.helper.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
 import java.lang.ref.WeakReference

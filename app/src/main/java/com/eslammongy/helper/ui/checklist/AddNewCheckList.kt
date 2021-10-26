@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.checklist
+package com.eslammongy.helper.ui.checklist
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
@@ -8,17 +8,19 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.eslammongy.helper.R
 import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.databinding.ActivityAddNewCheckListBinding
 import com.eslammongy.helper.ui.dailogs.CustomDeleteDialog
-import com.eslammongy.helper.ui.module.home.HomeScreen
-import com.eslammongy.helper.ui.module.sublist.ChlBottomSheet
-import com.eslammongy.helper.ui.module.sublist.SubChlFragment
+import com.eslammongy.helper.ui.home.HomeScreen
+import com.eslammongy.helper.ui.sublist.ChlBottomSheet
+import com.eslammongy.helper.ui.sublist.SubChlFragment
 import com.eslammongy.helper.utilis.setToastMessage
 import com.eslammongy.helper.utilis.showingSnackBar
 import com.eslammongy.helper.utilis.startNewActivity
 import com.eslammongy.helper.viewModels.ChListViewModel
+import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.*
 
@@ -39,14 +41,16 @@ class AddNewCheckList : AppCompatActivity(), View.OnClickListener {
             this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)
         ).get(ChListViewModel::class.java)
         checkLId = intent.getIntExtra("chlID", 0)
-        notifyChList = intent.getIntExtra("ChListID" , 0)
+        val bundle = intent.extras
+        notifyChList = bundle!!.getInt("ChListID" , 0)
         isComplete = intent.getBooleanExtra("chlComplete", false)
         chlColor = ResourcesCompat.getColor(resources, R.color.ColorDefaultNote, theme)
         if (checkLId != 0){
             displayInfoFromAdapter()
-            binding.parentView.setBackgroundColor(chlColor!!)
+        }else if (notifyChList != 0){
+            displayNotifiedChList(notifyChList)
         }
-        replaceFragment(checkLId)
+
         binding.chlPaletteColor.setOnColorSelectedListener { clr ->
             chlColor = clr
             binding.btnChlColorPicker.setCardBackgroundColor(chlColor!!)
@@ -61,15 +65,30 @@ class AddNewCheckList : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    private fun displayInfoFromAdapter() {
+    private fun displayNotifiedChList(notifyChList:Int){
+        var chList : CheckListEntity
+        chListViewModel.viewModelScope.launch {
+            chList = chListViewModel.getSingleChList(notifyChList)
+            binding.checkListTitle.setText(chList.checkList_Title)
+            binding.tvShowChlDate.text = chList.checkList_Date
+            chlColor = Integer.parseInt(chList.checkList_Color)
+            binding.btnChlColorPicker.setCardBackgroundColor(chlColor!!)
+            binding.chlPaletteColor.setSelectedColor(chlColor!!)
+            binding.parentView.setBackgroundColor(chlColor!!)
+        }
+        replaceFragment(notifyChList)
+    }
 
+    private fun displayInfoFromAdapter() {
             binding.checkListTitle.setText(intent.getStringExtra("chlTitle"))
             binding.tvShowChlDate.text = intent.getStringExtra("chlDate")
             chlColor = Integer.parseInt(intent.getStringExtra("chlColor")!!)
             binding.btnChlColorPicker.setCardBackgroundColor(chlColor!!)
             binding.chlPaletteColor.setSelectedColor(chlColor!!)
+            binding.parentView.setBackgroundColor(chlColor!!)
             binding.btnDeleteChl.visibility = View.VISIBLE
             binding.btnOpenSubChlSheet.visibility = View.VISIBLE
+            replaceFragment(checkLId)
     }
 
     @SuppressLint("SimpleDateFormat")

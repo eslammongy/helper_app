@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.checklist
+package com.eslammongy.helper.ui.checklist
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -20,6 +20,8 @@ class CheckListRepo(private val chListDao: CheckListDao) {
         return chListDao.searchInCheckListDataBase(searchQuery)
     }
 
+    suspend fun getSingleChList(chListID:Int) = chListDao.getSingleChList(chListID)
+
     // subCheckList Repo
     suspend fun saveNewSubCheckList(subCheckList: SubCheckList) = chListDao.saveNewSubCheckList(subCheckList)
 

@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.onboardingSetup
+package com.eslammongy.helper.ui.onboardingSetup
 
  data class OnBoardingItem (
 

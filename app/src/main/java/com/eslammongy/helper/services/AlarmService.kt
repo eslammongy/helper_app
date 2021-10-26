@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 
 class AlarmService(private val context: Context) {
 
@@ -12,7 +13,6 @@ class AlarmService(private val context: Context) {
         context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
 
     fun setExactAlarm(timeMillis: Long ,notifyHeader:String  ,message:String ,  notifiedFrom:Int , elementID:Int) {
-
         setAlarm(timeMillis , getPendingIntent(getIntent(notifyHeader , message ,notifiedFrom , elementID).apply {
             action = Constants.ACTION_SET_EXACT_ALARM
             putExtra(Constants.EXTRA_EXACT_ALARM_TIME , timeMillis)
@@ -48,6 +48,7 @@ class AlarmService(private val context: Context) {
         putExtra("NotifyMessage" , message)
         putExtra("NotifiedFrom" , notifiedFrom)
         putExtra("ElementNotifiedID" , elementID)
+
     }
 
     private fun getPendingIntent(intent: Intent): PendingIntent =

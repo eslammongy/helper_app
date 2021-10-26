@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.task
+package com.eslammongy.helper.ui.task
 
 import android.Manifest
 import android.graphics.Color
@@ -18,8 +18,8 @@ import com.eslammongy.helper.databinding.ActivityAddNewTaskBinding
 import com.eslammongy.helper.services.AlarmService
 import com.eslammongy.helper.ui.dailogs.CustomDeleteDialog
 import com.eslammongy.helper.ui.dailogs.CustomWebView
-import com.eslammongy.helper.ui.module.home.HomeScreen
-import com.eslammongy.helper.ui.module.task_friends.TaskBottomSheet
+import com.eslammongy.helper.ui.home.HomeScreen
+import com.eslammongy.helper.ui.task_friends.TaskBottomSheet
 import com.eslammongy.helper.utilis.*
 import com.eslammongy.helper.viewModels.TaskViewModel
 import id.zelory.compressor.Compressor
@@ -30,7 +30,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
     private lateinit var taskViewModel: TaskViewModel
     private var taskColor: Int = 0
     private var taskID: Int = 0
-    private var notifyTask: Int = 0
+    private var notifyTask: Int? = 0
     private var friendID: Int = 0
     private var taskAlarm: Long = 0L
     private var imageFilePath: String = "ImagePath"
@@ -49,7 +49,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
         ).get(TaskViewModel::class.java)
         alarmService = AlarmService(this)
         taskID = intent.getIntExtra("ID", 0)
-        notifyTask = intent.getIntExtra("TaskID", 0)
+
         binding.btnBackToHomeMT.setOnClickListener(this)
         binding.btnOpenBottomSheet.setOnClickListener(this)
         binding.btnDeleteTask.setOnClickListener(this)
@@ -58,7 +58,8 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
         binding.tvShowTaskLink.setOnClickListener(this)
         selectAndCompressImage()
         binding.bottomView.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.ColorDefaultNote, theme))
-
+        val bundle = intent.extras
+        notifyTask = bundle!!.getInt("TaskID", 0)
         if (taskID != 0) {
 
             displayTaskInfo(
@@ -72,11 +73,11 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                 intent.getIntExtra("TaskFriendID", 0))
             friendID = intent.getIntExtra("TaskFriendID", 0)
 
-
         } else if (notifyTask != 0) {
+            setToastMessage("$notifyTask" , Color.RED)
             var taskEntities: TaskEntities
             taskViewModel.viewModelScope.launch {
-                taskEntities = taskViewModel.getSingleTask(notifyTask)
+                taskEntities = taskViewModel.getSingleTask(notifyTask!!)
                 displayTaskInfo(
                     taskEntities.taskTitle,
                     taskEntities.taskDesc,
@@ -91,6 +92,8 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
             }
 
         }
+
+
 
     }
 
@@ -178,7 +181,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                         1,
                         taskEntities.taskId
                     )
-                    setToastMessage("Task Saved", Color.parseColor("#6ECB63"))
+                    setToastMessage("Task Saved ${taskEntities.taskId}", Color.parseColor("#6ECB63"))
                     this.startNewActivity(HomeScreen::class.java, 1)
                 }
             }
@@ -198,10 +201,10 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                         binding.tiTaskTitle.text.toString(),
                         "You have a new task  called ${taskEntities.taskTitle} with your friend ${binding.tvShowTaskFriend.text} .. let's go to do it.",
                         1,
-                        taskEntities.taskId
+                        taskID
                     )
                     this.startNewActivity(HomeScreen::class.java, 1)
-                    setToastMessage("Task Updated", Color.parseColor("#6ECB63"))
+                    setToastMessage("Task Updated ${taskEntities.taskId}", Color.parseColor("#6ECB63"))
                 }
             }
 

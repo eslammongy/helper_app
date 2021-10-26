@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    tools:context=".ui.module.task.AddNewTask">
+    tools:context=".ui.task.AddNewTask">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_task_layout"

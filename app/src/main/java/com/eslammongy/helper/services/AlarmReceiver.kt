@@ -8,14 +8,11 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.text.format.DateFormat
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.eslammongy.helper.R
-import com.eslammongy.helper.ui.module.checklist.AddNewCheckList
-import com.eslammongy.helper.ui.module.home.HomeScreen
-import com.eslammongy.helper.ui.module.task.AddNewTask
-import com.eslammongy.helper.utilis.notifyMessage
-import io.karn.notify.Notify
-import io.karn.notify.internal.utils.Action
+import com.eslammongy.helper.ui.checklist.AddNewCheckList
+import com.eslammongy.helper.ui.task.AddNewTask
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -26,11 +23,9 @@ class AlarmReceiver:BroadcastReceiver() {
     private val notificationID = 101
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        val timeMillis = intent!!.getLongExtra(Constants.EXTRA_EXACT_ALARM_TIME , 0)
-        val notifyMessage = intent.getStringExtra("NotifyMessage")
+        //val timeMillis = intent!!.getLongExtra(Constants.EXTRA_EXACT_ALARM_TIME , 0)
+        val notifyMessage = intent!!.getStringExtra("NotifyMessage")
         val notifyHeader = intent.getStringExtra("NotifyHeader")
-        val elementID = intent.getIntExtra("ElementNotifiedID" , 0)
-        val notifyKeyForm = intent.getIntExtra("NotifiedFrom" , 0)
 
         when(intent.action){
 
@@ -39,36 +34,39 @@ class AlarmReceiver:BroadcastReceiver() {
                     context!!,
                     notifyHeader.toString(),
                     notifyMessage.toString(),
-                    notifyKeyForm , elementID
-                )
+                   intent)
             }
             Constants.ACTION_SET_REPETITIVE_ALARM ->{
                val calender = Calendar.getInstance().apply {
                    this.timeInMillis = timeInMillis + TimeUnit.DAYS.toMillis(7)
                }
-                AlarmService(context!!).setRepetitiveAlarm(calender.timeInMillis ,
-                    notifyHeader!!,notifyMessage!! ,notifyKeyForm , elementID)
-                buildNotificationChannel(context, convertDate(timeMillis) , notifyHeader.toString(), notifyKeyForm ,elementID)
+             //   AlarmService(context!!).setRepetitiveAlarm(calender.timeInMillis , notifyHeader!!,notifyMessage!! ,notifyKeyForm , elementID)
+              //  buildNotificationChannel(context, convertDate(timeMillis) , notifyHeader.toString(), intent)
             }
         }
 
     }
 
-    private fun buildNotificationChannel(context: Context , notifyHeader:String ,message:String , key:Int , elementID:Int){
+    private fun buildNotificationChannel(context: Context , notifyHeader:String ,message:String ,intent: Intent?){
+        val elementID = intent!!.getIntExtra("ElementNotifiedID" , 0)
+        val notifyKeyForm = intent.getIntExtra("NotifiedFrom" , 0)
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val pendingIntent = PendingIntent.getActivity(context, 0, Intent(context , AddNewTask::class.java).apply {
-            flags = if (key == 1){
-                putExtra("NotifiedToTask" , key)
+        val pendingIntent:PendingIntent
+        if (notifyKeyForm == 1){
+           pendingIntent = PendingIntent.getActivity(context, 0, Intent(context , AddNewTask::class.java).apply {
+                putExtra("NotifiedToTask" , notifyKeyForm)
                 putExtra("TaskID" , elementID)
-                Intent.FLAG_ACTIVITY_NEW_TASK
-            }else{
-                putExtra("NotifiedToCheckList" , key)
+               Intent.FLAG_ACTIVITY_NEW_TASK
+            }, PendingIntent.FLAG_UPDATE_CURRENT)
+            Toast.makeText(context, "$elementID", Toast.LENGTH_SHORT).show()
+        }else{
+            pendingIntent = PendingIntent.getActivity(context, 0, Intent(context , AddNewCheckList::class.java).apply {
+                putExtra("NotifiedToChList" , notifyKeyForm)
                 putExtra("ChListID" , elementID)
                 Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-
-        }, 0)
+            }, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
 
         val notificationBuilder = NotificationCompat.Builder(context , channelID)
         notificationBuilder.setSmallIcon(R.drawable.ic_round_notifications_active_24)
@@ -91,8 +89,8 @@ class AlarmReceiver:BroadcastReceiver() {
                 notificationManager.createNotificationChannel(channel)
             }
         }
-        val notification = notificationBuilder.build()
-        notificationManager.notify(notificationID , notification)
+
+        notificationManager.notify(notificationID , notificationBuilder.build())
 
     }
 

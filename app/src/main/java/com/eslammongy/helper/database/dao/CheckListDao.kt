@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.database.entities.SubCheckList
+import com.eslammongy.helper.database.entities.TaskEntities
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -23,6 +24,9 @@ interface CheckListDao {
 
     @Update
     suspend fun updateCurrentCheckList(checkListEntity: CheckListEntity)
+
+    @Query("SELECT * FROM checklist_table WHERE checkListId LIKE :chLID")
+    suspend fun getSingleChList(chLID: Int): CheckListEntity
 
      @Query("UPDATE checklist_table SET checkList_Completed = :isComplete WHERE checkListId = :id")
      fun getCompleteStatus(id:Int , isComplete:Boolean)

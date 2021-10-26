@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.weather
+package com.eslammongy.helper.ui.weather
 
 import android.app.Activity
 import android.view.View

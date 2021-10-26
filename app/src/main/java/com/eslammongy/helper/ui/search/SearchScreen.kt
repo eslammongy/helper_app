@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.search
+package com.eslammongy.helper.ui.search
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -11,7 +11,7 @@ import com.eslammongy.helper.adapters.CheckListAdapter
 import com.eslammongy.helper.adapters.ContactAdapter
 import com.eslammongy.helper.adapters.TaskAdapter
 import com.eslammongy.helper.databinding.ActivitySearchScreenBinding
-import com.eslammongy.helper.ui.module.home.HomeScreen
+import com.eslammongy.helper.ui.home.HomeScreen
 import com.eslammongy.helper.utilis.startNewActivity
 import com.eslammongy.helper.viewModels.ChListViewModel
 import com.eslammongy.helper.viewModels.ContactViewMode

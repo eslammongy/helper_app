@@ -21,12 +21,12 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Helper"
         tools:targetApi="m">
-        <activity android:name=".ui.module.checklist.AddNewCheckList" />
-        <activity android:name=".ui.module.contact.AddNewContact" />
-        <activity android:name=".ui.module.search.SearchScreen" />
-        <activity android:name=".ui.module.task.AddNewTask" />
-        <activity android:name=".ui.module.onboardingSetup.OnBoardingScreen" />
-        <activity android:name=".ui.module.home.HomeScreen" />
+        <activity android:name="com.eslammongy.helper.ui.checklist.AddNewCheckList" />
+        <activity android:name="com.eslammongy.helper.ui.contact.AddNewContact" />
+        <activity android:name="com.eslammongy.helper.ui.search.SearchScreen" />
+        <activity android:name="com.eslammongy.helper.ui.task.AddNewTask" />
+        <activity android:name="com.eslammongy.helper.ui.onboardingSetup.OnBoardingScreen" />
+        <activity android:name="com.eslammongy.helper.ui.home.HomeScreen" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

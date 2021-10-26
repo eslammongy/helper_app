@@ -15,7 +15,7 @@ import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.FragmentCustomDeleteDailogBinding
 import com.eslammongy.helper.ui.baseui.BaseDialogFragment
-import com.eslammongy.helper.ui.module.home.HomeScreen
+import com.eslammongy.helper.ui.home.HomeScreen
 import com.eslammongy.helper.utilis.startNewActivity
 import com.eslammongy.helper.viewModels.ChListViewModel
 import com.eslammongy.helper.viewModels.ContactViewMode

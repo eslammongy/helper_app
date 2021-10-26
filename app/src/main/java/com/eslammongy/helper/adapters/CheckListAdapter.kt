@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.CheckListEntity
 import com.eslammongy.helper.databinding.ChecklistLayoutViewBinding
-import com.eslammongy.helper.ui.module.checklist.AddNewCheckList
+import com.eslammongy.helper.ui.checklist.AddNewCheckList
 
 
 class CheckListAdapter(var context: Context) : RecyclerView.Adapter<CheckListAdapter.CheckListViewHolder>() {

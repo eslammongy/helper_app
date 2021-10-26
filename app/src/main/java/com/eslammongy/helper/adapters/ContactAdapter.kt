@@ -10,9 +10,8 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.entities.ContactEntities
-import com.eslammongy.helper.database.entities.TaskEntities
 import com.eslammongy.helper.databinding.ContactLayoutViewBinding
-import com.eslammongy.helper.ui.module.contact.AddNewContact
+import com.eslammongy.helper.ui.contact.AddNewContact
 import com.eslammongy.helper.utilis.GlideApp
 
 class ContactAdapter(var context: Context) :

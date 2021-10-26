@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    tools:context=".ui.module.task_friends.TaskWithFriendAndSendEmail">
+    tools:context=".ui.task_friends.TaskWithFriendAndSendEmail">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

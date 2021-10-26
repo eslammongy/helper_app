@@ -1,23 +1,20 @@
-package com.eslammongy.helper.ui.module.home
+package com.eslammongy.helper.ui.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.eslammongy.helper.R
 import com.eslammongy.helper.databinding.ActivityHomeScreenBinding
-import com.eslammongy.helper.utilis.setToastMessage
-import com.eslammongy.helper.ui.module.checklist.CheckListFragment
-import com.eslammongy.helper.ui.module.contact.ContactsFragment
-import com.eslammongy.helper.ui.module.task.TasksFragment
-import com.eslammongy.helper.ui.module.weather.WeatherFragment
+import com.eslammongy.helper.ui.checklist.CheckListFragment
+import com.eslammongy.helper.ui.contact.ContactsFragment
+import com.eslammongy.helper.ui.task.TasksFragment
+import com.eslammongy.helper.ui.weather.WeatherFragment
 import com.eslammongy.helper.utilis.getGreetingMessage
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 class HomeScreen : AppCompatActivity(), CoroutineScope {

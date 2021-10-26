@@ -1,23 +1,18 @@
 package com.eslammongy.helper.viewModels
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Application
-import android.graphics.Color
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.eslammongy.helper.model.MyListDaily
-import com.eslammongy.helper.model.Weather
 import com.eslammongy.helper.model.WeatherResponse
 import com.eslammongy.helper.remoteApi.RetrofitBuilder
 import com.eslammongy.helper.repository.WeatherRepo
-import com.eslammongy.helper.ui.module.weather.connectingError
+import com.eslammongy.helper.ui.weather.connectingError
 import com.eslammongy.helper.utilis.apiKey
-import com.eslammongy.helper.utilis.setToastMessage
-import com.eslammongy.helper.utilis.showingSnackBar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call

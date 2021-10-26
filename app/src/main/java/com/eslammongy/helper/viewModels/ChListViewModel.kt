@@ -40,6 +40,9 @@ class ChListViewModel(application: Application):AndroidViewModel(application) {
         return checkListRepo.searchInChListDatabase(searchQuery).asLiveData()
     }
 
+    suspend fun getSingleChList(chListID:Int) = checkListRepo.getSingleChList(chListID)
+
+
     // sub Check List Repo
 
     fun saveNewSubChList(subCheckList: SubCheckList) = viewModelScope.launch(Dispatchers.IO){

@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.onboardingSetup
+package com.eslammongy.helper.ui.onboardingSetup
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.eslammongy.helper.R
 import com.eslammongy.helper.adapters.OnboardItemAdapter
-import com.eslammongy.helper.ui.module.home.HomeScreen
+import com.eslammongy.helper.ui.home.HomeScreen
 import com.eslammongy.helper.databinding.ActivityOnBoadrdinScreenBinding
 
 class OnBoardingScreen : AppCompatActivity(), View.OnClickListener {

@@ -1,4 +1,4 @@
-package com.eslammongy.helper.ui.module.task_friends
+package com.eslammongy.helper.ui.task_friends
 
 import android.annotation.SuppressLint
 import android.content.Intent
