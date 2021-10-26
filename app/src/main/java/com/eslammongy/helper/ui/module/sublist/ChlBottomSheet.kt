@@ -1,31 +1,23 @@
 package com.eslammongy.helper.ui.module.sublist
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.provider.CalendarContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import com.eslammongy.helper.R
-import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.entities.SubCheckList
 import com.eslammongy.helper.databinding.FragmentChlBottomSheetBinding
-import com.eslammongy.helper.utilis.setToastMessage
 import com.eslammongy.helper.services.AlarmService
+import com.eslammongy.helper.utilis.setToastMessage
 import com.eslammongy.helper.viewModels.ChListViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialogFragment(),View.OnClickListener {
 
@@ -107,7 +99,7 @@ class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialo
             requireActivity().setToastMessage("Please make sure all fields are filled" , Color.RED)
         }else{
             chListViewModel.saveNewSubChList(subCheckList)
-            alarmService.setExactAlarm(chlAlarm , "You Have A New Task Called ${subCheckList.subChl_Title} In Your CheckList Called $parentChlTitle .. Let's Go To Do It." , 2 , parentChlID)
+            alarmService.setExactAlarm(chlAlarm , binding.subChlTitle.text.toString(),"You have a new task called ${subCheckList.subChl_Title} in your checkList called $parentChlTitle .. let's go to do it." , 2 , parentChlID)
             dismiss()
         }
     }

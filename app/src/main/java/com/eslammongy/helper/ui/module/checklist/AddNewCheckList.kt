@@ -27,6 +27,7 @@ class AddNewCheckList : AppCompatActivity(), View.OnClickListener {
     private var showing = false
     private var chlColor: Int? = null
     private var checkLId: Int = 0
+    private var notifyChList:Int = 0
     private var isComplete: Boolean = false
     private lateinit var chListViewModel: ChListViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +39,7 @@ class AddNewCheckList : AppCompatActivity(), View.OnClickListener {
             this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)
         ).get(ChListViewModel::class.java)
         checkLId = intent.getIntExtra("chlID", 0)
+        notifyChList = intent.getIntExtra("ChListID" , 0)
         isComplete = intent.getBooleanExtra("chlComplete", false)
         chlColor = ResourcesCompat.getColor(resources, R.color.ColorDefaultNote, theme)
         if (checkLId != 0){
@@ -48,6 +50,7 @@ class AddNewCheckList : AppCompatActivity(), View.OnClickListener {
         binding.chlPaletteColor.setOnColorSelectedListener { clr ->
             chlColor = clr
             binding.btnChlColorPicker.setCardBackgroundColor(chlColor!!)
+            binding.parentView.setBackgroundColor(chlColor!!)
         }
         binding.btnArrowToHome.setOnClickListener(this)
         binding.btnAddNewChl.setOnClickListener(this)

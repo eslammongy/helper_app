@@ -222,7 +222,7 @@
             android:background="@drawable/custom_dark_shape"
             android:contentDescription="@string/todo"
             android:padding="10dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             android:src="@drawable/work_on_time_image"
             app:layout_constraintBottom_toTopOf="@+id/bottomButton"
             app:layout_constraintEnd_toEndOf="parent"

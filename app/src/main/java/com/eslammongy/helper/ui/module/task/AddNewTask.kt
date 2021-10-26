@@ -49,7 +49,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
         ).get(TaskViewModel::class.java)
         alarmService = AlarmService(this)
         taskID = intent.getIntExtra("ID", 0)
-        notifyTask = intent.getIntExtra("TaskNotifiedID", 0)
+        notifyTask = intent.getIntExtra("TaskID", 0)
         binding.btnBackToHomeMT.setOnClickListener(this)
         binding.btnOpenBottomSheet.setOnClickListener(this)
         binding.btnDeleteTask.setOnClickListener(this)
@@ -173,7 +173,8 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                     taskViewModel.saveNewTask(taskEntities)
                     alarmService.setExactAlarm(
                         taskAlarm,
-                        "You Have A New Task  Called ${taskEntities.taskTitle} With Your Friend .. Let's Go To Do It.",
+                        binding.tiTaskTitle.text.toString(),
+                        "You have a new task  called ${taskEntities.taskTitle} with your friend ${binding.tvShowTaskFriend.text} .. let's go to do it.",
                         1,
                         taskEntities.taskId
                     )
@@ -182,8 +183,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                 }
             }
             intent.getIntExtra("ID", 0) -> {
-                if (title == intent.getStringExtra("Title") && desc == intent.getStringExtra("Content") && time == intent.getStringExtra(
-                        "Time")) {
+                if (title == intent.getStringExtra("Title") && desc == intent.getStringExtra("Content") && time == intent.getStringExtra("Time")) {
 
                     showingSnackBar(
                         binding.root,
@@ -195,7 +195,8 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                     taskViewModel.updateCurrentTask(taskEntities)
                     alarmService.setExactAlarm(
                         taskAlarm,
-                        "You Have A New Task  Called ${taskEntities.taskTitle} With Your Friend .. Let's Go To Do It.",
+                        binding.tiTaskTitle.text.toString(),
+                        "You have a new task  called ${taskEntities.taskTitle} with your friend ${binding.tvShowTaskFriend.text} .. let's go to do it.",
                         1,
                         taskEntities.taskId
                     )

@@ -11,17 +11,17 @@ class AlarmService(private val context: Context) {
     private val alarmManager: AlarmManager? =
         context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
 
-    fun setExactAlarm(timeMillis: Long , message:String ,  notifiedFrom:Int , elementID:Int) {
+    fun setExactAlarm(timeMillis: Long ,notifyHeader:String  ,message:String ,  notifiedFrom:Int , elementID:Int) {
 
-        setAlarm(timeMillis , getPendingIntent(getIntent(message , notifiedFrom , elementID).apply {
+        setAlarm(timeMillis , getPendingIntent(getIntent(notifyHeader , message ,notifiedFrom , elementID).apply {
             action = Constants.ACTION_SET_EXACT_ALARM
             putExtra(Constants.EXTRA_EXACT_ALARM_TIME , timeMillis)
         }))
 
     }
 
-    fun setRepetitiveAlarm(timeMillis: Long ,message:String , NotifiedFrom:Int , todoID:Int) {
-        setAlarm(timeMillis , getPendingIntent(getIntent(message ,  NotifiedFrom , todoID).apply {
+    fun setRepetitiveAlarm(timeMillis: Long ,notifyHeader:String ,message:String , notifiedFrom:Int , elementID:Int) {
+        setAlarm(timeMillis , getPendingIntent(getIntent(notifyHeader , message , notifiedFrom , elementID).apply {
             action = Constants.ACTION_SET_REPETITIVE_ALARM
             putExtra(Constants.EXTRA_EXACT_ALARM_TIME , timeMillis)
         }))
@@ -42,7 +42,9 @@ class AlarmService(private val context: Context) {
         }
     }
 
-    private fun getIntent(message:String , notifiedFrom:Int , elementID:Int): Intent = Intent(context, AlarmReceiver::class.java).apply {
+    private fun getIntent(notifyHeader:String , message:String , notifiedFrom:Int , elementID:Int):
+            Intent = Intent(context, AlarmReceiver::class.java).apply {
+        putExtra("NotifyHeader" , notifyHeader)
         putExtra("NotifyMessage" , message)
         putExtra("NotifiedFrom" , notifiedFrom)
         putExtra("ElementNotifiedID" , elementID)
