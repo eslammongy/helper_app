@@ -44,7 +44,7 @@ class TaskAdapter(var context: Context) :
             ColorStateList.valueOf(Integer.parseInt(taskModel.taskColor))
         holder.binding.taskLayoutTime.text = taskModel.taskTime
         holder.binding.taskLayoutDate.text = taskModel.taskDate
-        holder.binding.mainView.strokeColor =Integer.parseInt(taskModel.taskColor)
+       // holder.binding.mainView.strokeColor =Integer.parseInt(taskModel.taskColor)
         holder.binding.circularCardView.chipBackgroundColor =
             ColorStateList.valueOf(Integer.parseInt(taskModel.taskColor))
 

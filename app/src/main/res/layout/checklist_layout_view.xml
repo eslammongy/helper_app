@@ -6,8 +6,6 @@
     app:cardBackgroundColor="@color/colorDark"
     app:cardCornerRadius="10dp"
     android:layout_margin="12dp"
-    app:strokeWidth="0.4dp"
-    app:strokeColor="@color/ColorOrangeNote"
     app:cardElevation="10dp"
     android:id="@+id/mainView"
     xmlns:app="http://schemas.android.com/apk/res-auto">

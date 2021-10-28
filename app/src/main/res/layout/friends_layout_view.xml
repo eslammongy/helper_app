@@ -11,7 +11,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="10dp"
-        android:src="@mipmap/ic_launcher_round"
+        android:src="@mipmap/helper_app_launcher_icon_round"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

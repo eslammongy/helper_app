@@ -76,6 +76,8 @@ class AddNewCheckList : AppCompatActivity(), View.OnClickListener {
             binding.chlPaletteColor.setSelectedColor(chlColor!!)
             binding.parentView.setBackgroundColor(chlColor!!)
         }
+        binding.btnDeleteChl.visibility = View.VISIBLE
+        binding.btnOpenSubChlSheet.visibility = View.VISIBLE
         replaceFragment(notifyChList)
     }
 

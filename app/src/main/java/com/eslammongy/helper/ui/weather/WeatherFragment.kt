@@ -50,13 +50,15 @@ class WeatherFragment : BaseFragment() {
 
         sharedPreferences = requireActivity().getSharedPreferences("UserLocation", Context.MODE_PRIVATE)
         disableView()
-        if (userLocation.checkUserLocationPermission(Manifest.permission.ACCESS_FINE_LOCATION) && CheckInternetConnection.checkForInternet(requireActivity())) {
-
+        if (userLocation.checkUserLocationPermission(Manifest.permission.ACCESS_FINE_LOCATION)){
             latitude = sharedPreferences.getString("latitude", "Noun").toString()
             longitude = sharedPreferences.getString("longitude", "Noun").toString()
-
-            getCurrentWeatherDate(latitude, longitude)
-            getWeatherDaily(latitude, longitude)
+            if (CheckInternetConnection.checkForInternet(requireActivity())){
+                getCurrentWeatherDate(latitude, longitude)
+                getWeatherDaily(latitude, longitude)
+            }else{
+                enableView("Error")
+            }
 
         } else {
             permReqLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
