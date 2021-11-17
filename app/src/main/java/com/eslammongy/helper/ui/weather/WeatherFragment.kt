@@ -2,13 +2,17 @@ package com.eslammongy.helper.ui.weather
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.IntentSender
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -19,7 +23,12 @@ import com.eslammongy.helper.databinding.FragmentWeatherBinding
 import com.eslammongy.helper.ui.baseui.BaseFragment
 import com.eslammongy.helper.utilis.*
 import com.eslammongy.helper.viewModels.WeatherViewModel
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.cancel
+import java.lang.ClassCastException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
@@ -70,16 +79,59 @@ class WeatherFragment : BaseFragment() {
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             val granted = permissions.entries.all { it.value == true }
             if (granted) {
-                requireActivity().getCurrentLocation {
-                    getWeatherDaily(it[0], it[1])
-                    getCurrentWeatherDate(it[0], it[1])
-                }
+                if (checkLocationEnable(requireContext())){
+                    requireActivity().getCurrentLocation {
+                        getWeatherDaily(it[0], it[1])
+                        getCurrentWeatherDate(it[0], it[1])
+                    }
+                }else{
+                    enableLocationDialog(requireContext())
 
+                }
             } else {
                 enableView("Error")
                 requireActivity().setToastMessage("Permission Refused", Color.parseColor("#CB0003"))
             }
         }
+
+    private fun enableLocationDialog(context: Context) {
+
+        val locationRequest = LocationRequest.create()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+        var response: LocationSettingsResponse? = null
+        val result: Task<LocationSettingsResponse> = LocationServices.getSettingsClient(context).checkLocationSettings(builder.build())
+        result.addOnCompleteListener{task ->
+            try {
+                response = task.getResult(ApiException::class.java)
+                Toast.makeText(context , "1" , Toast.LENGTH_LONG).show()
+            }catch (exception: ApiException){
+                when(exception.statusCode){
+                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED ->{
+                        try {
+                            Toast.makeText(context , "2" , Toast.LENGTH_LONG).show()
+                            val reSolveException: ResolvableApiException = exception as ResolvableApiException
+                            reSolveException.startResolutionForResult(context as Activity, LocationRequest.PRIORITY_HIGH_ACCURACY)
+                            requireActivity().getCurrentLocation {
+                                getWeatherDaily(it[0], it[1])
+                                getCurrentWeatherDate(it[0], it[1])
+                            }
+                        }catch (ex: IntentSender.SendIntentException){
+                            Toast.makeText(context , "3" , Toast.LENGTH_LONG).show()
+                            Log.e("TAG" , ex.message!!)
+                        }catch (ex: ClassCastException){
+                            Toast.makeText(context , "4" , Toast.LENGTH_LONG).show()
+                            Log.e("TAG" , ex.message!!)
+                        }
+                    }
+                    LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE ->{
+                        Log.e("TAG" , "UNAVAILABLE")
+                    }
+                }
+            }
+        }
+
+    }
 
     private fun disableView() {
         binding.circularProgressBar.visibility = View.VISIBLE

@@ -30,4 +30,7 @@ interface TaskDao {
     @Query("SELECT * FROM task_table WHERE taskId LIKE :taskID")
     suspend fun getSingleTask(taskID: Int): TaskEntities
 
+    @Query("SELECT * FROM task_table WHERE title LIKE :taskTitle")
+    suspend fun getSingleTaskByName(taskTitle: String): TaskEntities
+
 }

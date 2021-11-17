@@ -1,4 +1,5 @@
 package com.eslammongy.helper.services
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -47,7 +48,8 @@ class AlarmReceiver:BroadcastReceiver() {
 
     }
 
-    private fun buildNotificationChannel(context: Context , notifyHeader:String ,message:String ,intent: Intent?){
+    @SuppressLint("UnspecifiedImmutableFlag")
+    private fun buildNotificationChannel(context: Context, notifyHeader:String, message:String, intent: Intent?){
         val elementID = intent!!.getIntExtra("ElementNotifiedID" , 0)
         val notifyKeyForm = intent.getIntExtra("NotifiedFrom" , 0)
 

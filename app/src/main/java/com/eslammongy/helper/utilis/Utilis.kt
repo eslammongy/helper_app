@@ -4,24 +4,30 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.graphics.Color
 import android.graphics.Typeface
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Looper
+import android.renderscript.RenderScript
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.eslammongy.helper.R
 import com.eslammongy.helper.ui.search.SearchScreen
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.muddzdev.styleabletoast.StyleableToast
+import java.lang.ClassCastException
 import java.util.*
 
 
@@ -91,6 +97,12 @@ fun showingSnackBar(view: View, message: String, color: String){
          .show()
 }
 
+fun checkLocationEnable(context: Context):Boolean{
+    val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
+   return  manager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
+
+}
+
 
 @SuppressLint("CommitPrefEdits")
 fun Activity.saveUserLatLang(latitude:String, longitude:String){
@@ -104,7 +116,6 @@ fun Activity.saveUserLatLang(latitude:String, longitude:String){
 
 @SuppressLint("MissingPermission")
 fun Activity.getCurrentLocation(callback: (Array<String>) -> Unit) {
-
     val locationRequest = LocationRequest.create().apply {
         interval = 10000
         fastestInterval = 3000
@@ -124,6 +135,7 @@ fun Activity.getCurrentLocation(callback: (Array<String>) -> Unit) {
                     saveUserLatLang(latitude , longitude)
                      callback(arrayOf(latitude , longitude))
                     }
+
                 }
 
         }

@@ -42,23 +42,7 @@ class UserPermission(var activity: Activity?) {
         return true
     }
 
-     fun showRequestPermissionDialog(permissions: String, name: String, requestCode: Int) {
 
-        val builder = AlertDialog.Builder(activity!!)
-        builder.apply {
-            setMessage("You need to access your $name permission is required to use this app")
-            setTitle("Permission Required")
-            setPositiveButton("Ok") { _, _ ->
-                ActivityCompat.requestPermissions(
-                    activity!!,
-                    arrayOf(permissions),
-                    requestCode
-                )
-            }
-        }
-        val dialog = builder.create()
-        dialog.show()
-    }
 
 
 }

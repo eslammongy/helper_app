@@ -34,6 +34,7 @@ class TaskViewModel(application: Application):AndroidViewModel(application){
 
     suspend fun getSingleTask(taskID:Int) = tasksRepo.getSingleTask(taskID)
 
+    suspend fun getSingleTaskByName(title:String) = tasksRepo.getSingleTaskByName(title)
 
     fun searchInTaskDatabase(searchQuery: String): LiveData<List<TaskEntities>> {
         return tasksRepo.searchInTaskDatabase(searchQuery).asLiveData()

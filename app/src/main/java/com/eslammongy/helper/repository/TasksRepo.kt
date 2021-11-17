@@ -23,6 +23,8 @@ class TasksRepo(private var taskDao: TaskDao) {
 
     suspend fun getSingleTask(taskID:Int) = taskDao.getSingleTask(taskID)
 
+    suspend fun getSingleTaskByName(title:String) = taskDao.getSingleTaskByName(title)
+
     fun searchInTaskDatabase(searchQuery: String): Flow<List<TaskEntities>> {
         return taskDao.searchInTaskDataBase(searchQuery)
     }

@@ -11,6 +11,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toFile
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.room.CoroutinesRoom
 import com.eslammongy.helper.R
 import com.eslammongy.helper.database.entities.ContactEntities
 import com.eslammongy.helper.database.entities.TaskEntities
@@ -174,15 +175,8 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                     )
                 } else {
                     taskViewModel.saveNewTask(taskEntities)
-                    alarmService.setExactAlarm(
-                        taskAlarm,
-                        binding.tiTaskTitle.text.toString(),
-                        "You have a new task  called ${taskEntities.taskTitle} with your friend ${binding.tvShowTaskFriend.text} .. let's go to do it.",
-                        1,
-                        taskEntities.taskId
-                    )
-                    setToastMessage("Task Saved ${taskEntities.taskId}", Color.parseColor("#6ECB63"))
-                    this.startNewActivity(HomeScreen::class.java, 1)
+                    setFirstTimeAlarm(taskEntities.taskTitle)
+
                 }
             }
             intent.getIntExtra("ID", 0) -> {
@@ -209,6 +203,23 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
             }
 
         }
+    }
+
+    private fun setFirstTimeAlarm(title: String?){
+         CoroutineScope(Dispatchers.IO).launch {
+             //delay(1000)
+             val taskEntities =taskViewModel.getSingleTaskByName(title!!)
+             alarmService.setExactAlarm(
+                 taskAlarm,
+                 binding.tiTaskTitle.text.toString(),
+                 "You have a new task  called $title with your friend ${binding.tvShowTaskFriend.text} .. let's go to do it.",
+                 1,
+                 taskEntities.taskId
+             )
+             finish()
+         }
+        setToastMessage("Task Saved", Color.parseColor("#6ECB63"))
+        this.startNewActivity(HomeScreen::class.java, 1)
     }
 
     override fun onClick(v: View?) {

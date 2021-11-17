@@ -76,8 +76,12 @@ class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialo
                         requireContext(),
                         0,
                         { _, hour, minute ->
+                            this.set(Calendar.MONTH, 11)
+                            this.set(Calendar.YEAR, 2021)
+                            this.set(Calendar.DAY_OF_MONTH, 20)
                             this.set(Calendar.HOUR_OF_DAY, hour)
                             this.set(Calendar.MINUTE, minute)
+                            this.set(Calendar.SECOND, 0)
                             chlAlarm = this.timeInMillis
                             val timeFormatted = SimpleDateFormat("hh:mm a").format(this.time)
                             binding.subChlTime.text = timeFormatted.toString()
