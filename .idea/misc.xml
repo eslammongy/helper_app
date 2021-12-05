@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/eslam/Downloads/pc/native_apps/Helper/app/src/main/res/drawable/custom_one_shape_button.xml" value="0.25625" />
+        <entry key="..\:/Users/eslam/Downloads/pc/native_apps/Helper/app/src/main/res/layout/activity_home_screen.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/eslam/Downloads/pc/native_apps/Helper/app/src/main/res/layout/activity_main.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/eslam/Downloads/pc/native_apps/Helper/app/src/main/res/layout/activity_on_boadrdin_screen.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/eslam/Downloads/pc/native_apps/Helper/app/src/main/res/layout/custom_snackbar_view.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/eslam/Downloads/pc/native_apps/Helper/app/src/main/res/layout/fragment_task_with_friend_and_send_email.xml" value="0.23854166666666668" />
+        <entry key="..\:/Users/eslam/Downloads/pc/native_apps/Helper/app/src/main/res/layout/fragment_tasks.xml" value="0.24010416666666667" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

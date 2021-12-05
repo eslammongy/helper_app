@@ -7,8 +7,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.eslammongy.helper.model.MyListDaily
-import com.eslammongy.helper.model.WeatherResponse
+import com.eslammongy.helper.data.model.MyListDaily
+import com.eslammongy.helper.data.model.WeatherResponse
 import com.eslammongy.helper.remoteApi.RetrofitBuilder
 import com.eslammongy.helper.repository.WeatherRepo
 import com.eslammongy.helper.ui.weather.connectingError

@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eslammongy.helper.R
 import com.eslammongy.helper.adapters.FriendsAdapter
-import com.eslammongy.helper.database.entities.ContactEntities
+import com.eslammongy.helper.data.entities.ContactEntities
 import com.eslammongy.helper.databinding.FragmentTaskBottomSheetBinding
 import com.eslammongy.helper.viewModels.ContactViewMode
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -91,7 +91,6 @@ class TaskBottomSheet(
         binding.taskFiendRecycler.adapter = friendAdapter
         contactViewMode.getAllContacts.observe(viewLifecycleOwner, {
             it.let { list ->
-
                 friendAdapter.differ.submitList(list)
             }
         })
@@ -147,7 +146,7 @@ class TaskBottomSheet(
             sheetListener.setTaskInfo(
                 selectedColor.toString(), link, time, date, friendID, taskAlarm
             )
-            Toast.makeText(requireActivity(), "$friendID", Toast.LENGTH_SHORT).show()
+          // Toast.makeText(requireActivity(), "$friendID", Toast.LENGTH_SHORT).show()
             dismiss()
         } else {
             binding.enterLinkText.error = "Url is not valid!!"
@@ -228,6 +227,7 @@ class TaskBottomSheet(
         friendID = contactEntities.contactId
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onItemClickListener(position: Int, view: View?) {
         friendAdapter.notifyDataSetChanged()
     }

@@ -11,10 +11,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toFile
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.room.CoroutinesRoom
 import com.eslammongy.helper.R
-import com.eslammongy.helper.database.entities.ContactEntities
-import com.eslammongy.helper.database.entities.TaskEntities
+import com.eslammongy.helper.data.entities.ContactEntities
+import com.eslammongy.helper.data.entities.TaskEntities
 import com.eslammongy.helper.databinding.ActivityAddNewTaskBinding
 import com.eslammongy.helper.services.AlarmService
 import com.eslammongy.helper.ui.dailogs.CustomDeleteDialog
@@ -75,14 +74,14 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
             friendID = intent.getIntExtra("TaskFriendID", 0)
 
         } else if (notifyTask != 0) {
-            setToastMessage("$notifyTask" , Color.RED)
+           // setToastMessage("$notifyTask" , Color.RED)
             var taskEntities: TaskEntities
             taskViewModel.viewModelScope.launch {
                 taskEntities = taskViewModel.getSingleTask(notifyTask!!)
                 displayTaskInfo(
                     taskEntities.taskTitle,
                     taskEntities.taskDesc,
-                    taskEntities.taskDesc,
+                    taskEntities.taskDate,
                     taskEntities.taskTime,
                     taskEntities.taskLink,
                     taskEntities.taskImage,
@@ -90,12 +89,9 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
                     taskEntities.taskFriendID
                 )
                 friendID = taskEntities.taskFriendID
+                taskID = taskEntities.taskId
             }
-
         }
-
-
-
     }
 
     private fun selectAndCompressImage() {
@@ -163,6 +159,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
 
         val taskEntities = TaskEntities(title, desc, time, date,
             link, taskColor.toString(), imageFilePath, friendID)
+        val itemID = if (taskID !=  0) taskID else  intent.getIntExtra("ID", 0)
 
         when (taskID) {
 
@@ -179,7 +176,7 @@ class AddNewTask : AppCompatActivity(), View.OnClickListener, TaskBottomSheet.Bo
 
                 }
             }
-            intent.getIntExtra("ID", 0) -> {
+           itemID -> {
                 if (title == intent.getStringExtra("Title") && desc == intent.getStringExtra("Content") && time == intent.getStringExtra("Time")) {
 
                     showingSnackBar(

@@ -39,7 +39,7 @@ class OnBoardingScreen : AppCompatActivity(), View.OnClickListener {
             R.drawable.work_on_time_image, "Work On Time",
             "When you are overwhelmed by the amount of the work you have on your plate , stop and rethink."))
         listOnBoardingItem.add(OnBoardingItem(
-            R.drawable.manage_your_task_image, "Get Reminder On Time",
+            R.drawable.reminder_me_task_image, "Get Reminder On Time",
             "when you encounter a small task that takes less than 5 minutes to complete."))
 
         onboardItemsAdapter = OnboardItemAdapter(this , listOnBoardingItem)

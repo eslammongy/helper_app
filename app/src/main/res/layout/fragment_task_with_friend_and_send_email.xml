@@ -121,6 +121,7 @@
                 android:background="@drawable/custom_dark_shape"
                 android:hint="@string/subject"
                 android:textColor="@color/White"
+                android:paddingHorizontal="10dp"
                 android:inputType="textEmailSubject"
                 android:textColorHint="@color/ColorDefaultNote"
                 />
@@ -132,11 +133,11 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="10dp"
+                android:paddingHorizontal="10dp"
                 android:background="@drawable/custom_dark_shape"
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="top"
                 android:hint="@string/message"
-                android:padding="6dp"
                 android:textColor="@color/White"
                 android:textColorHint="@color/ColorDefaultNote"
                 android:textSize="17sp" />

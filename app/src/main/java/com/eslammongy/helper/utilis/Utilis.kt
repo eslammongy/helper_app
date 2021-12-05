@@ -35,7 +35,6 @@ const val apiKey = "ca4f047ebf37d1d9d7dfebb4100bd981"
 
 fun <A : Activity> Activity.startNewActivity( activity: Class<A> , intentID:Int) {
     Intent(this, activity).also {
-        it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         it.putExtra("ArrowKey" , intentID)
         startActivity(it)
     }

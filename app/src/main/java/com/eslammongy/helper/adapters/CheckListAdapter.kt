@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.HelperDataBase
-import com.eslammongy.helper.database.entities.CheckListEntity
+import com.eslammongy.helper.data.entities.CheckListEntity
 import com.eslammongy.helper.databinding.ChecklistLayoutViewBinding
 import com.eslammongy.helper.ui.checklist.AddNewCheckList
 

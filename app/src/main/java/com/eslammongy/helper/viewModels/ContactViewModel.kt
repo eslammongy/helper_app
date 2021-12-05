@@ -6,11 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.eslammongy.helper.database.HelperDataBase
-import com.eslammongy.helper.database.entities.ContactEntities
-import com.eslammongy.helper.database.entities.TaskEntities
+import com.eslammongy.helper.data.entities.ContactEntities
+import com.eslammongy.helper.data.entities.TaskEntities
 import com.eslammongy.helper.repository.ContactRepo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class ContactViewMode(application: Application): AndroidViewModel(application) {

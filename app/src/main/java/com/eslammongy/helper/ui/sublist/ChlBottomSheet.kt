@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import com.eslammongy.helper.R
-import com.eslammongy.helper.database.entities.SubCheckList
+import com.eslammongy.helper.data.entities.SubCheckList
 import com.eslammongy.helper.databinding.FragmentChlBottomSheetBinding
 import com.eslammongy.helper.services.AlarmService
 import com.eslammongy.helper.utilis.setToastMessage
@@ -76,9 +76,6 @@ class ChlBottomSheet(parentChlID:Int , parentChlTitle:String) : BottomSheetDialo
                         requireContext(),
                         0,
                         { _, hour, minute ->
-                            this.set(Calendar.MONTH, 11)
-                            this.set(Calendar.YEAR, 2021)
-                            this.set(Calendar.DAY_OF_MONTH, 20)
                             this.set(Calendar.HOUR_OF_DAY, hour)
                             this.set(Calendar.MINUTE, minute)
                             this.set(Calendar.SECOND, 0)

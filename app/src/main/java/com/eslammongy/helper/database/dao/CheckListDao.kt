@@ -2,9 +2,8 @@ package com.eslammongy.helper.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.eslammongy.helper.database.entities.CheckListEntity
-import com.eslammongy.helper.database.entities.SubCheckList
-import com.eslammongy.helper.database.entities.TaskEntities
+import com.eslammongy.helper.data.entities.CheckListEntity
+import com.eslammongy.helper.data.entities.SubCheckList
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.databinding.WeatherLayoutBinding
-import com.eslammongy.helper.model.MyListDaily
+import com.eslammongy.helper.data.model.MyListDaily
 import com.eslammongy.helper.ui.weather.getWeatherDescriptionIconByID
 import java.text.SimpleDateFormat
 import java.util.*

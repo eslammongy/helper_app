@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.R
 import com.eslammongy.helper.adapters.CheckListAdapter
-import com.eslammongy.helper.database.entities.CheckListEntity
+import com.eslammongy.helper.data.entities.CheckListEntity
 import com.eslammongy.helper.databinding.FragmentCheckListBinding
 import com.eslammongy.helper.utilis.startNewActivity
 import com.eslammongy.helper.utilis.startSearchActivity

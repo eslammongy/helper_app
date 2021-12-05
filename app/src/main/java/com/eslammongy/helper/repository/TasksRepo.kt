@@ -1,11 +1,8 @@
 package com.eslammongy.helper.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.eslammongy.helper.database.HelperDataBase
 import com.eslammongy.helper.database.dao.TaskDao
-import com.eslammongy.helper.database.entities.ContactEntities
-import com.eslammongy.helper.database.entities.TaskEntities
+import com.eslammongy.helper.data.entities.TaskEntities
 import kotlinx.coroutines.flow.Flow
 
 class TasksRepo(private var taskDao: TaskDao) {

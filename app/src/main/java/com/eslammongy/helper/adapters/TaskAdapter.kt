@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.eslammongy.helper.database.entities.TaskEntities
+import com.eslammongy.helper.data.entities.TaskEntities
 import com.eslammongy.helper.databinding.TaskLayoutViewBinding
 import com.eslammongy.helper.ui.task.AddNewTask
 import com.eslammongy.helper.utilis.GlideApp

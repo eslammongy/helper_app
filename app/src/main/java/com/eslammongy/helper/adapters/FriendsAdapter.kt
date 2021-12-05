@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.eslammongy.helper.database.entities.ContactEntities
+import com.eslammongy.helper.data.entities.ContactEntities
 import com.eslammongy.helper.databinding.FriendsLayoutViewBinding
 import com.eslammongy.helper.utilis.GlideApp
 

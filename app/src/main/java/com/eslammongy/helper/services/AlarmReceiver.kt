@@ -61,7 +61,7 @@ class AlarmReceiver:BroadcastReceiver() {
                 putExtra("TaskID" , elementID)
                Intent.FLAG_ACTIVITY_NEW_TASK
             }, PendingIntent.FLAG_UPDATE_CURRENT)
-            Toast.makeText(context, "$elementID", Toast.LENGTH_SHORT).show()
+         //   Toast.makeText(context, "$elementID", Toast.LENGTH_SHORT).show()
         }else{
             pendingIntent = PendingIntent.getActivity(context, 0, Intent(context , AddNewCheckList::class.java).apply {
                 putExtra("NotifiedToChList" , notifyKeyForm)

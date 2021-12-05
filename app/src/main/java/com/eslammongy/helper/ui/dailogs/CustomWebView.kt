@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.*
 import android.webkit.WebViewClient
 import androidx.fragment.app.DialogFragment
+import com.eslammongy.helper.R
 import com.eslammongy.helper.databinding.FragmentCustomWebViewBinding
 
 class CustomWebView(private var webViewUrl: String? = null) : DialogFragment() {
@@ -19,7 +20,7 @@ class CustomWebView(private var webViewUrl: String? = null) : DialogFragment() {
         savedInstanceState: Bundle?
     ): View{
         _binding = FragmentCustomWebViewBinding.inflate(inflater, container, false)
-
+        dialog!!.window!!.setWindowAnimations(R.style.AnimationDialog)
         binding.taskWebView.loadUrl(webViewUrl!!)
         val webViewSetting = binding.taskWebView.settings
         webViewSetting.javaScriptEnabled = true

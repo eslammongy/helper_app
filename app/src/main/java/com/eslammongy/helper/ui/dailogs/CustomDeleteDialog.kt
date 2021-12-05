@@ -10,9 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.eslammongy.helper.R
-import com.eslammongy.helper.database.entities.CheckListEntity
-import com.eslammongy.helper.database.entities.ContactEntities
-import com.eslammongy.helper.database.entities.TaskEntities
+import com.eslammongy.helper.data.entities.CheckListEntity
+import com.eslammongy.helper.data.entities.ContactEntities
+import com.eslammongy.helper.data.entities.TaskEntities
 import com.eslammongy.helper.databinding.FragmentCustomDeleteDailogBinding
 import com.eslammongy.helper.ui.baseui.BaseDialogFragment
 import com.eslammongy.helper.ui.home.HomeScreen
@@ -102,7 +102,6 @@ class CustomDeleteDialog(itemDeletedID: Int , selectedDialog:Int)  : BaseDialogF
     override fun onStart() {
         super.onStart()
         val sheetContainer = requireView().parent as? ViewGroup ?: return
-
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         sheetContainer.layoutParams.width = width
         dialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

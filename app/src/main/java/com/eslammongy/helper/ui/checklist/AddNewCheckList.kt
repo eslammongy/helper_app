@@ -10,7 +10,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.eslammongy.helper.R
-import com.eslammongy.helper.database.entities.CheckListEntity
+import com.eslammongy.helper.data.entities.CheckListEntity
 import com.eslammongy.helper.databinding.ActivityAddNewCheckListBinding
 import com.eslammongy.helper.ui.dailogs.CustomDeleteDialog
 import com.eslammongy.helper.ui.home.HomeScreen

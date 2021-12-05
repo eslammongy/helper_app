@@ -9,12 +9,11 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.adapters.SubChlAdapter
-import com.eslammongy.helper.database.entities.SubCheckList
+import com.eslammongy.helper.data.entities.SubCheckList
 import com.eslammongy.helper.databinding.FragmentSubChlBinding
 import com.eslammongy.helper.ui.baseui.BaseFragment
 import com.eslammongy.helper.viewModels.ChListViewModel
 import com.google.android.material.snackbar.Snackbar
-import java.util.*
 
 class SubChlFragment(parentChlID: Int , parentChlTitle:String ) : BaseFragment() {
 

@@ -120,14 +120,11 @@ class TaskWithFriendAndSendEmail(contactName: String, contactEmail: String, frie
         }
 
         if (address.isEmpty() || subject.isEmpty() || message.isEmpty()) {
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                startActivity(Intent.createChooser(intent, "Choose App"))
-            } else {
                 Toast.makeText(requireContext(), "Required Field Is Empty", Toast.LENGTH_LONG)
                     .show()
-            }
+            } else  if (intent.resolveActivity(requireActivity().packageManager) != null)  {
+            startActivity(Intent.createChooser(intent, "Choose App"))
         } else {
-
             Toast.makeText(requireContext(), "Required App Is Not Installed", Toast.LENGTH_LONG)
                 .show()
         }

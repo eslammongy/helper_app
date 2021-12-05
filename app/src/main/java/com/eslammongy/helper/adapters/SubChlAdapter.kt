@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.database.HelperDataBase
-import com.eslammongy.helper.database.entities.SubCheckList
+import com.eslammongy.helper.data.entities.SubCheckList
 import com.eslammongy.helper.databinding.SubChecklistLayoutBinding
 
 class SubChlAdapter(var context: Context) : RecyclerView.Adapter<SubChlAdapter.SubChlViewHolder>() {

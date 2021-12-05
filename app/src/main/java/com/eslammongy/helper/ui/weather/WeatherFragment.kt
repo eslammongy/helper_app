@@ -104,12 +104,12 @@ class WeatherFragment : BaseFragment() {
         result.addOnCompleteListener{task ->
             try {
                 response = task.getResult(ApiException::class.java)
-                Toast.makeText(context , "1" , Toast.LENGTH_LONG).show()
+               // Toast.makeText(context , "1" , Toast.LENGTH_LONG).show()
             }catch (exception: ApiException){
                 when(exception.statusCode){
                     LocationSettingsStatusCodes.RESOLUTION_REQUIRED ->{
                         try {
-                            Toast.makeText(context , "2" , Toast.LENGTH_LONG).show()
+                            //Toast.makeText(context , "2" , Toast.LENGTH_LONG).show()
                             val reSolveException: ResolvableApiException = exception as ResolvableApiException
                             reSolveException.startResolutionForResult(context as Activity, LocationRequest.PRIORITY_HIGH_ACCURACY)
                             requireActivity().getCurrentLocation {
@@ -117,7 +117,7 @@ class WeatherFragment : BaseFragment() {
                                 getCurrentWeatherDate(it[0], it[1])
                             }
                         }catch (ex: IntentSender.SendIntentException){
-                            Toast.makeText(context , "3" , Toast.LENGTH_LONG).show()
+                          //  Toast.makeText(context , "3" , Toast.LENGTH_LONG).show()
                             Log.e("TAG" , ex.message!!)
                         }catch (ex: ClassCastException){
                             Toast.makeText(context , "4" , Toast.LENGTH_LONG).show()

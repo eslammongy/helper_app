@@ -8,10 +8,10 @@ import androidx.room.TypeConverters
 import com.eslammongy.helper.database.dao.CheckListDao
 import com.eslammongy.helper.database.dao.ContactDao
 import com.eslammongy.helper.database.dao.TaskDao
-import com.eslammongy.helper.database.entities.CheckListEntity
-import com.eslammongy.helper.database.entities.ContactEntities
-import com.eslammongy.helper.database.entities.SubCheckList
-import com.eslammongy.helper.database.entities.TaskEntities
+import com.eslammongy.helper.data.entities.CheckListEntity
+import com.eslammongy.helper.data.entities.ContactEntities
+import com.eslammongy.helper.data.entities.SubCheckList
+import com.eslammongy.helper.data.entities.TaskEntities
 
 @Database(
     entities = [TaskEntities::class, ContactEntities::class, CheckListEntity::class , SubCheckList::class],

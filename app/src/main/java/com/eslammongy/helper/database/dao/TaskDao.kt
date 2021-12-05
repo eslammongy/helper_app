@@ -2,8 +2,8 @@ package com.eslammongy.helper.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.eslammongy.helper.database.entities.ContactEntities
-import com.eslammongy.helper.database.entities.TaskEntities
+import com.eslammongy.helper.data.entities.ContactEntities
+import com.eslammongy.helper.data.entities.TaskEntities
 import kotlinx.coroutines.flow.Flow
 
 @Dao

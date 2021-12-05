@@ -41,7 +41,7 @@
         app:mbn_countTextColor="#ffffff"
         app:mbn_defaultIconColor="@color/ColorDefaultNote"
         app:mbn_rippleColor="#2f424242"
-        app:mbn_selectedIconColor="@color/purple_200"
+        app:mbn_selectedIconColor="@color/ColorOrangeNote"
         app:mbn_shadowColor="@color/ColorLightBlack"
         android:elevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"

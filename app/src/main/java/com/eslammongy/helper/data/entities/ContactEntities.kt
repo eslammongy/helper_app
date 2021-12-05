@@ -1,4 +1,4 @@
-package com.eslammongy.helper.database.entities
+package com.eslammongy.helper.data.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

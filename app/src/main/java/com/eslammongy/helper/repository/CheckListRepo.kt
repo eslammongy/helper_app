@@ -2,9 +2,8 @@ package com.eslammongy.helper.repository
 
 import androidx.lifecycle.LiveData
 import com.eslammongy.helper.database.dao.CheckListDao
-import com.eslammongy.helper.database.entities.CheckListEntity
-import com.eslammongy.helper.database.entities.SubCheckList
-import com.eslammongy.helper.database.entities.TaskEntities
+import com.eslammongy.helper.data.entities.CheckListEntity
+import com.eslammongy.helper.data.entities.SubCheckList
 import kotlinx.coroutines.flow.Flow
 
 class CheckListRepo(private val chListDao: CheckListDao) {

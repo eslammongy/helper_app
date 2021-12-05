@@ -1,4 +1,4 @@
-package com.eslammongy.helper.model
+package com.eslammongy.helper.data.model
 
 data class FeelsLike(
     val day: Double,

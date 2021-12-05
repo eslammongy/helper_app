@@ -3,8 +3,7 @@ package com.eslammongy.helper.viewModels
 import android.app.Application
 import androidx.lifecycle.*
 import com.eslammongy.helper.database.HelperDataBase
-import com.eslammongy.helper.database.entities.ContactEntities
-import com.eslammongy.helper.database.entities.TaskEntities
+import com.eslammongy.helper.data.entities.TaskEntities
 import com.eslammongy.helper.repository.TasksRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

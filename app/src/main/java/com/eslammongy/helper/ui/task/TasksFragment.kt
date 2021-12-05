@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eslammongy.helper.R
 import com.eslammongy.helper.adapters.TaskAdapter
-import com.eslammongy.helper.database.entities.TaskEntities
+import com.eslammongy.helper.data.entities.TaskEntities
 import com.eslammongy.helper.databinding.FragmentTasksBinding
 import com.eslammongy.helper.ui.baseui.BaseFragment
 import com.eslammongy.helper.utilis.startNewActivity

@@ -13,7 +13,7 @@ import androidx.core.net.toFile
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.eslammongy.helper.R
-import com.eslammongy.helper.database.entities.ContactEntities
+import com.eslammongy.helper.data.entities.ContactEntities
 import com.eslammongy.helper.databinding.ActivityAddNewContactBinding
 import com.eslammongy.helper.ui.dailogs.CustomDeleteDialog
 import com.eslammongy.helper.ui.home.HomeScreen

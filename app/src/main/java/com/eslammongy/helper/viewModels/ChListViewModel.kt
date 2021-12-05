@@ -6,11 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.eslammongy.helper.database.HelperDataBase
-import com.eslammongy.helper.database.entities.CheckListEntity
-import com.eslammongy.helper.database.entities.SubCheckList
+import com.eslammongy.helper.data.entities.CheckListEntity
+import com.eslammongy.helper.data.entities.SubCheckList
 import com.eslammongy.helper.repository.CheckListRepo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class ChListViewModel(application: Application):AndroidViewModel(application) {
